@@ -1,0 +1,108 @@
+@startuml Activity - Alur Kompetisi End-to-End
+' Activity diagram alur utama: Registrasi -> Bertanding -> Dinilai -> Disahkan -> Dipublikasi.
+' Swimlane per aktor. Tidak ada peran lain di luar ketujuh aktor ini.
+skinparam shadowing false
+skinparam DefaultFontName SansSerif
+
+|#E8F0FE|Coach / Sekolah|
+start
+:Registrasi tim & peserta;
+:Isi consent orang tua / wali;
+if (Data valid\ndan jenjang sesuai?) then (tidak)
+  :Perbaiki data registrasi;
+  stop
+else (ya)
+endif
+
+|#E8F0FE|Event Admin|
+:Verifikasi registrasi;
+if (Dokumen lengkap?) then (tidak)
+  :Tolak + alasan;
+  :Coach perbaiki;
+  stop
+else (ya)
+endif
+:Set status Terverifikasi;
+:Susun jadwal & heat per arena;
+
+|#FFF3E0|Operator Arena|
+:Call tim;
+if (Tim hadir?) then (tidak)
+  :Set No-show;
+  |#FCE4EC|Juri|
+  :Skor 0 / tidak dinilai;
+  stop
+else (ya)
+endif
+:Set Ready;
+:Start run + timer;
+if (Robot berjalan?) then (tidak)
+  :Set DNF / DQ;
+  :Catat insiden & alasan;
+else (ya)
+endif
+:Finish;
+:Catat waktu & insiden;
+
+|#FCE4EC|Juri|
+:Isi form skor dinamis;
+:' Save Draft;
+if (Objek wajib evidence?) then (ya)
+  :Upload bukti foto / video;
+  :Simpan ke Evidence Vault;
+else (tidak)
+endif
+:Submit skor;
+note right
+  Mulai titik ini skor berstatus
+  Submitted -> terlihat tim sendiri
+  sebagai "belum resmi".
+  Draft TIDAK pernah dikirim.
+end note
+
+|#E1F5FE|Chief Judge|
+:Review skor;
+if (Skor sesuai?) then (tidak)
+  :Reject / Reopen + alasan wajib;
+  |#FCE4EC|Juri|
+  :Revisi -> versi baru;
+  |#E1F5FE|Chief Judge|
+else (ya)
+endif
+:Approve -> skor frozen;
+:audit trail tercatat;
+if (Ada protes?) then (ya)
+  :Tangani protes;
+  if (Diterima?) then (ya)
+    :Jadwalkan re-run;
+    :Reopen resmi + alasan;
+  else (tidak)
+  endif
+else (tidak)
+endif
+:Cek prasyarat publish;
+if (Semua run selesai\ndan semua skor Approved?) then (tidak)
+  :Tampilkan daftar penyebab blokir;
+  stop
+else (ya)
+endif
+:Publish per jenjang;
+
+|#E8F5E9|Coach / Sekolah|
+:Lihat skor tim sendiri realtime\ndi private channel;
+note right
+  Private channel team.{id}.
+  Hanya tim sendiri. Skor
+  berubah "resmi" setelah Approved.
+end note
+
+|#F3E5F5|Publik (Guest)|
+:Lihat jadwal & info umum;
+if (Jenjang sudah Publish?) then (tidak)
+  :Hanya info umum\ntanpa skor apapun;
+else (ya)
+endif
+:Lihat leaderboard + rincian;
+stop
+
+@enduml

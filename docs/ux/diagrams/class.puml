@@ -1,0 +1,432 @@
+@startuml Class - NanoRobotic Competition Hub Domain Model
+' Class diagram domain model. Cermin dari migration + model Eloquent yang sudah dibuat di Fase 0.
+' Empat domain: Registration, Competition, Operations, Scoring + Approval/Evidence/Audit.
+skinparam shadowing false
+skinparam classAttributeIconSize 0
+skinparam packageStyle rectangle
+
+' ============ ENUMS ============
+package "App\\Enums" {
+  enum Role {
+    SuperAdmin
+    EventAdmin
+    ArenaOperator
+    Judge
+    ChiefJudge
+    Coach
+    Public
+  }
+  enum Level {
+    Sd
+    Smp
+    Sma
+  }
+  enum RunStatus {
+    Scheduled
+    Called
+    Ready
+    Running
+    Finished
+    Dnf
+    Dq
+    NoShow
+    ReRun
+  }
+  enum ScoreStatus {
+    Draft
+    Submitted
+    Approved
+    Reopened
+    Rejected
+  }
+  enum CategoryStatus {
+    Registration
+    Scheduled
+    Running
+    AllRunsFinished
+    Published
+  }
+  enum RegistrationStatus {
+    Draft
+    Submitted
+    UnderReview
+    Verified
+    Rejected
+    Withdrawn
+  }
+  enum ScoreObjectType {
+    Object
+    Checkpoint
+    Achievement
+    Penalty
+  }
+}
+
+' ============ USER & RBAC ============
+package "Auth & RBAC" {
+  class User {
+    +uuid: UUID
+    +name: string
+    +email: string
+    +phone: string?
+    +is_active: bool
+    +isRole(Role): bool
+    +isStaff(): bool
+  }
+  class SpatieRole <<spatie>> {
+    +name: string
+    +guard_name: string
+  }
+  class Permission <<spatie>> {
+    +name: string
+    +guard_name: string
+  }
+  User "*" -- "*" SpatieRole : hasRoles
+  SpatieRole "*" -- "*" Permission
+  Role ..> SpatieRole : di-seed sebagai\nname
+}
+
+' ============ COMPETITION ============
+package "App\\Domain\\Competition" {
+  class Event {
+    +uuid: UUID
+    +name: string
+    +slug: string
+    +venue: string?
+    +starts_at: date?
+    +ends_at: date?
+    +status: string
+  }
+  class Category {
+    +uuid: UUID
+    +level: Level
+    +name: string
+    +persona: string?
+    +status: CategoryStatus
+    +min_team_members: int
+    +max_team_members: int
+    +settings: array
+    +isPublished(): bool
+  }
+  class Rulebook {
+    +uuid: UUID
+    +version: int
+    +aggregation: array
+    +tie_break_order: array
+    +penalties: array
+    +retry_rules: array
+    +locked_at: datetime?
+    +isLocked(): bool
+  }
+  class Challenge {
+    +uuid: UUID
+    +name: string
+    +theme: string?
+    +position: int
+    +is_active: bool
+  }
+  class ScoreObject {
+    +uuid: UUID
+    +code: string
+    +name: string
+    +type: ScoreObjectType
+    +points_per_unit: int
+    +max_quantity: int?
+    +requires_evidence: bool
+    +is_bonus: bool
+    +position: int
+  }
+  class CapabilityTag {
+    +uuid: UUID
+    +code: string
+    +name: string
+    +position: int
+  }
+}
+
+' ============ REGISTRATION ============
+package "App\\Domain\\Registration" {
+  class School {
+    +uuid: UUID
+    +name: string
+    +npsn: string?
+    +level: Level?
+    +city: string?
+    +province: string?
+  }
+  class Coach {
+    +uuid: UUID
+    +name: string
+    +phone: string?
+    +email: string?
+  }
+  class Team {
+    +uuid: UUID
+    +name: string
+    +slug: string?
+    +short_name: string?
+    +status: RegistrationStatus
+    +publicLabel(): string
+  }
+  class Participant {
+    +uuid: UUID
+    +name: string
+    +nisn: string <<encrypted>>
+    +nisn_hash: string <<blind index>>
+    +grade: string?
+    +role: string
+    +hashNisn(nisn): string$
+    +maskNisn(plain): string$
+  }
+  class Registration {
+    +uuid: UUID
+    +status: RegistrationStatus
+    +consent_parent: bool
+    +consent_media: bool
+    +consent_at: datetime?
+    +submitted_at: datetime?
+    +verified_at: datetime?
+    +rejection_reason: string?
+    +documents: array
+  }
+}
+
+' ============ OPERATIONS ============
+package "App\\Domain\\Operations" {
+  class Arena {
+    +uuid: UUID
+    +name: string
+    +code: string?
+    +location: string?
+    +status: string
+    +capacity_per_slot: int?
+    +slot_minutes: int?
+    +is_active: bool
+  }
+  class ArenaAssignment {
+    +uuid: UUID
+    +role: string
+    +starts_at: datetime?
+    +ends_at: datetime?
+    +is_active: bool
+  }
+  class HeatSlot {
+    +uuid: UUID
+    +slot_no: int
+    +label: string?
+    +starts_at: datetime?
+    +ends_at: datetime?
+    +status: string
+  }
+  class Run {
+    +uuid: UUID
+    +attempt_no: int
+    +status: RunStatus
+    +scheduled_at: datetime?
+    +called_at: datetime?
+    +started_at: datetime?
+    +finished_at: datetime?
+    +duration_seconds: int?
+    +outcome_reason: string?
+  }
+}
+
+' ============ SCORING ============
+package "App\\Domain\\Scoring" {
+  class Score {
+    +uuid: UUID
+    +version: int
+    +status: ScoreStatus
+    +subtotal: int
+    +penalty_total: int
+    +total: int
+    +ruleset_snapshot: array
+    +submitted_at: datetime?
+    +approved_at: datetime?
+    +reopened_at: datetime?
+    +reopen_reason: string?
+    +idempotency_key: string?
+  }
+  class ScoreLine {
+    +uuid: UUID
+    +quantity: int
+    +achieved: bool
+    +points_per_unit_snapshot: int
+    +computed_points: int
+    +notes: string?
+  }
+  class ScoringEngine <<pure>> {
+    +calculate(lines: ScoreLineInput[]): ScoreResult
+  }
+  class ScoreLineInput <<readonly>> {
+    +scoreObjectId: int
+    +code: string
+    +pointsPerUnit: int
+    +isPenalty: bool
+    +quantity: int
+    +achieved: bool
+    +maxQuantity: int?
+  }
+  class ScoreResult <<readonly>> {
+    +subtotal: int
+    +penaltyTotal: int
+    +total: int
+    +lines: array
+  }
+}
+
+' ============ APPROVAL ============
+package "App\\Domain\\Approvals" {
+  class ResultApproval {
+    +uuid: UUID
+    +decision: string
+    +reason: string?
+    +decided_at: datetime?
+  }
+  class Appeal {
+    +uuid: UUID
+    +reason: string
+    +status: string
+    +resolution: string?
+    +resolved_at: datetime?
+  }
+  class CategoryPublication {
+    +uuid: UUID
+    +published_at: datetime
+  }
+}
+
+' ============ EVIDENCE & AUDIT ============
+package "App\\Domain\\Evidence" {
+  class EvidenceFile {
+    +uuid: UUID
+    +disk: string
+    +path: string
+    +original_name: string?
+    +mime_type: string?
+    +size_bytes: bigint?
+    +kind: string
+    +caption: string?
+  }
+}
+package "App\\Domain\\Audit" {
+  class AuditLog <<append-only>> {
+    +uuid: UUID
+    +actor_name: string?
+    +action: string
+    +auditable_type: string?
+    +auditable_id: bigint?
+    +before: array?
+    +after: array?
+    +reason: string?
+    +ip_address: string?
+    +created_at: datetime
+  }
+  class IncidentReport {
+    +uuid: UUID
+    +severity: string
+    +category: string?
+    +title: string
+    +description: string?
+    +status: string
+    +resolved_at: datetime?
+  }
+  class Certificate {
+    +uuid: UUID
+    +type: string
+    +award: string?
+    +qr_token: string
+    +pdf_path: string?
+    +issued_at: datetime?
+  }
+}
+
+' ============ TELEMETRY ============
+package "App\\Domain\\Telemetry (flag OFF)" {
+  class TelemetryEvent <<tidak masuk skor>> {
+    +uuid: UUID
+    +device_id: string?
+    +event_type: string
+    +payload: array?
+    +occurred_at: datetime?
+    +received_at: datetime?
+  }
+}
+
+' ============ RELASI ============
+Event "1" *-- "0..*" Category : memiliki
+Category "1" *-- "0..*" Rulebook : versioned
+Category "1" *-- "0..*" Challenge : tantangan dinamis
+Category "1" *-- "0..*" CapabilityTag : kemampuan uji
+Challenge "1" *-- "0..*" ScoreObject : objek penilaian
+CapabilityTag "0..1" -- "0..*" ScoreObject : ditandai
+
+School "1" -- "0..*" Coach
+School "1" -- "0..*" Team
+Team "1" *-- "0..*" Participant
+Category "1" -- "0..*" Team
+Event "1" -- "0..*" Registration
+Category "1" -- "0..*" Registration
+Team "1" -- "0..*" Registration
+Coach "0..1" -- "0..*" Registration
+
+Event "1" -- "0..*" Arena
+Arena "1" *-- "0..*" ArenaAssignment
+User "1" -- "0..*" ArenaAssignment : operator/juri
+Arena "1" *-- "0..*" HeatSlot
+Category "1" -- "0..*" HeatSlot
+Event "1" -- "0..*" Run
+Category "1" -- "0..*" Run
+Arena "1" -- "0..*" Run
+Team "1" -- "0..*" Run
+HeatSlot "0..1" -- "0..*" Run
+User "0..1" -- "0..*" Run : operator_id
+
+Run "1" *-- "0..*" Score : dinilai
+User "1" -- "0..*" Score : judge_id
+Score "1" *-- "0..*" ScoreLine
+ScoreObject "1" -- "0..*" ScoreLine
+Score "1" -- "0..*" ResultApproval
+Run "1" -- "0..*" ResultApproval
+
+Run "1" -- "0..*" Appeal
+Team "1" -- "0..*" Appeal
+Category "1" -- "0..1" CategoryPublication
+User "1" -- "0..*" CategoryPublication : published_by
+
+Run "1" *-- "0..*" EvidenceFile
+Score "0..1" -- "0..*" EvidenceFile
+ScoreLine "0..1" -- "0..*" EvidenceFile
+Run "1" -- "0..*" IncidentReport
+Event "0..1" -- "0..*" IncidentReport
+Arena "0..1" -- "0..*" IncidentReport
+Category "1" -- "0..*" Certificate
+Team "1" -- "0..*" Certificate
+Run "1" -- "0..*" TelemetryEvent
+
+ScoringEngine ..> ScoreLineInput : menerima
+ScoringEngine ..> ScoreResult : menghasilkan
+Score ..> ScoringEngine : memakai (Fase 5)
+
+' ============ CATATAN ============
+note right of Participant
+  NISN encrypted + hidden.
+  nisn_hash = blind index HMAC-SHA256
+  untuk cek duplikat tanpa dekripsi.
+  Tidak pernah tampil publik.
+end note
+
+note bottom of Score
+  Alur status:
+  Draft -> Submitted -> Approved (frozen)
+  -> Reopened -> versi baru.
+  Versi lama immutable.
+  Maker-checker: author != approver.
+end note
+
+note bottom of AuditLog
+  Append-only. Aplikasi tidak pernah
+  update/delete baris tabel ini.
+end note
+
+@enduml

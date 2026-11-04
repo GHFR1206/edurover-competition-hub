@@ -1,0 +1,146 @@
+@startuml Use Case - NanoRobotic Competition Hub
+' Diagram use case 7 peran. Tidak ada peran lain di luar ketujuh aktor ini.
+left to right direction
+skinparam packageStyle rectangle
+skinparam actorStyle awesome
+skinparam shadowing false
+
+actor "Super Admin" as SA
+actor "Event Admin" as EA
+actor "Operator Arena" as OA
+actor "Juri" as JU
+actor "Chief Judge" as CJ
+actor "Coach / Sekolah" as CO
+actor "Publik (Guest)" as PU
+actor "Robot EduRover\n(telemetri, flag OFF)" as RB #LightGray
+
+rectangle "NanoRobotic Competition Hub" {
+
+  package "Konfigurasi Kompetisi" {
+    usecase "Kelola Event" as UC1
+    usecase "Kelola Kategori per Jenjang\n(SD / SMP / SMA)" as UC2
+    usecase "Kelola Tantangan Dinamis" as UC3
+    usecase "Kelola Capability Tags" as UC4
+    usecase "Kelola & Lock Rulebook" as UC5
+    usecase "Kelola Arena" as UC6
+    usecase "Susun Jadwal & Heat" as UC7
+    usecase "Tugaskan Operator & Juri" as UC8
+  }
+
+  package "Registrasi & Verifikasi" {
+    usecase "Registrasi Tim & Peserta" as UC10
+    usecase "Isi Consent Orang Tua / Wali" as UC11
+    usecase "Verifikasi Registrasi" as UC12
+  }
+
+  package "Operasional Hari-H" {
+    usecase "Lihat Control Center Multi-Arena" as UC20
+    usecase "Kontrol Run\nCall / Ready / Start / Finish" as UC21
+    usecase "Catat DNF / DQ / No-show" as UC22
+    usecase "Catat Insiden" as UC23
+  }
+
+  package "Penilaian" {
+    usecase "Input Skor Dinamis\n(Draft / Submit)" as UC30
+    usecase "Upload Bukti\n(Evidence Vault)" as UC31
+  }
+
+  package "Pengesahan & Publikasi" {
+    usecase "Review Skor" as UC40
+    usecase "Approve / Reject" as UC41
+    usecase "Reopen dengan Alasan" as UC42
+    usecase "Tangani Protes & Re-run" as UC43
+    usecase "Publish per Jenjang" as UC44
+  }
+
+  package "Hasil & Pelaporan" {
+    usecase "Lihat Skor Tim Sendiri\n(Realtime, private channel)" as UC50
+    usecase "Lihat Leaderboard Publik" as UC51
+    usecase "Lihat Jadwal & Info Publik" as UC52
+    usecase "Lihat Audit Trail" as UC53
+    usecase "Export Hasil / Berita Acara" as UC54
+    usecase "Cetak Sertifikat QR" as UC55
+    usecase "Terima Telemetri\n(tidak masuk skor)" as UC56
+  }
+}
+
+' ---- Relasi aktor ke use case ----
+SA --> UC1
+SA --> UC2
+SA --> UC3
+SA --> UC4
+SA --> UC5
+SA --> UC6
+SA --> UC7
+SA --> UC8
+SA --> UC12
+SA --> UC20
+SA --> UC53
+SA --> UC54
+SA --> UC55
+
+EA --> UC1
+EA --> UC2
+EA --> UC3
+EA --> UC4
+EA --> UC5
+EA --> UC6
+EA --> UC7
+EA --> UC8
+EA --> UC12
+EA --> UC20
+EA --> UC23
+EA --> UC53
+EA --> UC54
+EA --> UC55
+
+OA --> UC20
+OA --> UC21
+OA --> UC22
+OA --> UC23
+OA --> UC31
+
+JU --> UC30
+JU --> UC31
+
+CJ --> UC40
+CJ --> UC41
+CJ --> UC42
+CJ --> UC43
+CJ --> UC44
+CJ --> UC53
+CJ --> UC54
+CJ --> UC55
+
+CO --> UC10
+CO --> UC50
+CO --> UC55
+
+PU --> UC51
+PU --> UC52
+
+RB --> UC56
+
+' ---- Include / extend ----
+UC10 ..> UC11 : <<include>>
+UC41 ..> UC40 : <<include>>
+UC30 ..> UC31 : <<extend>>\n{bila objek menandai evidence}
+UC44 ..> UC5 : <<include>>\n{publish butuh rulebook locked}
+UC21 ..> UC22 : <<extend>>
+UC43 ..> UC42 : <<extend>>
+UC51 ..> UC44 : <<include>>\n{guest hanya pasca-publish}
+
+note bottom of UC44
+  Prasyarat publish:
+  (a) semua run jenjang selesai
+  (b) semua skor Approved
+  Publish = aksi terpisah dari Approve.
+end note
+
+note bottom of UC30
+  Juri hanya melihat skor
+  yang dia input sendiri.
+  Draft tidak pernah dikirim.
+end note
+
+@enduml
