@@ -9,6 +9,24 @@
     dan semua skor disetujui. Alasan penghalang selalu ditampilkan di bawah.
 </div>
 
+<form method="GET" class="mt-4 flex flex-wrap items-end gap-3">
+    <div>
+        <label for="event" class="block text-xs text-slate-500">Event</label>
+        <select id="event" name="event" class="mt-1 rounded-md border-slate-300 text-sm">
+            @foreach ($events as $option)
+                <option value="{{ $option->id }}" @selected($event && $event->id === $option->id)>
+                    {{ $option->name }}
+                </option>
+            @endforeach
+        </select>
+    </div>
+    <button class="rounded-md bg-slate-800 px-4 py-2 text-sm font-medium text-white">Tampilkan</button>
+</form>
+
+@if (! $event)
+    <p class="mt-6 text-sm text-slate-500">Belum ada event.</p>
+@endif
+
 <div class="mt-6 space-y-6">
     @foreach ($categories as $row)
         @php($category = $row['category'])
@@ -64,4 +82,8 @@
         </div>
     @endforeach
 </div>
+
+@if ($event && $categories->isEmpty())
+    <p class="mt-6 text-sm text-slate-500">Event ini belum memiliki kategori.</p>
+@endif
 @endsection

@@ -4,7 +4,6 @@ namespace App\Http\Controllers\Chief;
 
 use App\Enums\ScoreStatus;
 use App\Http\Controllers\Controller;
-use App\Models\Category;
 use App\Models\Score;
 use App\Services\PublicationService;
 use Illuminate\Http\RedirectResponse;
@@ -26,7 +25,6 @@ class ApprovalController extends Controller
             'submitted' => Score::where('status', ScoreStatus::Submitted->value)->count(),
             'reopened' => Score::where('status', ScoreStatus::Reopened->value)->count(),
             'approved' => Score::where('status', ScoreStatus::Approved->value)->count(),
-            'categories' => Category::with('event')->get(),
         ]);
     }
 
