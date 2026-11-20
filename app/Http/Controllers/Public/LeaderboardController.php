@@ -23,7 +23,7 @@ class LeaderboardController extends Controller
     {
         $event = Event::with('categories')
             ->whereIn('status', ['running', 'scheduled', 'finished'])
-            ->orderByRaw("FIELD(status, 'running', 'scheduled', 'finished')")
+            ->inDisplayOrder()
             ->latest('starts_at')
             ->first()
             ?? Event::with('categories')->latest()->first();

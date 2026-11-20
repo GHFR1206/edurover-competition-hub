@@ -21,7 +21,7 @@ class EventController extends Controller
             'arenas',
         ])
             ->whereIn('status', ['running', 'scheduled', 'finished'])
-            ->orderByRaw("FIELD(status, 'running', 'scheduled', 'finished')")
+            ->inDisplayOrder()
             ->latest('starts_at')
             ->first()
             ?? Event::with(['categories', 'arenas'])->latest()->first();

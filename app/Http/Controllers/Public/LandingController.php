@@ -57,7 +57,7 @@ class LandingController extends Controller
     {
         return Event::with(['categories' => fn ($q) => $q->orderBy('level')])
             ->whereIn('status', ['running', 'scheduled', 'finished'])
-            ->orderByRaw("FIELD(status, 'running', 'scheduled', 'finished')")
+            ->inDisplayOrder()
             ->latest('starts_at')
             ->first()
             ?? Event::with('categories')->latest()->first();

@@ -71,6 +71,11 @@ class ScheduleController extends Controller
         $arena = Arena::findOrFail($validated['arena_id']);
         $startsAt = \Illuminate\Support\Carbon::parse($validated['scheduled_at']);
 
+        // Each new session for a team is the next attempt (re-runs included).
+        $attemptNo = (int) Run::where('category_id', $team->category_id)
+            ->where('team_id', $team->id)
+            ->max('attempt_no') + 1;
+
         $slot = HeatSlot::firstOrCreate(
             ['arena_id' => $arena->id, 'category_id' => $team->category_id, 'starts_at' => $startsAt],
             [
@@ -87,7 +92,7 @@ class ScheduleController extends Controller
             'arena_id' => $arena->id,
             'team_id' => $team->id,
             'heat_slot_id' => $slot->id,
-            'attempt_no' => 1,
+            'attempt_no' => $attemptNo,
             'status' => 'scheduled',
             'scheduled_at' => $startsAt,
         ]);

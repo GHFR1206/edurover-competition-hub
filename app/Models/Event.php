@@ -47,4 +47,20 @@ class Event extends Model
     {
         return $this->hasMany(Run::class);
     }
+
+    /**
+     * Order events the way the public site wants them: running first, then
+     * scheduled, then finished. Portable across MySQL and SQLite (avoids the
+     * MySQL-only FIELD() function).
+     *
+     * @param  \Illuminate\Database\Eloquent\Builder<Event>  $query
+     * @return \Illuminate\Database\Eloquent\Builder<Event>
+     */
+    public function scopeInDisplayOrder($query)
+    {
+        return $query->orderByRaw(
+            'case status when ? then 0 when ? then 1 when ? then 2 else 3 end',
+            ['running', 'scheduled', 'finished'],
+        );
+    }
 }
