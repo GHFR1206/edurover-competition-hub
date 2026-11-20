@@ -16,4 +16,6 @@ Route::get('/setup', [SetupController::class, 'index'])->name('setup.index');
 Route::get('/staff', StaffController::class)->name('staff.index');
 Route::get('/jadwal', [ScheduleController::class, 'index'])->name('schedule.index');
 Route::post('/jadwal', [ScheduleController::class, 'store'])->name('schedule.store');
-Route::get('/laporan', ReportController::class)->name('reports.index');
+Route::get('/laporan', [ReportController::class, 'index'])->name('reports.index');
+Route::get('/laporan/ekspor/klasemen', [ReportController::class, 'exportStandings'])->name('reports.export.standings');
+Route::get('/laporan/ekspor/partisipasi', [ReportController::class, 'exportParticipation'])->name('reports.export.participation');

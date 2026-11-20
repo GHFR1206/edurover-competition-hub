@@ -4,12 +4,12 @@ namespace App\Http\Controllers\EventAdmin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Arena;
-use App\Models\Category;
 use App\Models\Event;
 use App\Models\HeatSlot;
 use App\Models\Run;
 use App\Models\Team;
 use Illuminate\Http\Request;
+use Illuminate\Support\Carbon;
 use Illuminate\View\View;
 
 /**
@@ -69,7 +69,7 @@ class ScheduleController extends Controller
 
         $duration = (int) ($validated['duration'] ?? 15);
         $arena = Arena::findOrFail($validated['arena_id']);
-        $startsAt = \Illuminate\Support\Carbon::parse($validated['scheduled_at']);
+        $startsAt = Carbon::parse($validated['scheduled_at']);
 
         // Each new session for a team is the next attempt (re-runs included).
         $attemptNo = (int) Run::where('category_id', $team->category_id)

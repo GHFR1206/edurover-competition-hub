@@ -23,6 +23,24 @@
 
 <main class="content-zone">
     <div class="content-width page-stack">
+        @if ($team->certificates->isNotEmpty())
+            <section class="card reveal">
+                <span class="eyebrow">SERTIFIKAT</span>
+                <h2>Sertifikat tim</h2>
+                <div class="data-list">
+                    @foreach ($team->certificates as $certificate)
+                        <div class="data-row">
+                            <div>
+                                <strong>{{ $certificate->type === 'achievement' ? ($certificate->award ?? 'Pencapaian') : 'Sertifikat Partisipasi' }}</strong>
+                                <span>Diterbitkan {{ $certificate->issued_at?->translatedFormat('d M Y') }}</span>
+                            </div>
+                            <a class="button secondary" href="{{ route('certificates.show', $certificate) }}">Buka sertifikat</a>
+                        </div>
+                    @endforeach
+                </div>
+            </section>
+        @endif
+
         @forelse ($runs as $run)
             <section class="card reveal">
                 <span class="eyebrow">{{ strtoupper($run->arena?->name ?? 'ARENA') }}</span>

@@ -2,10 +2,8 @@
 
 namespace App\Http\Controllers\EventAdmin;
 
-use App\Enums\CategoryStatus;
 use App\Http\Controllers\Controller;
 use App\Models\Arena;
-use App\Models\Category;
 use App\Models\Event;
 use App\Models\Registration;
 use App\Models\Run;

@@ -6,10 +6,11 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>@yield('title', 'RoboRace') · Operator Arena</title>
     <link rel="icon" type="image/png" href="{{ asset('favicon.png') }}">
+    @include('partials.realtime-meta')
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Lilita+One&family=Nunito:wght@400;600;700;800&family=JetBrains+Mono:wght@700;800&family=Inter:wght@400;700&display=swap">
-    @vite(['resources/css/roborace/operator.css'])
+    @vite(['resources/css/roborace/operator.css', 'resources/js/realtime.js'])
 </head>
 <body>
 @php($user = auth()->user())
@@ -18,6 +19,7 @@
         <a class="brand" href="{{ route('operator.dashboard') }}" aria-label="RoboRace">Robo<span>Race</span></a>
         <div class="nav-menu">
             <a class="nav-active" href="{{ route('operator.arenas.index') }}">Antrean Arena</a>
+            <a href="{{ route('operator.incidents.index') }}">Insiden</a>
         </div>
         <span class="operator-label">Operator Arena</span>
     </nav>

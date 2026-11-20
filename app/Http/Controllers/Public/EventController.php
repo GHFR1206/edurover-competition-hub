@@ -3,7 +3,6 @@
 namespace App\Http\Controllers\Public;
 
 use App\Http\Controllers\Controller;
-use App\Models\Category;
 use App\Models\Event;
 use App\Models\Team;
 use Illuminate\View\View;

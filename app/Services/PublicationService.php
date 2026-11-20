@@ -4,6 +4,7 @@ namespace App\Services;
 
 use App\Enums\CategoryStatus;
 use App\Enums\ScoreStatus;
+use App\Events\StandingsUpdated;
 use App\Models\Category;
 use App\Models\CategoryPublication;
 use App\Models\Score;
@@ -92,6 +93,8 @@ class PublicationService
             $category->writeAudit('updated', null, ['status' => 'published'], 'Publikasi hasil kategori');
         });
 
+        StandingsUpdated::dispatch($category->fresh(), true);
+
         return [];
     }
 
@@ -117,6 +120,9 @@ class PublicationService
 
             $score->writeAudit('updated', null, ['status' => 'approved'], 'Penyetujuan skor');
         });
+
+        $score->loadMissing('run.category');
+        StandingsUpdated::dispatch($score->run->category, $score->run->category->isPublished());
     }
 
     public function reject(Score $score, User $chief, string $reason): void

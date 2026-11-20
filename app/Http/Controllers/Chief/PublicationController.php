@@ -5,12 +5,14 @@ namespace App\Http\Controllers\Chief;
 use App\Http\Controllers\Controller;
 use App\Models\Category;
 use App\Models\Event;
+use App\Services\CertificateService;
 use App\Services\PublicationService;
 use App\Services\StandingsService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
 use Illuminate\View\View;
+use RuntimeException;
 
 /**
  * Chief Judge publication step — separate from approve. Blocked until every
@@ -23,6 +25,7 @@ class PublicationController extends Controller
     public function __construct(
         private readonly PublicationService $publication,
         private readonly StandingsService $standings,
+        private readonly CertificateService $certificates,
     ) {}
 
     public function index(Request $request): View
@@ -65,6 +68,25 @@ class PublicationController extends Controller
         return redirect()
             ->route('chief.publication.index', ['event' => $category->event_id])
             ->with('status', "Kategori {$category->name} dipublikasikan.");
+    }
+
+    public function issueCertificates(Request $request, Category $category): RedirectResponse
+    {
+        if (! $this->events($request)->contains('id', $category->event_id)) {
+            abort(403, 'Kategori ini bukan bagian dari event yang dapat Anda kelola.');
+        }
+
+        try {
+            $count = $this->certificates->issueForCategory($category, $request->user());
+        } catch (RuntimeException $e) {
+            return back()->withErrors(['certificates' => $e->getMessage()]);
+        }
+
+        return redirect()
+            ->route('chief.publication.index', ['event' => $category->event_id])
+            ->with('status', $count > 0
+                ? "{$count} sertifikat diterbitkan untuk kategori {$category->name}."
+                : 'Semua sertifikat kategori ini sudah pernah diterbitkan.');
     }
 
     /** @return Collection<int, Event> */

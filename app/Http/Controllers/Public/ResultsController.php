@@ -51,6 +51,8 @@ class ResultsController extends Controller
             'podium' => $podium,
             'published' => $published,
             'publishedCategories' => $publishedCategories,
+            'liveEvent' => $event?->id,
+            'liveCategory' => $category?->id,
             'page' => 'hasil',
         ]);
     }
@@ -71,6 +73,8 @@ class ResultsController extends Controller
                 ->where('category_id', $category->id)
                 ->orderBy('scheduled_at')
                 ->get(),
+            'liveEvent' => $category->event_id,
+            'liveCategory' => $category->id,
             'page' => 'hasil',
         ]);
     }

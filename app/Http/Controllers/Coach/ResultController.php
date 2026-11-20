@@ -28,7 +28,7 @@ class ResultController extends Controller
     {
         abort_unless($request->user()->coachProfile?->school_id === $team->school_id, 403);
 
-        $team->load(['school', 'category', 'runs.arena', 'runs.scores.lines.scoreObject']);
+        $team->load(['school', 'category', 'certificates', 'runs.arena', 'runs.scores.lines.scoreObject']);
 
         $visibleRuns = $team->runs->map(function ($run) {
             $run->setRelation('scores', $run->scores

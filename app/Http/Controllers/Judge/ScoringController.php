@@ -41,7 +41,7 @@ class ScoringController extends Controller
     {
         $this->authorizeRun($request, $run);
 
-        $run->load(['team.school', 'arena', 'category.challenges.scoreObjects.capabilityTag']);
+        $run->load(['team.school', 'arena', 'category.challenges.scoreObjects.capabilityTag', 'evidenceFiles']);
 
         $challenge = $run->category->challenges->first();
         $score = Score::with('lines')
@@ -56,6 +56,8 @@ class ScoringController extends Controller
             'challenge' => $challenge,
             'score' => $score,
             'lines' => $lines,
+            'evidence' => $run->evidenceFiles,
+            'requiresEvidence' => $challenge?->scoreObjects->contains(fn ($o) => $o->requires_evidence) ?? false,
         ]);
     }
 
@@ -69,13 +71,33 @@ class ScoringController extends Controller
             'entries.*.quantity' => ['nullable', 'integer', 'min:0'],
             'entries.*.achieved' => ['nullable', 'boolean'],
             'entries.*.notes' => ['nullable', 'string', 'max:255'],
+            'evidence_files' => ['nullable', 'array', 'max:6'],
+            'evidence_files.*' => ['file', 'mimes:jpg,jpeg,png,webp,gif,mp4,webm,pdf', 'max:20480'],
+            'evidence_kind' => ['nullable', 'in:photo,video,document,note'],
+            'evidence_caption' => ['nullable', 'string', 'max:255'],
         ]);
 
-        $this->scoring->saveDraft($run, $request->user(), $validated['entries'] ?? []);
+        $score = $this->scoring->saveDraft($run, $request->user(), $validated['entries'] ?? []);
+
+        foreach ($request->file('evidence_files', []) as $file) {
+            $path = $file->store('evidence/'.now()->format('Y/m'), 'local');
+
+            $run->evidenceFiles()->create([
+                'score_id' => $score->id,
+                'uploaded_by' => $request->user()->id,
+                'disk' => 'local',
+                'path' => $path,
+                'original_name' => $file->getClientOriginalName(),
+                'mime_type' => $file->getClientMimeType(),
+                'size_bytes' => $file->getSize(),
+                'kind' => $validated['evidence_kind'] ?? 'photo',
+                'caption' => $validated['evidence_caption'] ?? null,
+            ]);
+        }
 
         return redirect()
             ->route('judge.scores.edit', $run)
-            ->with('status', 'Draft skor tersimpan.');
+            ->with('status', 'Draft skor dan bukti tersimpan.');
     }
 
     public function submit(Request $request, Score $score): RedirectResponse

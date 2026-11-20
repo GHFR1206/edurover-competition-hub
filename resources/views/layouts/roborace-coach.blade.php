@@ -16,6 +16,7 @@
     $coachNav = [
         ['id' => 'team', 'label' => 'Tim saya', 'route' => 'coach.teams.index'],
         ['id' => 'results', 'label' => 'Hasil', 'route' => 'coach.results.index'],
+        ['id' => 'appeals', 'label' => 'Banding', 'route' => 'coach.appeals.index'],
         ['id' => 'schedule', 'label' => 'Jadwal', 'route' => 'public.schedule'],
     ];
     $activeNav = $page ?? 'team';

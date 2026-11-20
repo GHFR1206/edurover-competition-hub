@@ -32,15 +32,15 @@
     <div class="rows">
         <div class="row">
             <div class="row-copy"><strong>Daftar peserta lengkap</strong><span>{{ $teamCount }} tim · nama anggota, jenjang, status verifikasi</span></div>
-            <span class="badge">CSV</span>
+            <a class="button" href="{{ route('eventadmin.reports.export.participation') }}">Unduh CSV</a>
         </div>
         <div class="row">
             <div class="row-copy"><strong>Rekap sekolah</strong><span>{{ $schoolCount }} sekolah · coach pendamping dan kontak</span></div>
-            <span class="badge">CSV</span>
+            <a class="button" href="{{ route('eventadmin.reports.export.participation') }}">Unduh CSV</a>
         </div>
         <div class="row">
             <div class="row-copy"><strong>Rekap kehadiran arena</strong><span>{{ $runFinished }} selesai · dari {{ $runTotal }} run</span></div>
-            <span class="badge">CSV</span>
+            <a class="button" href="{{ route('eventadmin.reports.export.standings') }}">Unduh CSV</a>
         </div>
     </div>
 </section>
@@ -49,6 +49,10 @@
     <span class="eyebrow">HANYA SETELAH DIPUBLIKASIKAN</span>
     <h2>Hasil resmi</h2>
     <div class="rows">
+        <div class="row">
+            <div class="row-copy"><strong>Klasemen resmi (semua level terbit)</strong><span>Hanya kategori yang sudah dipublikasikan yang ikut diekspor</span></div>
+            <a class="button primary" href="{{ route('eventadmin.reports.export.standings') }}">Unduh CSV</a>
+        </div>
         @forelse ($published as $category)
             <div class="row">
                 <div class="row-copy">

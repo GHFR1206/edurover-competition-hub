@@ -17,6 +17,8 @@ export default defineConfig({
                 'resources/css/roborace/operator.css',
                 'resources/css/roborace/chief.css',
                 'resources/css/roborace/super-admin.css',
+                // Realtime (Reverb via Pusher protocol) — shared entry.
+                'resources/js/realtime.js',
             ],
             refresh: true,
         }),

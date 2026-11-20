@@ -6,7 +6,6 @@ use App\Http\Controllers\Controller;
 use App\Models\Arena;
 use App\Models\Category;
 use App\Models\Event;
-use App\Models\Run;
 use App\Models\Team;
 use App\Services\StandingsService;
 use Illuminate\View\View;

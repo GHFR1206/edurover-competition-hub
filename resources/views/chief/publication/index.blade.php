@@ -44,6 +44,10 @@
             <p class="publish-meta">Hasil sudah resmi. Jejak pengesahan tersimpan di audit log.</p>
             <div class="actions">
                 <a class="button primary" href="{{ route('public.results.category', $category) }}">Buka hasil resmi</a>
+                <form method="POST" action="{{ route('chief.publication.certificates', $category) }}">
+                    @csrf
+                    <button class="button yellow" type="submit">Terbitkan sertifikat</button>
+                </form>
             </div>
         @elseif ($row['publishable'])
             <span class="badge yellow">Siap dipublikasikan</span>

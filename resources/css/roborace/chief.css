@@ -1553,3 +1553,28 @@ button.official-team-row {
     scroll-behavior: auto !important;
   }
 }
+
+/* Tinjau Penilaian + Koreksi Resmi (ported from the chief-judge design). */
+.card label {
+  display: block;
+  margin: 14px 0 6px;
+  color: #5e3ba2;
+  font: 600 14px "Fredoka", sans-serif;
+}
+.card .evidence {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-top: 10px;
+}
+.card .evidence a {
+  padding: 7px 12px;
+  border-radius: 99px;
+  background: #ece7ff;
+  color: #5e3ba2;
+  font: 600 13px "Fredoka", sans-serif;
+  text-decoration: none;
+}
+.card .evidence a:hover {
+  background: #ddd2fa;
+}

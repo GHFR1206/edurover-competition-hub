@@ -27,7 +27,7 @@ class RolesAndPermissionsSeeder extends Seeder
             'score.input', 'score.submit',
             // Verification & publication
             'score.review', 'score.approve', 'score.reject', 'score.reopen', 'category.publish',
-            'appeal.manage', 'rerun.manage',
+            'appeal.submit', 'appeal.manage', 'rerun.manage',
             // Results
             'results.view.all', 'results.view.arena', 'results.view.own_team', 'results.view.published',
             // Registration
@@ -67,7 +67,7 @@ class RolesAndPermissionsSeeder extends Seeder
                 'export.results', 'export.certificates', 'export.curation',
             ],
             RoleEnum::Coach->value => [
-                'results.view.own_team', 'export.certificates',
+                'results.view.own_team', 'export.certificates', 'appeal.submit',
             ],
             RoleEnum::Public->value => [
                 'results.view.published',

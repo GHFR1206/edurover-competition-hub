@@ -41,6 +41,8 @@ class LeaderboardController extends Controller
             'category' => $category,
             'standings' => $standings,
             'published' => $published,
+            'liveEvent' => $event?->id,
+            'liveCategory' => $category?->id,
             'page' => 'leaderboard',
         ]);
     }

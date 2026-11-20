@@ -4,7 +4,6 @@ namespace App\Http\Controllers\EventAdmin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Category;
-use App\Models\Challenge;
 use App\Models\Event;
 use App\Models\Rulebook;
 use Illuminate\Http\Request;

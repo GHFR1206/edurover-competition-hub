@@ -16,8 +16,9 @@
     // "Review & Publikasi" and "Tinjau Penilaian" both share the verification area.
     $chiefNav = [
         ['id' => 'review', 'label' => 'Review & Publikasi', 'route' => 'chief.verification.index'],
-        ['id' => 'judging', 'label' => 'Tinjau Penilaian', 'route' => 'chief.verification.index'],
-        ['id' => 'correction', 'label' => 'Koreksi Resmi', 'route' => 'chief.verification.index'],
+        ['id' => 'judging', 'label' => 'Tinjau Penilaian', 'route' => 'chief.judging.index'],
+        ['id' => 'correction', 'label' => 'Koreksi Resmi', 'route' => 'chief.correction.index'],
+        ['id' => 'appeals', 'label' => 'Banding', 'route' => 'chief.appeals.index'],
         ['id' => 'results', 'label' => 'Hasil Resmi', 'route' => 'public.results'],
         ['id' => 'leaderboard', 'label' => 'Leaderboard', 'route' => 'public.leaderboard'],
     ];

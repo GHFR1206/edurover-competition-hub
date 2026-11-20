@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\CertificateController;
+use App\Http\Controllers\EvidenceController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\Public\ArchiveController;
 use App\Http\Controllers\Public\EventController;
@@ -24,6 +26,9 @@ Route::get('/hasil', [ResultsController::class, 'index'])->name('public.results'
 Route::get('/hasil/{category:uuid}', [ResultsController::class, 'show'])->name('public.results.category');
 Route::get('/arsip', ArchiveController::class)->name('public.archive');
 
+// Public certificate verification by opaque token.
+Route::get('/sertifikat/verifikasi/{token}', [CertificateController::class, 'verify'])->name('certificates.verify');
+
 /*
 |--------------------------------------------------------------------------
 | Authenticated routes
@@ -32,6 +37,12 @@ Route::get('/arsip', ArchiveController::class)->name('public.archive');
 
 Route::middleware(['auth', 'active'])->group(function () {
     Route::get('/dashboard', RoleDashboardController::class)->name('dashboard');
+
+    // Private evidence download (authorised users only).
+    Route::get('/bukti/{evidence:uuid}', [EvidenceController::class, 'show'])->name('evidence.show');
+
+    // Certificate viewing (own team or staff).
+    Route::get('/sertifikat/{certificate:uuid}', [CertificateController::class, 'show'])->name('certificates.show');
 
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');

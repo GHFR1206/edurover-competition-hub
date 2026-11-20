@@ -9,6 +9,7 @@ use App\Models\Registration;
 use App\Models\Run;
 use App\Models\School;
 use App\Models\Team;
+use App\Services\ResultExportService;
 use App\Services\StandingsService;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
@@ -19,18 +20,40 @@ use Illuminate\View\View;
  */
 class ReportController extends Controller
 {
-    public function __construct(private readonly StandingsService $standings) {}
+    public function __construct(private readonly StandingsService $standings, private readonly ResultExportService $export) {}
 
-    public function __invoke(Request $request): View
+    public function index(Request $request): View
     {
         $event = Event::with('categories')->latest('starts_at')->first();
+
+        return view('event-admin.reports', $this->data($event));
+    }
+
+    public function exportStandings(Request $request)
+    {
+        return $this->export->standings($this->event());
+    }
+
+    public function exportParticipation(Request $request)
+    {
+        return $this->export->participation($this->event());
+    }
+
+    private function event(): Event
+    {
+        return Event::with('categories')->latest('starts_at')->firstOrFail();
+    }
+
+    /** @return array<string, mixed> */
+    private function data(?Event $event): array
+    {
         $categoryIds = $event?->categories->pluck('id') ?? collect();
 
         $published = $event
             ? $event->categories->filter(fn (Category $c) => $c->isPublished())->sortBy('level')
             : collect();
 
-        return view('event-admin.reports', [
+        return [
             'event' => $event,
             'teamCount' => Team::whereIn('category_id', $categoryIds)->count(),
             'verifiedCount' => Team::whereIn('category_id', $categoryIds)->where('status', 'verified')->count(),
@@ -42,6 +65,6 @@ class ReportController extends Controller
             'draftLevels' => $event ? $event->categories->reject(fn (Category $c) => $c->isPublished())->sortBy('level') : collect(),
             'schools' => School::withCount('teams')->orderByDesc('teams_count')->take(8)->get(),
             'page' => 'reports',
-        ]);
+        ];
     }
 }

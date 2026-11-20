@@ -45,7 +45,7 @@
                 <span>Status run {{ $run->status->label() }}</span>
             </div>
 
-            <form method="POST" action="{{ route('judge.scores.store', $run) }}" class="parameters">
+            <form method="POST" action="{{ route('judge.scores.store', $run) }}" class="parameters" enctype="multipart/form-data">
                 @csrf
                 <h3>Parameter manual</h3>
                 <p>Isi jumlah dan centang objek yang tercapai. Poin mengikuti konfigurasi challenge pada level ini.</p>
@@ -80,6 +80,46 @@
 
                 @if ($score && $score->status !== \App\Enums\ScoreStatus::Approved)
                     <p class="muted">Total saat ini: <strong>{{ $score->total }}</strong> (subtotal {{ $score->subtotal }} − penalti {{ $score->penalty_total }})</p>
+                @endif
+
+                @if (! $score || $score->status !== \App\Enums\ScoreStatus::Approved)
+                    <div class="evidence-block">
+                        <h3>Bukti pendukung{{ $requiresEvidence ? ' (ada parameter wajib bukti)' : ' (opsional)' }}</h3>
+                        <p class="muted">Unggah foto/video bukti arena. Berkas disimpan privat dan hanya dapat dilihat pihak berwenang.</p>
+                        <label class="file-field">
+                            <span>Berkas (maks 6 · jpg/png/webp/mp4/pdf · 20 MB)</span>
+                            <input type="file" name="evidence_files[]" multiple accept="image/*,video/*,application/pdf">
+                        </label>
+                        <div class="meta-chips">
+                            <label class="file-field">
+                                <span>Jenis</span>
+                                <select name="evidence_kind">
+                                    <option value="photo">Foto</option>
+                                    <option value="video">Video</option>
+                                    <option value="document">Dokumen</option>
+                                    <option value="note">Catatan</option>
+                                </select>
+                            </label>
+                            <label class="file-field">
+                                <span>Keterangan (opsional)</span>
+                                <input type="text" name="evidence_caption" maxlength="255" placeholder="Mis. CP2 tercapai bersih">
+                            </label>
+                        </div>
+                    </div>
+                @endif
+
+                @if ($evidence->isNotEmpty())
+                    <div class="evidence-block">
+                        <h3>Bukti terunggah ({{ $evidence->count() }})</h3>
+                        <ul class="evidence-list">
+                            @foreach ($evidence as $file)
+                                <li>
+                                    <a href="{{ route('evidence.show', $file) }}" target="_blank" rel="noopener">{{ $file->original_name ?? 'bukti' }}</a>
+                                    <span class="muted">{{ strtoupper($file->kind) }} · {{ number_format(($file->size_bytes ?? 0) / 1024, 0) }} KB @if ($file->caption) · {{ $file->caption }} @endif</span>
+                                </li>
+                            @endforeach
+                        </ul>
+                    </div>
                 @endif
 
                 @if ($challenge && $challenge->scoreObjects->isNotEmpty() && (! $score || $score->status !== \App\Enums\ScoreStatus::Approved))

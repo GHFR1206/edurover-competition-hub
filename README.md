@@ -4,7 +4,9 @@ Sistem manajemen kompetisi robot **EduRover** untuk jenjang **SD, SMP, SMA** —
 penilaian juri berbasis poin, verifikasi/approval/publikasi oleh Chief Judge, evidence vault,
 audit trail, dan export untuk kurasi.
 
-> Status: **Fase 0 — Fondasi teknis** selesai. Lihat `docs/ASSUMPTIONS.md` dan rencana fase di bawah.
+> Status: **Fase 0–7 selesai** (fungsional). Fitur inti lengkap: scoring, evidence vault, approval &
+> publikasi, koreksi resmi, banding, laporan insiden, sertifikat, export CSV, dan realtime. Lihat
+> `docs/ASSUMPTIONS.md` dan peta fase di bawah.
 
 ## Stack
 
@@ -88,13 +90,13 @@ user tiap peran + 3 juri tambahan. **Score object yang diseed adalah CONTOH, buk
 | Fase | Isi | Status |
 |---|---|---|
 | 0 | Fondasi teknis (deps, struktur domain, README, CI) | ✅ selesai |
-| 1 | UX: user journey, storyboard, prototype Blade diklik (data dummy) | ⏳ menunggu |
-| 2 | Auth, 7 peran, event, kategori, tantangan dinamis, rulebook config | — |
-| 3 | Sekolah, tim, peserta, registrasi, verifikasi, consent | — |
-| 4 | Multi-arena, jadwal, antrean, run lifecycle, penugasan operator/juri | — |
-| 5 | Scoring engine, judge entry, evidence upload, approve/reopen, audit | — |
-| 6 | Realtime privat, visibilitas guest, Publish, leaderboard, export | — |
-| 7 | Hardening: security, visibilitas, offline/retry, load test, UAT | — |
+| 1 | UX: user journey, storyboard, prototype Blade diklik (data dummy) | ✅ selesai |
+| 2 | Auth, 7 peran, event, kategori, tantangan dinamis, rulebook config | ✅ selesai |
+| 3 | Sekolah, tim, peserta, registrasi, verifikasi, consent | ✅ selesai |
+| 4 | Multi-arena, jadwal, antrean, run lifecycle, penugasan operator/juri | ✅ selesai |
+| 5 | Scoring engine, judge entry, evidence upload, approve/reopen, audit | ✅ selesai |
+| 6 | Realtime privat, visibilitas guest, Publish, leaderboard, export | ✅ selesai |
+| 7 | Hardening: security, visibilitas, offline/retry, load test, UAT | ⏳ sebagian (UAT/load test manual) |
 
 ## CI
 

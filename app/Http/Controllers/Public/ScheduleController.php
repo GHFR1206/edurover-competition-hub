@@ -4,7 +4,6 @@ namespace App\Http\Controllers\Public;
 
 use App\Enums\Level;
 use App\Http\Controllers\Controller;
-use App\Models\Category;
 use App\Models\Event;
 use App\Models\Run;
 use Illuminate\Http\Request;
@@ -50,6 +49,7 @@ class ScheduleController extends Controller
             'todayRuns' => $todayRuns,
             'activeArenas' => $activeArenas,
             'next' => $next,
+            'liveEvent' => $event?->id,
             'page' => 'jadwal',
         ]);
     }

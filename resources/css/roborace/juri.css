@@ -911,8 +911,7 @@ footer hr {
   color: #5e3ba2;
 }
 .preview-copy {
-  padding-top: 12px;
-  border-top: 1px dashed #c9b8f0;
+  padding-top: 12px;  border-top: 1px dashed #c9b8f0;
   color: #6e7090;
 }
 .summary-grid {
@@ -1391,4 +1390,66 @@ footer hr {
   .floating-remote {
     display: none;
   }
+}
+
+/* Evidence upload + list (ported from the juri design). */
+.evidence-block {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 16px;
+  border: 2px dashed #c9b8f0;
+  border-radius: 16px;
+  background: #faf7ff;
+}
+.evidence-block h3 {
+  margin: 0;
+  color: #5e3ba2;
+  font: 18px "Lilita One";
+}
+.evidence-block .file-field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  height: auto;
+  min-height: 0;
+  padding: 0;
+  border: 0;
+  background: none;
+}
+.evidence-block .file-field span {
+  color: #6e7090;
+  font: 12px "JetBrains Mono";
+}
+.evidence-block input[type="file"],
+.evidence-block input[type="text"],
+.evidence-block select {
+  width: 100%;
+  padding: 10px 14px;
+  border: 2px solid #c9b8f0;
+  border-radius: 12px;
+  background: #fff;
+  color: #121326;
+}
+.evidence-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.evidence-list li {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: 10px 12px;
+  border-radius: 12px;
+  background: #fff;
+  border: 2px solid #ece7ff;
+}
+.evidence-list a {
+  color: #5e3ba2;
+  font: 15px "Fredoka";
+  text-decoration: underline;
 }

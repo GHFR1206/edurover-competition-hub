@@ -9,6 +9,7 @@ use App\Models\Event;
 use App\Models\Registration;
 use App\Models\Run;
 use App\Models\Setting;
+use App\Models\Team;
 use App\Models\User;
 use Database\Seeders\DemoSeeder;
 use Database\Seeders\RolesAndPermissionsSeeder;
@@ -91,7 +92,7 @@ it('advances an event through the one-way flow', function () {
 it('schedules a run and rejects arena or team conflicts', function () {
     $admin = ($this->eventAdmin)();
     $event = Event::with(['categories', 'arenas'])->latest('starts_at')->firstOrFail();
-    $team = $event->categories->first()->teams()->first() ?? \App\Models\Team::firstOrFail();
+    $team = $event->categories->first()->teams()->first() ?? Team::firstOrFail();
     $arena = $event->arenas->firstOrFail();
 
     $when = now()->addWeek()->setTime(9, 0)->toDateTimeString();
@@ -108,7 +109,7 @@ it('schedules a run and rejects arena or team conflicts', function () {
 
     // Same arena at the same time conflicts.
     $this->actingAs($admin)->post('/event-admin/jadwal', [
-        'team_id' => \App\Models\Team::where('id', '!=', $team->id)->firstOrFail()->id,
+        'team_id' => Team::where('id', '!=', $team->id)->firstOrFail()->id,
         'arena_id' => $arena->id,
         'scheduled_at' => $when,
     ])->assertSessionHasErrors('scheduled_at');

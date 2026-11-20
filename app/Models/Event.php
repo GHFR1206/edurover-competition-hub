@@ -5,6 +5,7 @@ namespace App\Models;
 use App\Models\Concerns\Auditable;
 use App\Models\Concerns\HasUuid;
 use Database\Factories\EventFactory;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -53,8 +54,8 @@ class Event extends Model
      * scheduled, then finished. Portable across MySQL and SQLite (avoids the
      * MySQL-only FIELD() function).
      *
-     * @param  \Illuminate\Database\Eloquent\Builder<Event>  $query
-     * @return \Illuminate\Database\Eloquent\Builder<Event>
+     * @param  Builder<Event>  $query
+     * @return Builder<Event>
      */
     public function scopeInDisplayOrder($query)
     {

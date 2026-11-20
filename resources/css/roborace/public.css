@@ -1231,3 +1231,146 @@ button.outline-btn, a.outline-btn { display: inline-flex; align-items: center; j
 button.purple-btn, a.purple-btn { display: inline-flex; align-items: center; justify-content: center; }
 .rank-row { text-decoration: none; }
 .leader-card { text-decoration: none; }
+
+/* Certificate page (print-to-PDF friendly) + verification. */
+.certificate-page {
+  min-height: 100vh;
+  display: grid;
+  place-items: center;
+  padding: 32px 16px;
+  background: linear-gradient(180deg, #cfe6ff 0%, #e9f3ff 55%, #f7f4ff 100%);
+}
+.certificate-card {
+  width: min(760px, 100%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  padding: 48px 40px;
+  border-radius: 28px;
+  background: #fff;
+  border: 6px solid #5e3ba2;
+  box-shadow: 0 24px 60px rgba(94, 59, 162, 0.18);
+  text-align: center;
+}
+.certificate-brand {
+  color: #5e3ba2;
+  font: 40px "Lilita One", sans-serif;
+}
+.certificate-brand span { color: #e0a100; }
+.certificate-card h1 {
+  margin: 0;
+  color: #121326;
+  font: 44px "Lilita One", sans-serif;
+}
+.certificate-name {
+  margin: 0;
+  color: #5e3ba2;
+  font: 36px "Lilita One", sans-serif;
+}
+.certificate-meta {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 24px;
+  margin: 20px 0;
+}
+.certificate-meta div { display: flex; flex-direction: column; gap: 2px; }
+.certificate-meta strong { color: #121326; font: 600 16px "Fredoka", sans-serif; }
+.certificate-meta span { color: #6e7090; font: 12px "JetBrains Mono", monospace; }
+.certificate-verify { display: flex; flex-direction: column; gap: 4px; align-items: center; }
+.certificate-verify code { color: #5e3ba2; font: 14px "JetBrains Mono", monospace; word-break: break-all; }
+.certificate-verify small { color: #6e7090; }
+.certificate-actions { display: flex; gap: 12px; margin-top: 20px; }
+
+@media print {
+  .certificate-actions { display: none; }
+  .certificate-page { background: #fff; padding: 0; }
+  .certificate-card { box-shadow: none; }
+}
+
+/* Profile page (shared by every role). */
+.profile-page {
+  min-height: 100vh;
+  padding: 32px 16px 64px;
+  background: linear-gradient(180deg, #e9f3ff 0%, #f7f4ff 100%);
+}
+.profile-hero {
+  width: min(960px, 100%);
+  margin: 0 auto 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.profile-hero .brand {
+  color: #5e3ba2;
+  font: 32px "Lilita One", sans-serif;
+  text-decoration: none;
+}
+.profile-hero .brand span { color: #e0a100; }
+.profile-hero h1 {
+  margin: 0;
+  color: #121326;
+  font: 40px "Lilita One", sans-serif;
+}
+.profile-hero .outline-btn {
+  align-self: flex-start;
+  margin-top: 4px;
+}
+.profile-grid {
+  width: min(960px, 100%);
+  margin: 0 auto;
+  display: grid;
+  gap: 24px;
+}
+.profile-form {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  margin-top: 16px;
+}
+.profile-form .field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.profile-form .field span {
+  color: #5e3ba2;
+  font: 600 13px "Fredoka", sans-serif;
+}
+.profile-form input {
+  width: 100%;
+  min-height: 48px;
+  padding: 12px 14px;
+  border: 2px solid #c9b8f0;
+  border-radius: 12px;
+  background: #fff;
+  color: #121326;
+}
+.profile-form input:focus {
+  outline: none;
+  border-color: #5e3ba2;
+  box-shadow: 0 0 0 3px rgba(94, 59, 162, 0.14);
+}
+.danger-card {
+  border-color: #f3c2c2;
+}
+.danger-btn {
+  padding: 12px 20px;
+  border: 0;
+  border-radius: 12px;
+  background: #d94a4a;
+  color: #fff;
+  font: 600 15px "Fredoka", sans-serif;
+  cursor: pointer;
+}
+.danger-btn:hover { background: #c13d3d; }
+.link-btn {
+  border: 0;
+  background: none;
+  color: #5e3ba2;
+  font: 600 14px "Fredoka", sans-serif;
+  text-decoration: underline;
+  cursor: pointer;
+  padding: 0;
+}

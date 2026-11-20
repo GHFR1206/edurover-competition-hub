@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Operator;
 
 use App\Enums\RunStatus;
+use App\Events\RunStatusChanged;
 use App\Http\Controllers\Controller;
 use App\Models\Arena;
 use App\Models\Run;
@@ -43,6 +44,7 @@ class ArenaController extends Controller
         return view('operator.arenas.show', [
             'arena' => $arena,
             'runs' => $arena->runs->sortBy('scheduled_at'),
+            'liveArena' => $arena->id,
         ]);
     }
 
@@ -76,6 +78,9 @@ class ArenaController extends Controller
 
         $run->operator_id = $request->user()->id;
         $run->save();
+
+        $run->load(['team', 'arena']);
+        RunStatusChanged::dispatch($run);
 
         return back()->with('status', "Status run diperbarui menjadi {$status->label()}.");
     }
