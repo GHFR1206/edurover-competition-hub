@@ -1,96 +1,119 @@
-@extends('layouts.role')
+@extends('layouts.roborace-chief')
 
 @section('title', 'Tinjau Skor')
-@section('heading', 'Tinjau Skor — ' . $score->run?->team?->name)
+
+@php($page = 'review')
+
+@section('hero')@endsection
+@section('hero-title', 'Tinjau skor ' . ($score->run?->team?->name ?? ''))
+@section('hero-subtitle', ($score->run?->arena?->name ?? 'Arena') . ' · Juri ' . ($score->judge?->name ?? '—') . ' · ' . $score->status->label())
+@section('hero-mascot', 'd8b40.png')
 
 @section('content')
-<a href="{{ route('chief.verification.index') }}" class="text-sm text-indigo-600 hover:underline">&larr; Kembali</a>
-
-<div class="mt-4 grid gap-4 sm:grid-cols-4">
-    <div class="rounded-xl border border-slate-200 bg-white p-4">
-        <p class="text-xs text-slate-500">Arena</p>
-        <p class="font-semibold">{{ $score->run?->arena?->name }}</p>
-    </div>
-    <div class="rounded-xl border border-slate-200 bg-white p-4">
-        <p class="text-xs text-slate-500">Juri</p>
-        <p class="font-semibold">{{ $score->judge?->name }}</p>
-    </div>
-    <div class="rounded-xl border border-slate-200 bg-white p-4">
-        <p class="text-xs text-slate-500">Status</p>
-        <p class="font-semibold">{{ $score->status->label() }}</p>
-    </div>
-    <div class="rounded-xl border border-slate-200 bg-white p-4">
-        <p class="text-xs text-slate-500">Total</p>
-        <p class="text-2xl font-bold">{{ $score->total }}</p>
-        <p class="text-xs text-slate-400">subtotal {{ $score->subtotal }} − penalti {{ $score->penalty_total }}</p>
-    </div>
+<div class="actions">
+    <a class="button" href="{{ route('chief.verification.index') }}">← Kembali ke antrean</a>
+    <span class="badge {{ $score->status->value === 'approved' ? 'green' : 'yellow' }}">{{ $score->status->label() }}</span>
 </div>
 
-<div class="mt-6 overflow-hidden rounded-xl border border-slate-200 bg-white">
-    <table class="w-full text-sm">
-        <thead class="bg-slate-50 text-slate-500">
-            <tr>
-                <th class="px-4 py-3 text-left">Objek Skor</th>
-                <th class="px-4 py-3 text-right">Poin/Unit</th>
-                <th class="px-4 py-3 text-center">Jumlah</th>
-                <th class="px-4 py-3 text-right">Dihitung</th>
-                <th class="px-4 py-3 text-left">Catatan</th>
-            </tr>
-        </thead>
-        <tbody class="divide-y divide-slate-100">
-            @forelse ($score->lines as $line)
-                <tr>
-                    <td class="px-4 py-3">{{ $line->scoreObject?->name }}</td>
-                    <td class="px-4 py-3 text-right">{{ $line->points_per_unit_snapshot }}</td>
-                    <td class="px-4 py-3 text-center">{{ $line->quantity }}@if ($line->achieved) ✓ @endif</td>
-                    <td class="px-4 py-3 text-right font-mono">{{ $line->computed_points }}</td>
-                    <td class="px-4 py-3 text-slate-500">{{ $line->notes }}</td>
-                </tr>
-            @empty
-                <tr><td colspan="5" class="px-4 py-6 text-center text-slate-500">Tidak ada baris skor.</td></tr>
-            @endforelse
-        </tbody>
-    </table>
-</div>
+<section class="card">
+    <span class="eyebrow">RINGKASAN PENILAIAN</span>
+    <h2>{{ $score->run?->team?->name }} · {{ $score->run?->category?->level->publicLabel() }}</h2>
+    <div class="stats">
+        <div class="card">
+            <span class="eyebrow">SUBTOTAL</span>
+            <b>{{ $score->subtotal }}</b>
+            <p>Poin sebelum penalti</p>
+        </div>
+        <div class="card">
+            <span class="eyebrow">PENALTI</span>
+            <b>{{ $score->penalty_total }}</b>
+            <p>Pengurang total</p>
+        </div>
+        <div class="card">
+            <span class="eyebrow">TOTAL</span>
+            <b>{{ $score->total }}</b>
+            <p>subtotal − penalti</p>
+        </div>
+    </div>
+</section>
+
+<section class="card">
+    <span class="eyebrow">RINCIAN BARIS SKOR</span>
+    <h2>Detail penilaian</h2>
+    <div class="rows">
+        @forelse ($score->lines as $line)
+            <div class="data-row">
+                <div>
+                    <strong>{{ $line->scoreObject?->name }}</strong>
+                    <span>
+                        {{ $line->points_per_unit_snapshot }} poin/unit · jumlah {{ $line->quantity }}
+                        @if ($line->achieved) · ✓ tercapai @endif
+                        @if ($line->notes) · {{ $line->notes }} @endif
+                    </span>
+                </div>
+                <div class="score">{{ $line->computed_points }}</div>
+            </div>
+        @empty
+            <p class="muted">Tidak ada baris skor.</p>
+        @endforelse
+    </div>
+</section>
 
 @if ($score->approvals->isNotEmpty())
-    <h2 class="mt-8 font-semibold text-lg">Riwayat Keputusan</h2>
-    <ul class="mt-2 space-y-2 text-sm">
-        @foreach ($score->approvals as $approval)
-            <li class="rounded-lg border border-slate-200 bg-white px-4 py-2">
-                <span class="font-medium">{{ ucfirst($approval->decision) }}</span>
-                oleh {{ $approval->decidedBy?->name }} — {{ $approval->decided_at?->format('d M Y H:i') }}
-                @if ($approval->reason)<br><span class="text-slate-500">{{ $approval->reason }}</span>@endif
-            </li>
-        @endforeach
-    </ul>
+    <section class="card">
+        <span class="eyebrow">JEJAK KEPUTUSAN</span>
+        <h2>Riwayat keputusan</h2>
+        <div class="rows">
+            @foreach ($score->approvals as $approval)
+                <div class="data-row">
+                    <div>
+                        <strong>{{ ucfirst($approval->decision) }} · {{ $approval->decidedBy?->name ?? 'Sistem' }}</strong>
+                        <span>{{ $approval->decided_at?->translatedFormat('d M Y H:i') }} WIB @if ($approval->reason) · {{ $approval->reason }} @endif</span>
+                    </div>
+                </div>
+            @endforeach
+        </div>
+    </section>
 @endif
 
-<div class="mt-8 grid gap-4 lg:grid-cols-3">
-    <form method="POST" action="{{ route('chief.verification.approve', $score) }}" class="rounded-xl border border-emerald-200 bg-emerald-50 p-5">
-        @csrf
-        @method('PATCH')
-        <p class="font-semibold text-emerald-800">Setujui</p>
-        <p class="mt-1 text-xs text-emerald-700">Skor menjadi resmi. Hanya jika Anda bukan penulisnya.</p>
-        <button @disabled($score->judge_id === auth()->id()) class="mt-3 rounded-lg bg-emerald-600 px-4 py-2 text-sm font-medium text-white disabled:opacity-40">
-            Setujui Skor
-        </button>
-    </form>
+<div class="correction-grid">
+    <section class="card decision-card">
+        <span class="eyebrow purple">SETUJUI</span>
+        <h2>Jadikan resmi</h2>
+        <p class="decision-description">Skor menjadi resmi. Hanya dapat dilakukan bila Anda bukan penulisnya.</p>
+        <form method="POST" action="{{ route('chief.verification.approve', $score) }}">
+            @csrf
+            @method('PATCH')
+            <div class="actions">
+                <button class="button primary" type="submit" @disabled($score->judge_id === auth()->id())>Setujui skor</button>
+            </div>
+        </form>
+        @if ($score->judge_id === auth()->id())
+            <small>Maker-checker: skor ini Anda tulis sendiri, tombol dinonaktifkan.</small>
+        @endif
+    </section>
 
-    <form method="POST" action="{{ route('chief.verification.reject', $score) }}" class="rounded-xl border border-rose-200 bg-rose-50 p-5">
-        @csrf
-        @method('PATCH')
-        <p class="font-semibold text-rose-800">Tolak</p>
-        <input type="text" name="reason" required placeholder="Alasan penolakan" class="mt-2 w-full rounded-md border-slate-300 text-sm">
-        <button class="mt-3 rounded-lg bg-rose-600 px-4 py-2 text-sm font-medium text-white">Tolak Skor</button>
-    </form>
-
-    <form method="POST" action="{{ route('chief.verification.reopen', $score) }}" class="rounded-xl border border-slate-200 bg-slate-50 p-5">
-        @csrf
-        @method('PATCH')
-        <p class="font-semibold">Buka Ulang</p>
-        <input type="text" name="reason" required placeholder="Alasan pembukaan ulang" class="mt-2 w-full rounded-md border-slate-300 text-sm">
-        <button class="mt-3 rounded-lg bg-slate-700 px-4 py-2 text-sm font-medium text-white">Buka Ulang</button>
-    </form>
+    <section class="card decision-card">
+        <span class="eyebrow purple">TOLAK / BUKA ULANG</span>
+        <h2>Kembalikan ke juri</h2>
+        <form method="POST" action="{{ route('chief.verification.reject', $score) }}">
+            @csrf
+            @method('PATCH')
+            <label for="reject-reason">Alasan penolakan *</label>
+            <input id="reject-reason" type="text" name="reason" required maxlength="255" placeholder="Nilai manual belum dilengkapi">
+            <div class="actions">
+                <button class="button danger" type="submit">Tolak skor</button>
+            </div>
+        </form>
+        <form method="POST" action="{{ route('chief.verification.reopen', $score) }}">
+            @csrf
+            @method('PATCH')
+            <label for="reopen-reason">Alasan pembukaan ulang *</label>
+            <input id="reopen-reason" type="text" name="reason" required maxlength="255" placeholder="Bukti tambahan ditemukan">
+            <div class="actions">
+                <button class="button" type="submit">Buka ulang</button>
+            </div>
+        </form>
+    </section>
 </div>
 @endsection

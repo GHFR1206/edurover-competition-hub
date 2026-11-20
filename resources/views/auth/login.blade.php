@@ -1,47 +1,63 @@
-<x-guest-layout>
-    <!-- Session Status -->
-    <x-auth-session-status class="mb-4" :status="session('status')" />
+@extends('layouts.roborace-auth')
 
-    <form method="POST" action="{{ route('login') }}">
-        @csrf
+@section('title', 'Masuk · RoboRace')
 
-        <!-- Email Address -->
-        <div>
-            <x-input-label for="email" :value="__('Email')" />
-            <x-text-input id="email" class="block mt-1 w-full" type="email" name="email" :value="old('email')" required autofocus autocomplete="username" />
-            <x-input-error :messages="$errors->get('email')" class="mt-2" />
+@section('intro-eyebrow', 'SELAMAT DATANG KEMBALI')
+@section('intro-title', "Siap melaju,\nsiap jadi juara?")
+@section('intro-description', 'Saatnya berkompetisi, berkolaborasi, dan mencetak prestasi!')
+@section('intro-mascot', '17d7a.png')
+
+@section('card-note', 'Siap berlomba? Mari berikan yang terbaik!')
+@section('card-note-mascot', '17d7a.png')
+
+@section('content')
+<form class="auth-card login-card" method="POST" action="{{ route('login') }}" novalidate>
+    @csrf
+
+    @if (session('status'))
+        <div class="success-note">{{ session('status') }}</div>
+    @endif
+
+    <span class="card-kicker">MULAI DARI SINI</span>
+    <h2>Masuk ke RoboRace</h2>
+    <p class="card-description">Senang melihatmu kembali di lintasan!</p>
+
+    <label class="field">
+        <span>Email</span>
+        <input name="email" type="email" value="{{ old('email') }}" placeholder="nama@sekolah.sch.id"
+               required autofocus autocomplete="username" @if ($errors->has('email')) aria-invalid="true" @endif>
+        @error('email') <small class="field-error">{{ $message }}</small> @enderror
+    </label>
+
+    <label class="field">
+        <span>Kata sandi</span>
+        <div class="password-input @error('password') input-error @enderror">
+            <input name="password" type="password" placeholder="••••••••"
+                   required autocomplete="current-password">
+            <button type="button" class="eye-button" aria-label="Tampilkan kata sandi"
+                    onclick="this.previousElementSibling.type = this.previousElementSibling.type === 'password' ? 'text' : 'password'">
+                <img src="{{ asset('assets/79260.svg') }}" alt="">
+            </button>
         </div>
+        @error('password') <small class="field-error">{{ $message }}</small> @enderror
+    </label>
 
-        <!-- Password -->
-        <div class="mt-4">
-            <x-input-label for="password" :value="__('Password')" />
+    <div class="form-options">
+        <label class="remember">
+            <input type="checkbox" name="remember" value="1" @checked(old('remember'))>
+            <span aria-hidden="true">✓</span>
+            Ingat saya
+        </label>
+        @if (Route::has('password.request'))
+            <a class="text-button" href="{{ route('password.request') }}">Lupa kata sandi?</a>
+        @endif
+    </div>
 
-            <x-text-input id="password" class="block mt-1 w-full"
-                            type="password"
-                            name="password"
-                            required autocomplete="current-password" />
+    <button class="submit-button" type="submit">Masuk</button>
 
-            <x-input-error :messages="$errors->get('password')" class="mt-2" />
-        </div>
-
-        <!-- Remember Me -->
-        <div class="block mt-4">
-            <label for="remember_me" class="inline-flex items-center">
-                <input id="remember_me" type="checkbox" class="rounded border-gray-300 text-indigo-600 shadow-sm focus:ring-indigo-500" name="remember">
-                <span class="ms-2 text-sm text-gray-600">{{ __('Remember me') }}</span>
-            </label>
-        </div>
-
-        <div class="flex items-center justify-end mt-4">
-            @if (Route::has('password.request'))
-                <a class="underline text-sm text-gray-600 hover:text-gray-900 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500" href="{{ route('password.request') }}">
-                    {{ __('Forgot your password?') }}
-                </a>
-            @endif
-
-            <x-primary-button class="ms-3">
-                {{ __('Log in') }}
-            </x-primary-button>
-        </div>
-    </form>
-</x-guest-layout>
+    <p class="switch-page">
+        Belum punya akun? <a href="{{ route('register') }}">Daftar sekolah →</a>
+    </p>
+    <div class="dotted-divider"></div>
+</form>
+@endsection

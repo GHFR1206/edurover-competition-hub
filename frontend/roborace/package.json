@@ -1,0 +1,19 @@
+{
+  "name": "roborace",
+  "private": true,
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
+  "scripts": {
+    "dev:publik": "npm run dev -w @roborace/publik",
+    "dev:auth": "npm run dev -w @roborace/auth",
+    "dev:coach": "npm run dev -w @roborace/coach",
+    "dev:event": "npm run dev -w @roborace/event-admin",
+    "dev:juri": "npm run dev -w @roborace/juri",
+    "dev:operator": "npm run dev -w @roborace/operator",
+    "dev:chief": "npm run dev -w @roborace/chief-judge",
+    "dev:super": "npm run dev -w @roborace/super-admin",
+    "build": "npm run build --workspaces --if-present"
+  }
+}

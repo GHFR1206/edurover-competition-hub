@@ -135,9 +135,11 @@ class DemoSeeder extends Seeder
         $users = [];
 
         foreach ($definitions as $role => $email) {
+            $password = $role === RoleEnum::SuperAdmin->value ? 'aghifari' : 'password';
+
             $user = User::firstOrCreate(
                 ['email' => $email],
-                ['name' => RoleEnum::from($role)->label(), 'password' => 'password', 'is_active' => true],
+                ['name' => RoleEnum::from($role)->label(), 'password' => $password, 'is_active' => true],
             );
             $user->syncRoles([$role]);
             $users[$role] = $user;

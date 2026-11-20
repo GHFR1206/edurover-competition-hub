@@ -1,41 +1,41 @@
-@extends('layouts.role')
+@extends('layouts.roborace-chief')
 
 @section('title', 'Verifikasi Skor')
-@section('heading', 'Verifikasi Skor')
+
+@php($page = 'review')
+
+@section('hero')@endsection
+@section('hero-title', 'Tinjau sebelum mengesahkan.')
+@section('hero-subtitle', 'Setiap skor juri melewati pemeriksaan Chief Judge. Maker-checker dijaga ketat.')
+@section('hero-mascot', 'd8b40.png')
 
 @section('content')
-<div class="rounded-xl border border-slate-200 bg-blue-50 px-4 py-3 text-sm text-blue-800">
+<div class="warning">
     <strong>Maker-checker:</strong> Anda tidak dapat menyetujui skor yang Anda tulis sendiri.
 </div>
 
-<div class="mt-4 overflow-hidden rounded-xl border border-slate-200 bg-white">
-    <table class="w-full text-sm">
-        <thead class="bg-slate-50 text-slate-500">
-            <tr>
-                <th class="px-4 py-3 text-left">Tim</th>
-                <th class="px-4 py-3 text-left">Arena</th>
-                <th class="px-4 py-3 text-left">Juri</th>
-                <th class="px-4 py-3 text-left">Status</th>
-                <th class="px-4 py-3 text-right">Total</th>
-                <th class="px-4 py-3"></th>
-            </tr>
-        </thead>
-        <tbody class="divide-y divide-slate-100">
-            @forelse ($scores as $score)
-                <tr>
-                    <td class="px-4 py-3">{{ $score->run?->team?->name }}<br><span class="text-xs text-slate-400">{{ $score->run?->category?->level->label() }}</span></td>
-                    <td class="px-4 py-3">{{ $score->run?->arena?->name }}</td>
-                    <td class="px-4 py-3">{{ $score->judge?->name }}</td>
-                    <td class="px-4 py-3">{{ $score->status->label() }}</td>
-                    <td class="px-4 py-3 text-right font-mono">{{ $score->total }}</td>
-                    <td class="px-4 py-3 text-right">
-                        <a href="{{ route('chief.verification.show', $score) }}" class="text-indigo-600 hover:underline">Tinjau</a>
-                    </td>
-                </tr>
-            @empty
-                <tr><td colspan="6" class="px-4 py-6 text-center text-slate-500">Tidak ada skor menunggu verifikasi.</td></tr>
-            @endforelse
-        </tbody>
-    </table>
+<section class="card">
+    <span class="eyebrow">ANTREAN VERSIFIKASI · {{ $scores->count() }}</span>
+    <h2>Skor menunggu keputusan</h2>
+    <div class="rows">
+        @forelse ($scores as $score)
+            <div class="data-row">
+                <div>
+                    <strong>{{ $score->run?->team?->name }} · {{ $score->run?->category?->level->publicLabel() }}</strong>
+                    <span>{{ $score->run?->arena?->name }} · Juri {{ $score->judge?->name }} · {{ $score->status->label() }}</span>
+                </div>
+                <div class="score">{{ $score->total }}</div>
+                <span class="badge {{ $score->status->value === 'reopened' ? 'yellow' : '' }}">{{ $score->status->label() }}</span>
+                <a class="button" href="{{ route('chief.verification.show', $score) }}">Tinjau</a>
+            </div>
+        @empty
+            <p class="muted">Tidak ada skor menunggu verifikasi.</p>
+        @endforelse
+    </div>
+</section>
+
+<div class="mascot-note">
+    <img src="{{ asset('assets/d8b40.png') }}" alt="Maskot RoboRace">
+    <strong>Valid bukan berarti sudah Resmi. Tanda ✓ Resmi muncul hanya setelah level dipublikasikan.</strong>
 </div>
 @endsection

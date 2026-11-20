@@ -1,62 +1,90 @@
-@extends('layouts.role')
+@extends('layouts.roborace-coach')
 
 @section('title', $team->name)
-@section('heading', 'Detail Tim')
+
+@php($page = 'team')
 
 @section('content')
-<a href="{{ route('coach.teams.index') }}" class="text-sm text-indigo-600 hover:underline">&larr; Kembali</a>
+<section class="hero hero-schedule">
+    <div class="content-width">
+        <div class="event-row">
+            <span class="live-chip">● LANGSUNG · {{ now()->translatedFormat('d M Y') }}</span>
+            <span class="series-chip">Seri Pilot</span>
+        </div>
+        <div class="hero-row">
+            <div>
+                <h1>{{ $team->name }}</h1>
+                <p>{{ $team->school?->name }} · {{ $team->category?->level->publicLabel() }}</p>
+            </div>
+            <img class="hero-mascot schedule-mascot" src="{{ asset('assets/17d7a.png') }}" alt="">
+        </div>
+    </div>
+</section>
 
-<div class="mt-4 grid gap-4 lg:grid-cols-3">
-    <div class="rounded-xl border border-slate-200 bg-white p-5">
-        <p class="text-xs text-slate-500">Tim</p>
-        <p class="text-xl font-bold">{{ $team->name }}</p>
-        <p class="text-sm text-slate-500">{{ $team->school?->name }}</p>
-        <p class="mt-2 text-xs">{{ $team->category->level->label() }} — {{ $team->category->name }}</p>
+<main class="content-zone">
+    <div class="ornament" aria-hidden="true">
+        <img src="{{ asset('assets/98d5a.svg') }}" alt="">
+        <span class="gear-cut"><img src="{{ asset('assets/98d5a.svg') }}" alt=""></span>
     </div>
-    <div class="rounded-xl border border-slate-200 bg-white p-5">
-        <p class="text-xs text-slate-500">Anggota</p>
-        <ul class="mt-2 space-y-1 text-sm">
-            @foreach ($team->participants as $participant)
-                <li class="flex justify-between">
-                    <span>{{ $participant->name }}</span>
-                    <span class="text-slate-400">{{ $participant->role === 'leader' ? 'Ketua' : 'Anggota' }}</span>
-                </li>
-            @endforeach
-        </ul>
-        <p class="mt-3 text-xs text-slate-400">NISN hanya terlihat oleh panitia, tidak untuk publik.</p>
-    </div>
-    <div class="rounded-xl border border-slate-200 bg-white p-5">
-        <p class="text-xs text-slate-500">Ringkasan Run</p>
-        <p class="text-3xl font-bold">{{ $team->runs->count() }}</p>
-        <p class="text-xs text-slate-500">total run tercatat</p>
-    </div>
-</div>
+    <div class="content-width page-stack">
+        <div class="two-column">
+            <section class="card reveal">
+                <span class="eyebrow">{{ strtoupper($team->school?->name ?? 'SEKOLAH') }} · {{ $team->category?->level->publicLabel() }}</span>
+                <h2>{{ $team->name }}</h2>
+                <span class="status-badge {{ $team->status->value === 'verified' ? 'success' : 'warning' }}">{{ $team->status->label() }}</span>
+                <p class="body-dark">{{ $team->category?->event?->name ?? 'RoboRace' }} · {{ $team->short_name ?? '—' }}</p>
+            </section>
+            <section class="card reveal" style="animation-delay:80ms">
+                <span class="eyebrow neutral">RINGKASAN RUN</span>
+                <h2>{{ $team->runs->count() }} run</h2>
+                <p>Total run tercatat untuk tim ini di seluruh arena.</p>
+            </section>
+        </div>
 
-<h2 class="mt-8 font-semibold text-lg">Riwayat Run</h2>
-<div class="mt-3 overflow-hidden rounded-xl border border-slate-200 bg-white">
-    <table class="w-full text-sm">
-        <thead class="bg-slate-50 text-slate-500">
-            <tr>
-                <th class="px-4 py-3 text-left">Arena</th>
-                <th class="px-4 py-3 text-left">Status</th>
-                <th class="px-4 py-3 text-left">Skor (belum resmi/resmi)</th>
-            </tr>
-        </thead>
-        <tbody class="divide-y divide-slate-100">
-            @forelse ($team->runs as $run)
-                <tr>
-                    <td class="px-4 py-3">{{ $run->arena?->name }}</td>
-                    <td class="px-4 py-3">{{ $run->status->label() }}</td>
-                    <td class="px-4 py-3">
-                        @foreach ($run->scores as $score)
-                            <span class="rounded-full bg-slate-100 px-2 py-1 text-xs">{{ $score->status->label() }}: {{ $score->total }}</span>
-                        @endforeach
-                    </td>
-                </tr>
-            @empty
-                <tr><td colspan="3" class="px-4 py-6 text-center text-slate-500">Belum ada run.</td></tr>
-            @endforelse
-        </tbody>
-    </table>
-</div>
+        <section class="card reveal" style="animation-delay:140ms">
+            <h2>Anggota tim</h2>
+            <div class="data-list">
+                @forelse ($team->participants as $participant)
+                    <div class="data-row">
+                        <div>
+                            <strong>{{ $participant->name }}</strong>
+                            <span>{{ $participant->role === 'leader' ? 'Ketua tim' : 'Anggota' }}</span>
+                        </div>
+                        <span class="status-badge success">Lengkap</span>
+                    </div>
+                @empty
+                    <p>Belum ada anggota tercatat.</p>
+                @endforelse
+            </div>
+            <p class="caption">NISN hanya terlihat oleh panitia, tidak untuk publik.</p>
+        </section>
+
+        <section class="card reveal" style="animation-delay:200ms">
+            <span class="eyebrow">RIWAYAT · ARENA &amp; SKOR</span>
+            <h2>Riwayat run</h2>
+            <div class="data-list schedule-list">
+                @forelse ($team->runs as $run)
+                    <div class="data-row">
+                        <div>
+                            <strong>{{ $run->arena?->name }}</strong>
+                            <span>
+                                {{ $run->status->label() }}
+                                @foreach ($run->scores as $score)
+                                    · {{ $score->status->label() }}: {{ $score->total }}
+                                @endforeach
+                            </span>
+                        </div>
+                        <span class="status-badge purple">Run</span>
+                    </div>
+                @empty
+                    <p>Belum ada run untuk tim ini.</p>
+                @endforelse
+            </div>
+            <div class="actions">
+                <a class="button secondary" href="{{ route('coach.teams.index') }}">← Kembali</a>
+                <a class="button primary" href="{{ route('coach.results.show', $team) }}">Lihat hasil</a>
+            </div>
+        </section>
+    </div>
+</main>
 @endsection

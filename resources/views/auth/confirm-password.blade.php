@@ -1,27 +1,31 @@
-<x-guest-layout>
-    <div class="mb-4 text-sm text-gray-600">
-        {{ __('This is a secure area of the application. Please confirm your password before continuing.') }}
-    </div>
+@extends('layouts.roborace-auth')
 
-    <form method="POST" action="{{ route('password.confirm') }}">
-        @csrf
+@section('title', 'Konfirmasi Kata Sandi · RoboRace')
+@section('layout-class', 'auth-layout--compact')
 
-        <!-- Password -->
-        <div>
-            <x-input-label for="password" :value="__('Password')" />
+@section('intro-title', 'Area aman')
+@section('intro-description', 'Konfirmasi kata sandimu sebelum melanjutkan.')
+@section('intro-mascot', '17d7a.png')
 
-            <x-text-input id="password" class="block mt-1 w-full"
-                            type="password"
-                            name="password"
-                            required autocomplete="current-password" />
+@section('content')
+<form class="auth-card forgot-card" method="POST" action="{{ route('password.confirm') }}" novalidate>
+    @csrf
 
-            <x-input-error :messages="$errors->get('password')" class="mt-2" />
+    <h2>Konfirmasi kata sandi</h2>
+    <p class="card-description">Ini area aman aplikasi. Mohon konfirmasi kata sandimu sebelum melanjutkan.</p>
+
+    <label class="field">
+        <span>Kata sandi</span>
+        <div class="password-input @error('password') input-error @enderror">
+            <input name="password" type="password" required autocomplete="current-password">
+            <button type="button" class="eye-button" aria-label="Tampilkan kata sandi"
+                    onclick="this.previousElementSibling.type = this.previousElementSibling.type === 'password' ? 'text' : 'password'">
+                <img src="{{ asset('assets/79260.svg') }}" alt="">
+            </button>
         </div>
+        @error('password') <small class="field-error">{{ $message }}</small> @enderror
+    </label>
 
-        <div class="flex justify-end mt-4">
-            <x-primary-button>
-                {{ __('Confirm') }}
-            </x-primary-button>
-        </div>
-    </form>
-</x-guest-layout>
+    <button class="submit-button" type="submit">Konfirmasi</button>
+</form>
+@endsection

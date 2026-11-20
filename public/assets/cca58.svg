@@ -1,0 +1,24 @@
+<svg preserveAspectRatio="none" overflow="visible" style="display: block;" width="1040" height="400" viewBox="0 0 1040 400" fill="none" xmlns="http://www.w3.org/2000/svg">
+<g id="Ornamen &#194;&#183; acuan HTML" clip-path="url(#clip0_0_10)">
+<path id="Vector" d="M837.288 320C920.037 320 987.119 243.888 987.119 150C987.119 56.1116 920.037 -20 837.288 -20C754.539 -20 687.458 56.1116 687.458 150C687.458 243.888 754.539 320 837.288 320Z" fill="url(#paint0_radial_0_10)"/>
+<g id="Group" opacity="0.7">
+<path id="Vector_2" d="M943.932 75H801.153C787.036 75 775.593 87.9837 775.593 104C775.593 120.016 787.036 133 801.153 133H943.932C958.048 133 969.492 120.016 969.492 104C969.492 87.9837 958.048 75 943.932 75Z" fill="white"/>
+<path id="Vector_3" d="M679.525 210H598.441C589.192 210 581.695 218.507 581.695 229C581.695 239.493 589.192 248 598.441 248H679.525C688.774 248 696.271 239.493 696.271 229C696.271 218.507 688.774 210 679.525 210Z" fill="white"/>
+<path id="Vector_4" d="M935.119 400H792.339C778.223 400 766.78 412.984 766.78 429C766.78 445.016 778.223 458 792.339 458H935.119C949.235 458 960.678 445.016 960.678 429C960.678 412.984 949.235 400 935.119 400Z" fill="white"/>
+</g>
+<g id="Group_2">
+<path id="Vector_5" d="M39.661 66L44.0678 80L57.2881 85L44.0678 90L39.661 104L35.2542 90L22.0339 85L35.2542 80L39.661 66Z" fill="#F5D23C" stroke-width="1.87761" stroke="white"/>
+<path id="Vector_6" d="M982.712 350L986.237 362L997.695 366L986.237 370L982.712 382L979.186 370L967.729 366L979.186 362L982.712 350Z" fill="#F5D23C" stroke-width="1.87761" stroke="white"/>
+</g>
+</g>
+<defs>
+<radialGradient id="paint0_radial_0_10" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(837.288 150) scale(149.831 170)">
+<stop stop-color="#FFE98A"/>
+<stop offset="0.55" stop-color="#FFD84D"/>
+<stop offset="1" stop-color="#FFD84D" stop-opacity="0"/>
+</radialGradient>
+<clipPath id="clip0_0_10">
+<rect width="1040" height="400" fill="white"/>
+</clipPath>
+</defs>
+</svg>

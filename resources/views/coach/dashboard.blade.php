@@ -1,36 +1,78 @@
-@extends('layouts.role')
+@extends('layouts.roborace-coach')
 
-@section('title', 'Dashboard Coach')
-@section('heading', 'Dashboard Coach / Sekolah')
+@section('title', 'Tim Saya')
+
+@php($page = 'team')
 
 @section('content')
-<div class="grid gap-4 sm:grid-cols-3">
-    <div class="rounded-xl border border-slate-200 bg-white p-5">
-        <p class="text-xs text-slate-500">Tim Terdaftar</p>
-        <p class="text-3xl font-bold">{{ $teams->count() }}</p>
-    </div>
-    <div class="rounded-xl border border-slate-200 bg-white p-5">
-        <p class="text-xs text-slate-500">Skor Menunggu Verifikasi</p>
-        <p class="text-3xl font-bold">{{ $pending }}</p>
-    </div>
-    <div class="rounded-xl border border-slate-200 bg-white p-5">
-        <p class="text-xs text-slate-500">Sekolah</p>
-        <p class="text-lg font-semibold">{{ auth()->user()->coachProfile?->school?->name ?? '—' }}</p>
-    </div>
-</div>
-
-<h2 class="mt-8 font-semibold text-lg">Tim Saya</h2>
-<div class="mt-3 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-    @forelse ($teams as $team)
-        <a href="{{ route('coach.teams.show', $team) }}" class="rounded-xl border border-slate-200 bg-white p-5 hover:border-indigo-400">
-            <div class="flex items-center justify-between">
-                <p class="font-semibold">{{ $team->name }}</p>
-                <span class="text-xs rounded-full bg-slate-100 px-2 py-1">{{ $team->category->level->label() }}</span>
+<section class="hero">
+    <div class="content-width">
+        <div class="event-row">
+            <span class="live-chip">● LANGSUNG · {{ now()->translatedFormat('d M Y') }}</span>
+            <span class="series-chip">Seri Pilot</span>
+        </div>
+        <div class="hero-row">
+            <div>
+                <h1>Tim kecil, mimpi besar.</h1>
+                <p>Halo, {{ auth()->user()->name }}! Siapkan timmu untuk petualangan berikutnya.</p>
             </div>
-            <p class="mt-1 text-xs text-slate-500">{{ $team->runs->count() }} run</p>
-        </a>
-    @empty
-        <p class="text-slate-500 text-sm">Belum ada tim terdaftar untuk sekolah Anda.</p>
-    @endforelse
-</div>
+            <img class="hero-mascot" src="{{ asset('assets/e638f.png') }}" alt="">
+        </div>
+    </div>
+</section>
+
+<main class="content-zone">
+    <div class="ornament" aria-hidden="true">
+        <img src="{{ asset('assets/98d5a.svg') }}" alt="">
+        <span class="gear-cut"><img src="{{ asset('assets/98d5a.svg') }}" alt=""></span>
+    </div>
+    <div class="content-width page-stack">
+        <div class="stats-grid">
+            <section class="card stat-card reveal" style="animation-delay:40ms">
+                <span class="antenna"><img src="{{ asset('assets/33664.svg') }}" alt=""></span>
+                <span class="eyebrow neutral">TIM TERDAFTAR</span>
+                <b class="stat-number">{{ $teams->count() }}</b>
+                <p>Tim sekolah Anda di kompetisi ini</p>
+            </section>
+            <section class="card stat-card reveal" style="animation-delay:110ms">
+                <span class="antenna"><img src="{{ asset('assets/33664.svg') }}" alt=""></span>
+                <span class="eyebrow neutral">SKOR MENUNGGU</span>
+                <b class="stat-number">{{ $pending }}</b>
+                <p>Penilaian menunggu verifikasi juri</p>
+            </section>
+            <section class="card stat-card reveal" style="animation-delay:180ms">
+                <span class="antenna"><img src="{{ asset('assets/33664.svg') }}" alt=""></span>
+                <span class="eyebrow neutral">SEKOLAH</span>
+                <b class="stat-number" style="font-size:30px;line-height:1.15">{{ auth()->user()->coachProfile?->school?->name ?? '—' }}</b>
+                <p>Asal sekolah tim binaan Anda</p>
+            </section>
+        </div>
+
+        <section class="card reveal" style="animation-delay:240ms">
+            <span class="eyebrow">DAFTAR TIM</span>
+            <h2>Tim saya</h2>
+            <div class="data-list">
+                @forelse ($teams as $team)
+                    <div class="data-row">
+                        <div>
+                            <strong>{{ $team->name }}</strong>
+                            <span>{{ $team->category?->level->publicLabel() }} · {{ $team->category?->name }} · {{ $team->runs->count() }} run</span>
+                        </div>
+                        <a class="button secondary" href="{{ route('coach.teams.show', $team) }}">Lihat tim</a>
+                    </div>
+                @empty
+                    <p>Belum ada tim terdaftar untuk sekolah Anda.</p>
+                @endforelse
+            </div>
+            <div class="actions">
+                <a class="button primary" href="{{ route('coach.results.index') }}">Lihat hasil</a>
+            </div>
+        </section>
+
+        <div class="mascot-message">
+            <img src="{{ asset('assets/d8b40.png') }}" alt="">
+            <strong>Robot &amp; API key baru tersedia setelah tim terverifikasi. Perbaiki catatan reviewer, lalu kirim ulang datamu.</strong>
+        </div>
+    </div>
+</main>
 @endsection

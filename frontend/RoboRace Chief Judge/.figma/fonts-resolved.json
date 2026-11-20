@@ -1,0 +1,181 @@
+{
+  "resolved": [
+    {
+      "family": "Fredoka",
+      "style": "SemiBold",
+      "font_style": "normal",
+      "font_weight": 600,
+      "format": "woff2",
+      "location": {
+        "type": "url",
+        "value": "https://static.figma.com/font/Fredoka_wdth_wght__1"
+      }
+    },
+    {
+      "family": "Inter",
+      "style": "Bold",
+      "font_style": "normal",
+      "font_weight": 700,
+      "format": "woff2",
+      "location": {
+        "type": "url",
+        "value": "https://static.figma.com/font/Inter_1"
+      }
+    },
+    {
+      "family": "Inter",
+      "style": "Regular",
+      "font_style": "normal",
+      "font_weight": 400,
+      "format": "woff2",
+      "location": {
+        "type": "url",
+        "value": "https://static.figma.com/font/Inter_1"
+      }
+    },
+    {
+      "family": "JetBrains Mono",
+      "style": "ExtraBold",
+      "font_style": "normal",
+      "font_weight": 800,
+      "format": "woff2",
+      "location": {
+        "type": "url",
+        "value": "https://static.figma.com/font/JetBrainsMono_wght__1"
+      }
+    },
+    {
+      "family": "Lilita One",
+      "style": "Regular",
+      "font_style": "normal",
+      "font_weight": 400,
+      "format": "woff2",
+      "location": {
+        "type": "url",
+        "value": "https://static.figma.com/font/LilitaOne-Regular_1"
+      }
+    },
+    {
+      "family": "Noto Sans Math",
+      "style": "Regular",
+      "font_style": "normal",
+      "font_weight": 400,
+      "format": "woff2",
+      "location": {
+        "type": "url",
+        "value": "https://static.figma.com/font/NotoSansMath-Regular_1"
+      }
+    },
+    {
+      "family": "Noto Sans Symbols2",
+      "style": "Regular",
+      "font_style": "normal",
+      "font_weight": 400,
+      "format": "woff2",
+      "location": {
+        "type": "url",
+        "value": "https://static.figma.com/font/NotoSansSymbols2-Regular_5"
+      }
+    },
+    {
+      "family": "Noto Sans Symbols",
+      "style": "Black",
+      "font_style": "normal",
+      "font_weight": 900,
+      "format": "woff2",
+      "location": {
+        "type": "url",
+        "value": "https://static.figma.com/font/NotoSansSymbols-VF_2"
+      }
+    },
+    {
+      "family": "Noto Sans Symbols",
+      "style": "Regular",
+      "font_style": "normal",
+      "font_weight": 400,
+      "format": "woff2",
+      "location": {
+        "type": "url",
+        "value": "https://static.figma.com/font/NotoSansSymbols-VF_2"
+      }
+    },
+    {
+      "family": "Noto Sans Symbols",
+      "style": "SemiBold",
+      "font_style": "normal",
+      "font_weight": 600,
+      "format": "woff2",
+      "location": {
+        "type": "url",
+        "value": "https://static.figma.com/font/NotoSansSymbols-VF_2"
+      }
+    },
+    {
+      "family": "Noto Sans",
+      "style": "Black",
+      "font_style": "normal",
+      "font_weight": 900,
+      "format": "woff2",
+      "location": {
+        "type": "url",
+        "value": "https://static.figma.com/font/NotoSans-VF_3"
+      }
+    },
+    {
+      "family": "Noto Sans",
+      "style": "Regular",
+      "font_style": "normal",
+      "font_weight": 400,
+      "format": "woff2",
+      "location": {
+        "type": "url",
+        "value": "https://static.figma.com/font/NotoSans-VF_3"
+      }
+    },
+    {
+      "family": "Noto Sans",
+      "style": "SemiBold",
+      "font_style": "normal",
+      "font_weight": 600,
+      "format": "woff2",
+      "location": {
+        "type": "url",
+        "value": "https://static.figma.com/font/NotoSans-VF_3"
+      }
+    },
+    {
+      "family": "Nunito",
+      "style": "ExtraBold",
+      "font_style": "normal",
+      "font_weight": 800,
+      "format": "woff2",
+      "location": {
+        "type": "url",
+        "value": "https://static.figma.com/font/Nunito_wght__1"
+      }
+    },
+    {
+      "family": "Nunito",
+      "style": "Regular",
+      "font_style": "normal",
+      "font_weight": 400,
+      "format": "woff2",
+      "location": {
+        "type": "url",
+        "value": "https://static.figma.com/font/Nunito_wght__1"
+      }
+    },
+    {
+      "family": "Nunito",
+      "style": "SemiBold",
+      "font_style": "normal",
+      "font_weight": 600,
+      "format": "woff2",
+      "location": {
+        "type": "url",
+        "value": "https://static.figma.com/font/Nunito_wght__1"
+      }
+    }
+  ],
+  "blocked": []
+}

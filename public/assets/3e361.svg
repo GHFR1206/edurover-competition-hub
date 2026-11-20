@@ -1,0 +1,12 @@
+<svg preserveAspectRatio="none" overflow="visible" style="display: block;" width="84" height="84" viewBox="0 0 84 84" fill="none" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="Segel dua belas kelopak">
+<use xlink:href="#stroke0_0_39" fill="#5E3BA2"/>
+<mask id="stroke1_0_39" fill="white">
+<use xlink:href="#stroke0_0_39"/>
+</mask>
+<path d="M42 0L51.0587 8.1926L63 5.62693L66.7487 17.2513L78.3731 21L75.8074 32.9413L84 42L75.8074 51.0587L78.3731 63L66.7487 66.7487L63 78.3731L51.0587 75.8074L42 84L32.9413 75.8074L21 78.3731L17.2513 66.7487L5.62693 63L8.1926 51.0587L0 42L8.1926 32.9413L5.62693 21L17.2513 17.2513L21 5.62693L32.9413 8.1926L42 0Z" stroke-width="4" stroke="white" mask="url(#stroke1_0_39)"/>
+</g>
+<defs>
+<path id="stroke0_0_39" d="M42 0L51.0587 8.1926L63 5.62693L66.7487 17.2513L78.3731 21L75.8074 32.9413L84 42L75.8074 51.0587L78.3731 63L66.7487 66.7487L63 78.3731L51.0587 75.8074L42 84L32.9413 75.8074L21 78.3731L17.2513 66.7487L5.62693 63L8.1926 51.0587L0 42L8.1926 32.9413L5.62693 21L17.2513 17.2513L21 5.62693L32.9413 8.1926L42 0Z"/>
+</defs>
+</svg>

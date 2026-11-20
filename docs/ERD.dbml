@@ -1,0 +1,523 @@
+// DBML — NanoRobotic / EduRover Competition Hub
+// Impor ke https://dbdiagram.io (Database > Import) atau https://dbdocs.io
+// Sumber: database/migrations/*
+
+// ===================== IDENTITAS & AKSES =====================
+Table users {
+  id bigint [pk, increment]
+  name varchar
+  email varchar [unique]
+  phone varchar [null]
+  is_active boolean [default: true]
+  email_verified_at timestamp [null]
+  password varchar
+  remember_token varchar [null]
+  created_at timestamp [null]
+  updated_at timestamp [null]
+}
+
+Table roles {
+  id bigint [pk, increment]
+  name varchar
+  guard_name varchar
+  created_at timestamp [null]
+  updated_at timestamp [null]
+  indexes {
+    (name, guard_name) [unique]
+  }
+}
+
+Table permissions {
+  id bigint [pk, increment]
+  name varchar
+  guard_name varchar
+  created_at timestamp [null]
+  updated_at timestamp [null]
+  indexes {
+    (name, guard_name) [unique]
+  }
+}
+
+Table model_has_roles {
+  role_id bigint [ref: > roles.id]
+  model_type varchar
+  model_id bigint
+  indexes {
+    (model_id, model_type) [name: 'model_has_roles_model_id_model_type_index']
+  }
+}
+
+Table model_has_permissions {
+  permission_id bigint [ref: > permissions.id]
+  model_type varchar
+  model_id bigint
+}
+
+Table role_has_permissions {
+  permission_id bigint [ref: > permissions.id]
+  role_id bigint [ref: > roles.id]
+}
+
+// ===================== KOMPETISI & KONFIGURASI =====================
+Table events {
+  id bigint [pk, increment]
+  uuid uuid [unique]
+  name varchar
+  slug varchar [unique]
+  description text [null]
+  venue varchar [null]
+  starts_at date [null]
+  ends_at date [null]
+  status varchar [default: 'draft']
+  created_by bigint [ref: > users.id, null]
+  created_at timestamp [null]
+  updated_at timestamp [null]
+  deleted_at timestamp [null]
+}
+
+Table categories {
+  id bigint [pk, increment]
+  uuid uuid [unique]
+  event_id bigint [ref: > events.id]
+  level varchar // sd | smp | sma
+  name varchar
+  persona varchar [null]
+  description text [null]
+  status varchar [default: 'registration']
+  min_team_members int [default: 1]
+  max_team_members int [default: 3]
+  settings json [null]
+  created_at timestamp [null]
+  updated_at timestamp [null]
+  deleted_at timestamp [null]
+  indexes {
+    (event_id, level) [unique]
+  }
+}
+
+Table rulebooks {
+  id bigint [pk, increment]
+  uuid uuid [unique]
+  category_id bigint [ref: > categories.id]
+  version int [default: 1]
+  title varchar
+  summary text [null]
+  aggregation json [null]
+  tie_break_order json [null]
+  penalties json [null]
+  retry_rules json [null]
+  status varchar [default: 'draft'] // draft | locked
+  locked_at timestamp [null]
+  locked_by bigint [ref: > users.id, null]
+  created_by bigint [ref: > users.id, null]
+  created_at timestamp [null]
+  updated_at timestamp [null]
+  indexes {
+    (category_id, version) [unique]
+  }
+}
+
+Table challenges {
+  id bigint [pk, increment]
+  uuid uuid [unique]
+  category_id bigint [ref: > categories.id]
+  name varchar
+  theme varchar [null]
+  description text [null]
+  mission_brief text [null]
+  position int [default: 0]
+  is_active boolean [default: true]
+  settings json [null]
+  created_at timestamp [null]
+  updated_at timestamp [null]
+  deleted_at timestamp [null]
+}
+
+Table capability_tags {
+  id bigint [pk, increment]
+  uuid uuid [unique]
+  category_id bigint [ref: > categories.id]
+  code varchar
+  name varchar
+  description text [null]
+  position int [default: 0]
+  created_at timestamp [null]
+  updated_at timestamp [null]
+  indexes {
+    (category_id, code) [unique]
+  }
+}
+
+Table score_objects {
+  id bigint [pk, increment]
+  uuid uuid [unique]
+  challenge_id bigint [ref: > challenges.id]
+  capability_tag_id bigint [ref: > capability_tags.id, null]
+  code varchar
+  name varchar
+  description text [null]
+  type varchar [default: 'object']
+  points_per_unit int [default: 0]
+  max_quantity int [null]
+  requires_evidence boolean [default: false]
+  is_bonus boolean [default: false]
+  position int [default: 0]
+  settings json [null]
+  created_at timestamp [null]
+  updated_at timestamp [null]
+  deleted_at timestamp [null]
+  indexes {
+    (challenge_id, code) [unique]
+  }
+}
+
+// ===================== SEKOLAH & PENDAFTARAN =====================
+Table schools {
+  id bigint [pk, increment]
+  uuid uuid [unique]
+  name varchar
+  npsn varchar [unique, null]
+  level varchar [null]
+  address varchar [null]
+  city varchar [null]
+  province varchar [null]
+  contact_name varchar [null]
+  contact_phone varchar [null]
+  contact_email varchar [null]
+  created_at timestamp [null]
+  updated_at timestamp [null]
+  deleted_at timestamp [null]
+}
+
+Table coaches {
+  id bigint [pk, increment]
+  uuid uuid [unique]
+  user_id bigint [ref: > users.id, null]
+  school_id bigint [ref: > schools.id]
+  name varchar
+  phone varchar [null]
+  email varchar [null]
+  created_at timestamp [null]
+  updated_at timestamp [null]
+  deleted_at timestamp [null]
+}
+
+Table teams {
+  id bigint [pk, increment]
+  uuid uuid [unique]
+  school_id bigint [ref: > schools.id]
+  category_id bigint [ref: > categories.id]
+  name varchar
+  slug varchar [null]
+  short_name varchar [null]
+  status varchar [default: 'draft']
+  created_at timestamp [null]
+  updated_at timestamp [null]
+  deleted_at timestamp [null]
+  indexes {
+    (category_id, school_id, name) [unique]
+  }
+}
+
+Table participants {
+  id bigint [pk, increment]
+  uuid uuid [unique]
+  team_id bigint [ref: > teams.id]
+  name varchar
+  nisn text [null] // encrypted at rest
+  nisn_hash varchar(64) [null] // blind index
+  level varchar [null]
+  grade varchar [null]
+  role varchar [default: 'member'] // leader | member | reserve
+  birth_date date [null]
+  gender varchar [null]
+  created_at timestamp [null]
+  updated_at timestamp [null]
+  deleted_at timestamp [null]
+}
+
+Table registrations {
+  id bigint [pk, increment]
+  uuid uuid [unique]
+  event_id bigint [ref: > events.id]
+  category_id bigint [ref: > categories.id]
+  team_id bigint [ref: > teams.id]
+  coach_id bigint [ref: > coaches.id, null]
+  status varchar [default: 'draft']
+  consent_parent boolean [default: false]
+  consent_media boolean [default: false]
+  consent_at timestamp [null]
+  submitted_at timestamp [null]
+  verified_at timestamp [null]
+  verified_by bigint [ref: > users.id, null]
+  rejection_reason text [null]
+  documents json [null]
+  notes text [null]
+  created_at timestamp [null]
+  updated_at timestamp [null]
+  deleted_at timestamp [null]
+  indexes {
+    (event_id, team_id) [unique]
+  }
+}
+
+// ===================== OPERASIONAL ARENA =====================
+Table arenas {
+  id bigint [pk, increment]
+  uuid uuid [unique]
+  event_id bigint [ref: > events.id]
+  name varchar
+  code varchar [null]
+  location varchar [null]
+  status varchar [default: 'idle'] // idle | running | ready | scoring | maintenance
+  capacity_per_slot int [null]
+  slot_minutes int [null]
+  is_active boolean [default: true]
+  settings json [null]
+  created_at timestamp [null]
+  updated_at timestamp [null]
+  deleted_at timestamp [null]
+  indexes {
+    (event_id, code) [unique]
+  }
+}
+
+Table arena_assignments {
+  id bigint [pk, increment]
+  uuid uuid [unique]
+  arena_id bigint [ref: > arenas.id]
+  user_id bigint [ref: > users.id]
+  role varchar // operator | judge
+  starts_at timestamp [null]
+  ends_at timestamp [null]
+  is_active boolean [default: true]
+  created_at timestamp [null]
+  updated_at timestamp [null]
+  indexes {
+    (arena_id, user_id, role) [unique]
+  }
+}
+
+Table heat_slots {
+  id bigint [pk, increment]
+  uuid uuid [unique]
+  arena_id bigint [ref: > arenas.id]
+  category_id bigint [ref: > categories.id]
+  slot_no int
+  label varchar [null]
+  starts_at timestamp [null]
+  ends_at timestamp [null]
+  status varchar [default: 'scheduled']
+  created_at timestamp [null]
+  updated_at timestamp [null]
+  indexes {
+    (arena_id, slot_no) [unique]
+  }
+}
+
+Table runs {
+  id bigint [pk, increment]
+  uuid uuid [unique]
+  event_id bigint [ref: > events.id]
+  category_id bigint [ref: > categories.id]
+  arena_id bigint [ref: > arenas.id]
+  team_id bigint [ref: > teams.id]
+  heat_slot_id bigint [ref: > heat_slots.id, null]
+  attempt_no int [default: 1]
+  status varchar [default: 'scheduled']
+  scheduled_at timestamp [null]
+  called_at timestamp [null]
+  started_at timestamp [null]
+  finished_at timestamp [null]
+  duration_seconds int [null]
+  notes text [null]
+  outcome_reason varchar [null]
+  operator_id bigint [ref: > users.id, null]
+  created_at timestamp [null]
+  updated_at timestamp [null]
+  deleted_at timestamp [null]
+  indexes {
+    (category_id, team_id, attempt_no) [unique]
+    (arena_id, status)
+  }
+}
+
+// ===================== PENILAIAN =====================
+Table scores {
+  id bigint [pk, increment]
+  uuid uuid [unique]
+  run_id bigint [ref: > runs.id]
+  judge_id bigint [ref: > users.id]
+  version int [default: 1]
+  status varchar [default: 'draft']
+  subtotal int [default: 0]
+  penalty_total int [default: 0]
+  total int [default: 0]
+  ruleset_snapshot json [null]
+  submitted_at timestamp [null]
+  approved_at timestamp [null]
+  approved_by bigint [ref: > users.id, null]
+  reopened_at timestamp [null]
+  reopened_by bigint [ref: > users.id, null]
+  reopen_reason text [null]
+  idempotency_key varchar [null]
+  created_at timestamp [null]
+  updated_at timestamp [null]
+  indexes {
+    (run_id, judge_id, version) [unique]
+    (run_id, judge_id, idempotency_key) [unique]
+    (run_id, status)
+  }
+}
+
+Table score_lines {
+  id bigint [pk, increment]
+  uuid uuid [unique]
+  score_id bigint [ref: > scores.id]
+  score_object_id bigint [ref: > score_objects.id]
+  quantity int [default: 0]
+  achieved boolean [default: false]
+  points_per_unit_snapshot int [default: 0]
+  computed_points int [default: 0]
+  notes text [null]
+  created_at timestamp [null]
+  updated_at timestamp [null]
+  indexes {
+    (score_id, score_object_id) [unique]
+  }
+}
+
+// ===================== APPROVAL & PUBLIKASI =====================
+Table result_approvals {
+  id bigint [pk, increment]
+  uuid uuid [unique]
+  score_id bigint [ref: > scores.id]
+  run_id bigint [ref: > runs.id]
+  decision varchar // approved | rejected | reopened
+  reason text [null]
+  decided_by bigint [ref: > users.id]
+  decided_at timestamp [null]
+  created_at timestamp [null]
+  updated_at timestamp [null]
+}
+
+Table appeals {
+  id bigint [pk, increment]
+  uuid uuid [unique]
+  run_id bigint [ref: > runs.id]
+  team_id bigint [ref: > teams.id]
+  submitted_by bigint [ref: > users.id, null]
+  reason text
+  status varchar [default: 'submitted'] // submitted | under_review | accepted | rejected
+  resolution text [null]
+  resolved_by bigint [ref: > users.id, null]
+  resolved_at timestamp [null]
+  created_at timestamp [null]
+  updated_at timestamp [null]
+}
+
+Table category_publications {
+  id bigint [pk, increment]
+  uuid uuid [unique]
+  category_id bigint [ref: > categories.id, unique]
+  published_at timestamp
+  published_by bigint [ref: > users.id]
+  notes text [null]
+  created_at timestamp [null]
+  updated_at timestamp [null]
+}
+
+// ===================== BUKTI, INSIDEN, AUDIT, SERTIFIKAT =====================
+Table evidence_files {
+  id bigint [pk, increment]
+  uuid uuid [unique]
+  run_id bigint [ref: > runs.id]
+  score_id bigint [ref: > scores.id, null]
+  score_line_id bigint [ref: > score_lines.id, null]
+  uploaded_by bigint [ref: > users.id, null]
+  disk varchar [default: 'local']
+  path varchar
+  original_name varchar [null]
+  mime_type varchar [null]
+  size_bytes bigint [null]
+  kind varchar [default: 'photo'] // photo | video | document | note
+  caption text [null]
+  created_at timestamp [null]
+  updated_at timestamp [null]
+  deleted_at timestamp [null]
+}
+
+Table incident_reports {
+  id bigint [pk, increment]
+  uuid uuid [unique]
+  event_id bigint [ref: > events.id, null]
+  arena_id bigint [ref: > arenas.id, null]
+  run_id bigint [ref: > runs.id, null]
+  reported_by bigint [ref: > users.id, null]
+  severity varchar [default: 'info'] // info | warning | critical
+  category varchar [null] // technical | robot | network | other
+  title varchar
+  description text [null]
+  status varchar [default: 'open'] // open | investigating | resolved
+  resolution text [null]
+  resolved_at timestamp [null]
+  created_at timestamp [null]
+  updated_at timestamp [null]
+}
+
+// Append-only: tidak ada update/delete oleh aplikasi.
+Table audit_logs {
+  id bigint [pk, increment]
+  uuid uuid [unique]
+  user_id bigint [ref: > users.id, null]
+  actor_name varchar [null]
+  action varchar
+  auditable_type varchar [null]
+  auditable_id bigint [null]
+  before json [null]
+  after json [null]
+  reason text [null]
+  ip_address varchar(45) [null]
+  user_agent varchar [null]
+  created_at timestamp [null]
+  indexes {
+    (auditable_type, auditable_id)
+    (action)
+  }
+}
+
+Table certificates {
+  id bigint [pk, increment]
+  uuid uuid [unique]
+  category_id bigint [ref: > categories.id]
+  team_id bigint [ref: > teams.id]
+  run_id bigint [ref: > runs.id, null]
+  type varchar [default: 'participation'] // participation | achievement
+  award varchar [null]
+  qr_token varchar [unique]
+  pdf_path varchar [null]
+  issued_at timestamp [null]
+  issued_by bigint [ref: > users.id, null]
+  created_at timestamp [null]
+  updated_at timestamp [null]
+  indexes {
+    (category_id, team_id, type) [unique]
+  }
+}
+
+// Data pendukung saja — tidak pernah masuk skor resmi. Feature-flagged OFF.
+Table telemetry_events {
+  id bigint [pk, increment]
+  uuid uuid [unique]
+  run_id bigint [ref: > runs.id, null]
+  device_id varchar [null]
+  event_type varchar
+  payload json [null]
+  occurred_at timestamp [null]
+  received_at timestamp [null]
+  created_at timestamp [null]
+  updated_at timestamp [null]
+  indexes {
+    (run_id, event_type)
+  }
+}

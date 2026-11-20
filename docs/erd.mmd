@@ -1,0 +1,437 @@
+erDiagram
+    %% ===================== IDENTITAS & AKSES =====================
+    USERS {
+        bigint id PK
+        string name
+        string email UK
+        string phone
+        boolean is_active
+        timestamp email_verified_at
+        string password
+    }
+    ROLES {
+        bigint id PK
+        string name
+        string guard_name
+    }
+    PERMISSIONS {
+        bigint id PK
+        string name
+        string guard_name
+    }
+    MODEL_HAS_ROLES {
+        bigint role_id FK
+        string model_type
+        bigint model_id
+    }
+    MODEL_HAS_PERMISSIONS {
+        bigint permission_id FK
+        string model_type
+        bigint model_id
+    }
+    ROLE_HAS_PERMISSIONS {
+        bigint permission_id FK
+        bigint role_id FK
+    }
+
+    %% ===================== KOMPETISI & KONFIGURASI =====================
+    EVENTS {
+        bigint id PK
+        uuid uuid UK
+        string name
+        string slug UK
+        text description
+        string venue
+        date starts_at
+        date ends_at
+        string status
+        bigint created_by FK
+        softDeletes deleted_at
+    }
+    CATEGORIES {
+        bigint id PK
+        uuid uuid UK
+        bigint event_id FK
+        string level
+        string name
+        string persona
+        text description
+        string status
+        int min_team_members
+        int max_team_members
+        json settings
+    }
+    RULEBOOKS {
+        bigint id PK
+        uuid uuid UK
+        bigint category_id FK
+        int version
+        string title
+        json aggregation
+        json tie_break_order
+        json penalties
+        json retry_rules
+        string status
+        timestamp locked_at
+        bigint locked_by FK
+        bigint created_by FK
+    }
+    CHALLENGES {
+        bigint id PK
+        uuid uuid UK
+        bigint category_id FK
+        string name
+        string theme
+        text mission_brief
+        int position
+        boolean is_active
+        json settings
+    }
+    CAPABILITY_TAGS {
+        bigint id PK
+        uuid uuid UK
+        bigint category_id FK
+        string code
+        string name
+        int position
+    }
+    SCORE_OBJECTS {
+        bigint id PK
+        uuid uuid UK
+        bigint challenge_id FK
+        bigint capability_tag_id FK
+        string code
+        string name
+        string type
+        int points_per_unit
+        int max_quantity
+        boolean requires_evidence
+        boolean is_bonus
+        int position
+        json settings
+    }
+
+    %% ===================== SEKOLAH & PENDAFTARAN =====================
+    SCHOOLS {
+        bigint id PK
+        uuid uuid UK
+        string name
+        string npsn UK
+        string level
+        string city
+        string province
+        string contact_name
+        string contact_phone
+        string contact_email
+    }
+    COACHES {
+        bigint id PK
+        uuid uuid UK
+        bigint user_id FK
+        bigint school_id FK
+        string name
+        string phone
+        string email
+    }
+    TEAMS {
+        bigint id PK
+        uuid uuid UK
+        bigint school_id FK
+        bigint category_id FK
+        string name
+        string slug
+        string short_name
+        string status
+    }
+    PARTICIPANTS {
+        bigint id PK
+        uuid uuid UK
+        bigint team_id FK
+        string name
+        text nisn
+        string nisn_hash
+        string level
+        string grade
+        string role
+        date birth_date
+        string gender
+    }
+    REGISTRATIONS {
+        bigint id PK
+        uuid uuid UK
+        bigint event_id FK
+        bigint category_id FK
+        bigint team_id FK
+        bigint coach_id FK
+        string status
+        boolean consent_parent
+        boolean consent_media
+        timestamp consent_at
+        timestamp submitted_at
+        timestamp verified_at
+        bigint verified_by FK
+        json documents
+    }
+
+    %% ===================== OPERASIONAL ARENA =====================
+    ARENAS {
+        bigint id PK
+        uuid uuid UK
+        bigint event_id FK
+        string name
+        string code
+        string location
+        string status
+        int capacity_per_slot
+        int slot_minutes
+        boolean is_active
+        json settings
+    }
+    ARENA_ASSIGNMENTS {
+        bigint id PK
+        uuid uuid UK
+        bigint arena_id FK
+        bigint user_id FK
+        string role
+        timestamp starts_at
+        timestamp ends_at
+        boolean is_active
+    }
+    HEAT_SLOTS {
+        bigint id PK
+        uuid uuid UK
+        bigint arena_id FK
+        bigint category_id FK
+        int slot_no
+        string label
+        timestamp starts_at
+        timestamp ends_at
+        string status
+    }
+    RUNS {
+        bigint id PK
+        uuid uuid UK
+        bigint event_id FK
+        bigint category_id FK
+        bigint arena_id FK
+        bigint team_id FK
+        bigint heat_slot_id FK
+        int attempt_no
+        string status
+        timestamp scheduled_at
+        timestamp called_at
+        timestamp started_at
+        timestamp finished_at
+        int duration_seconds
+        string outcome_reason
+        bigint operator_id FK
+    }
+
+    %% ===================== PENILAIAN =====================
+    SCORES {
+        bigint id PK
+        uuid uuid UK
+        bigint run_id FK
+        bigint judge_id FK
+        int version
+        string status
+        int subtotal
+        int penalty_total
+        int total
+        json ruleset_snapshot
+        timestamp submitted_at
+        timestamp approved_at
+        bigint approved_by FK
+        timestamp reopened_at
+        bigint reopened_by FK
+        text reopen_reason
+        string idempotency_key
+    }
+    SCORE_LINES {
+        bigint id PK
+        uuid uuid UK
+        bigint score_id FK
+        bigint score_object_id FK
+        int quantity
+        boolean achieved
+        int points_per_unit_snapshot
+        int computed_points
+        text notes
+    }
+
+    %% ===================== APPROVAL & PUBLIKASI =====================
+    RESULT_APPROVALS {
+        bigint id PK
+        uuid uuid UK
+        bigint score_id FK
+        bigint run_id FK
+        string decision
+        text reason
+        bigint decided_by FK
+        timestamp decided_at
+    }
+    APPEALS {
+        bigint id PK
+        uuid uuid UK
+        bigint run_id FK
+        bigint team_id FK
+        bigint submitted_by FK
+        text reason
+        string status
+        text resolution
+        bigint resolved_by FK
+        timestamp resolved_at
+    }
+    CATEGORY_PUBLICATIONS {
+        bigint id PK
+        uuid uuid UK
+        bigint category_id FK
+        timestamp published_at
+        bigint published_by FK
+        text notes
+    }
+
+    %% ===================== EVIDENCE, INSIDEN, AUDIT, SERTIFIKAT =====================
+    EVIDENCE_FILES {
+        bigint id PK
+        uuid uuid UK
+        bigint run_id FK
+        bigint score_id FK
+        bigint score_line_id FK
+        bigint uploaded_by FK
+        string disk
+        string path
+        string original_name
+        string mime_type
+        bigint size_bytes
+        string kind
+        text caption
+    }
+    INCIDENT_REPORTS {
+        bigint id PK
+        uuid uuid UK
+        bigint event_id FK
+        bigint arena_id FK
+        bigint run_id FK
+        bigint reported_by FK
+        string severity
+        string category
+        string title
+        text description
+        string status
+        text resolution
+        timestamp resolved_at
+    }
+    AUDIT_LOGS {
+        bigint id PK
+        uuid uuid UK
+        bigint user_id FK
+        string actor_name
+        string action
+        string auditable_type
+        bigint auditable_id
+        json before
+        json after
+        text reason
+        string ip_address
+        string user_agent
+        timestamp created_at
+    }
+    CERTIFICATES {
+        bigint id PK
+        uuid uuid UK
+        bigint category_id FK
+        bigint team_id FK
+        bigint run_id FK
+        string type
+        string award
+        string qr_token UK
+        string pdf_path
+        timestamp issued_at
+        bigint issued_by FK
+    }
+    TELEMETRY_EVENTS {
+        bigint id PK
+        uuid uuid UK
+        bigint run_id FK
+        string device_id
+        string event_type
+        json payload
+        timestamp occurred_at
+        timestamp received_at
+    }
+
+    %% ===================== RELASI =====================
+    %% --- Akses (spatie/laravel-permission, polymorphic) ---
+    USERS ||--o{ MODEL_HAS_ROLES : "punya role"
+    ROLES ||--o{ MODEL_HAS_ROLES : "diberikan ke"
+    USERS ||--o{ MODEL_HAS_PERMISSIONS : "punya permission"
+    PERMISSIONS ||--o{ MODEL_HAS_PERMISSIONS : "diberikan ke"
+    ROLES ||--o{ ROLE_HAS_PERMISSIONS : "punya permission"
+    PERMISSIONS ||--o{ ROLE_HAS_PERMISSIONS : "milik role"
+
+    %% --- Kompetisi ---
+    USERS ||--o{ EVENTS : "membuat"
+    EVENTS ||--o{ CATEGORIES : "memiliki"
+    EVENTS ||--o{ ARENAS : "memiliki"
+    EVENTS ||--o{ REGISTRATIONS : "menerima"
+    EVENTS ||--o{ RUNS : "menyelenggarakan"
+    EVENTS ||--o{ INCIDENT_REPORTS : "melaporkan"
+
+    CATEGORIES ||--o{ RULEBOOKS : "dikonfigurasi"
+    CATEGORIES ||--o{ CHALLENGES : "memiliki"
+    CATEGORIES ||--o{ CAPABILITY_TAGS : "memiliki"
+    CATEGORIES ||--o{ TEAMS : "diikuti"
+    CATEGORIES ||--o{ REGISTRATIONS : "mendaftar"
+    CATEGORIES ||--o{ HEAT_SLOTS : "dijadwalkan"
+    CATEGORIES ||--o{ RUNS : "dipertandingkan"
+    CATEGORIES ||--o{ CATEGORY_PUBLICATIONS : "dipublikasikan"
+    CATEGORIES ||--o{ CERTIFICATES : "menerbitkan"
+    USERS ||--o{ RULEBOOKS : "mengunci"
+
+    CHALLENGES ||--o{ SCORE_OBJECTS : "berisi"
+    CAPABILITY_TAGS ||--o{ SCORE_OBJECTS : "ditandai"
+
+    %% --- Sekolah & pendaftaran ---
+    SCHOOLS ||--o{ COACHES : "memiliki"
+    SCHOOLS ||--o{ TEAMS : "menaungi"
+    USERS ||--o{ COACHES : "terhubung"
+    TEAMS ||--o{ PARTICIPANTS : "beranggotakan"
+    TEAMS ||--o{ REGISTRATIONS : "mendaftar"
+    TEAMS ||--o{ RUNS : "berlaga"
+    TEAMS ||--o{ APPEALS : "mengajukan"
+    TEAMS ||--o{ CERTIFICATES : "menerima"
+    COACHES ||--o{ REGISTRATIONS : "mendaftarkan"
+    USERS ||--o{ REGISTRATIONS : "memverifikasi"
+
+    %% --- Operasional arena ---
+    ARENAS ||--o{ ARENA_ASSIGNMENTS : "dijaga"
+    ARENAS ||--o{ HEAT_SLOTS : "menjadwalkan"
+    ARENAS ||--o{ RUNS : "berlangsung di"
+    ARENAS ||--o{ INCIDENT_REPORTS : "tempat kejadian"
+    USERS ||--o{ ARENA_ASSIGNMENTS : "bertugas"
+    USERS ||--o{ RUNS : "mengoperasikan"
+    HEAT_SLOTS ||--o{ RUNS : "mengelompokkan"
+
+    %% --- Penilaian ---
+    RUNS ||--o{ SCORES : "dinilai"
+    RUNS ||--o{ EVIDENCE_FILES : "didokumentasikan"
+    RUNS ||--o{ RESULT_APPROVALS : "disetujui"
+    RUNS ||--o{ APPEALS : "disengketakan"
+    RUNS ||--o{ INCIDENT_REPORTS : "kejadian pada"
+    RUNS ||--o{ CERTIFICATES : "berprestasi"
+    RUNS ||--o{ TELEMETRY_EVENTS : "mengirim data"
+
+    USERS ||--o{ SCORES : "menilai / meng-approve"
+    SCORES ||--o{ SCORE_LINES : "merinci"
+    SCORE_OBJECTS ||--o{ SCORE_LINES : "dinilai"
+    SCORES ||--o{ RESULT_APPROVALS : "disetujui"
+    SCORES ||--o{ EVIDENCE_FILES : "bukti"
+    SCORE_LINES ||--o{ EVIDENCE_FILES : "bukti"
+
+    %% --- Audit & pendukung ---
+    USERS ||--o{ AUDIT_LOGS : "tercatat"
+    USERS ||--o{ EVIDENCE_FILES : "mengunggah"
+    USERS ||--o{ INCIDENT_REPORTS : "melaporkan"
+    USERS ||--o{ CERTIFICATES : "menerbitkan"
+    USERS ||--o{ CATEGORY_PUBLICATIONS : "menerbitkan"

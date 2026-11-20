@@ -1,45 +1,71 @@
-@extends('layouts.role')
+@extends('layouts.roborace-coach')
 
 @section('title', 'Hasil ' . $team->name)
-@section('heading', 'Hasil — ' . $team->name)
+
+@php($page = 'results')
 
 @section('content')
-<a href="{{ route('coach.results.index') }}" class="text-sm text-indigo-600 hover:underline">&larr; Kembali</a>
-
-<div class="mt-4 space-y-4">
-    @forelse ($runs as $run)
-        <div class="rounded-xl border border-slate-200 bg-white p-5">
-            <div class="flex items-center justify-between">
-                <div>
-                    <p class="font-semibold">{{ $run->arena?->name }}</p>
-                    <p class="text-xs text-slate-500">Status run: {{ $run->status->label() }}</p>
-                </div>
-                @if ($run->scores->isNotEmpty())
-                    <span class="text-2xl font-bold">{{ $run->scores->max('total') }}</span>
-                @else
-                    <span class="text-xs text-slate-400">Belum ada skor terlihat</span>
-                @endif
-            </div>
-
-            @foreach ($run->scores as $score)
-                <div class="mt-3 rounded-lg border border-slate-100 bg-slate-50 p-3">
-                    <div class="flex items-center justify-between text-xs">
-                        <span class="font-medium">{{ $score->status->label() }}</span>
-                        <span>Total: {{ $score->total }} (subtotal {{ $score->subtotal }} − penalti {{ $score->penalty_total }})</span>
-                    </div>
-                    <ul class="mt-2 space-y-1 text-xs text-slate-600">
-                        @foreach ($score->lines as $line)
-                            <li class="flex justify-between">
-                                <span>{{ $line->scoreObject?->name }}</span>
-                                <span>{{ $line->computed_points }} (×{{ $line->quantity }})</span>
-                            </li>
-                        @endforeach
-                    </ul>
-                </div>
-            @endforeach
+<section class="hero hero-schedule">
+    <div class="content-width">
+        <div class="event-row">
+            <span class="live-chip">● LANGSUNG · {{ now()->translatedFormat('d M Y') }}</span>
+            <span class="series-chip">Seri Pilot</span>
         </div>
-    @empty
-        <p class="text-slate-500">Belum ada run.</p>
-    @endforelse
-</div>
+        <div class="hero-row">
+            <div>
+                <h1>Hasil {{ $team->name }}</h1>
+                <p>{{ $team->school?->name }} · {{ $team->category?->level->publicLabel() }}</p>
+            </div>
+            <img class="hero-mascot schedule-mascot" src="{{ asset('assets/786e4.png') }}" alt="">
+        </div>
+    </div>
+</section>
+
+<main class="content-zone">
+    <div class="content-width page-stack">
+        @forelse ($runs as $run)
+            <section class="card reveal">
+                <span class="eyebrow">{{ strtoupper($run->arena?->name ?? 'ARENA') }}</span>
+                <h2>{{ $run->arena?->name ?? 'Run' }}</h2>
+                <span class="status-badge purple">{{ $run->status->label() }}</span>
+                @foreach ($run->scores as $score)
+                    <div class="score-row">
+                        <div>
+                            <strong>{{ $score->status->label() }}</strong>
+                            <span>Total {{ $score->total }} (subtotal {{ $score->subtotal }} − penalti {{ $score->penalty_total }})</span>
+                        </div>
+                        <div>
+                            <b>{{ $score->total }}</b>
+                            <span class="status-badge {{ $score->status->value === 'approved' ? 'success' : 'warning' }}">{{ $score->status->label() }}</span>
+                        </div>
+                    </div>
+                    @if ($score->lines->isNotEmpty())
+                        <div class="data-list">
+                            @foreach ($score->lines as $line)
+                                <div class="data-row">
+                                    <div>
+                                        <strong>{{ $line->scoreObject?->name ?? 'Kriteria' }}</strong>
+                                        <span>×{{ $line->quantity }}</span>
+                                    </div>
+                                    <span class="status-badge purple">{{ $line->computed_points }}</span>
+                                </div>
+                            @endforeach
+                        </div>
+                    @endif
+                @endforeach
+            </section>
+        @empty
+            <section class="card reveal"><p>Belum ada run.</p></section>
+        @endforelse
+
+        <div class="actions">
+            <a class="button secondary" href="{{ route('coach.results.index') }}">← Kembali</a>
+        </div>
+
+        <div class="mascot-message">
+            <img src="{{ asset('assets/e638f.png') }}" alt="">
+            <strong>Bukan hanya medali. Setiap eksperimen, perbaikan, dan kerja sama tim adalah pencapaianmu.</strong>
+        </div>
+    </div>
+</main>
 @endsection

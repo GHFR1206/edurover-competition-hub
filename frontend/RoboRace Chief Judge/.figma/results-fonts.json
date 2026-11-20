@@ -1,0 +1,17 @@
+{
+  "fonts": [
+    { "family": "Fredoka", "style": "Bold" },
+    { "family": "Fredoka", "style": "Medium" },
+    { "family": "Fredoka", "style": "Regular" },
+    { "family": "Fredoka", "style": "SemiBold" },
+    { "family": "Inter", "style": "Bold" },
+    { "family": "Inter", "style": "Regular" },
+    { "family": "Lilita One", "style": "Regular" },
+    { "family": "Noto Sans Math", "style": "Regular" },
+    { "family": "Noto Sans Symbols2", "style": "Regular" },
+    { "family": "Noto Sans Symbols", "style": "SemiBold" },
+    { "family": "Noto Sans", "style": "SemiBold" },
+    { "family": "Nunito", "style": "Bold" },
+    { "family": "Nunito", "style": "SemiBold" }
+  ]
+}

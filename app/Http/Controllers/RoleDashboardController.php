@@ -22,6 +22,8 @@ class RoleDashboardController extends Controller
             $user->isRole(RoleEnum::Judge) => redirect()->route('judge.dashboard'),
             $user->isRole(RoleEnum::ArenaOperator) => redirect()->route('operator.dashboard'),
             $user->isRole(RoleEnum::ChiefJudge) => redirect()->route('chief.dashboard'),
+            $user->isRole(RoleEnum::EventAdmin) => redirect()->route('eventadmin.dashboard'),
+            $user->isRole(RoleEnum::SuperAdmin) => redirect()->route('superadmin.dashboard'),
             default => view('dashboard', [
                 'event' => Event::with('categories')->latest('starts_at')->first(),
             ]),

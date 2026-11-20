@@ -1,89 +1,93 @@
-@extends('layouts.role')
+@extends('layouts.roborace-chief')
 
 @section('title', 'Publikasi Hasil')
-@section('heading', 'Publikasi Hasil')
+
+@php($page = 'review')
+
+@section('hero')@endsection
+@section('hero-title', 'Saatnya hasil resmi.')
+@section('hero-subtitle', 'Publikasi terpisah dari persetujuan. Kategori hanya terbit bila semua run selesai dan semua skor disetujui.')
+@section('hero-mascot', 'd8b40.png')
 
 @section('content')
-<div class="rounded-xl border border-slate-200 bg-blue-50 px-4 py-3 text-sm text-blue-800">
-    Publikasi <strong>terpisah</strong> dari persetujuan. Kategori hanya dapat dipublikasikan bila semua run selesai
-    dan semua skor disetujui. Alasan penghalang selalu ditampilkan di bawah.
+<div class="warning">
+    Publikasi <strong>terpisah</strong> dari persetujuan. Alasan penghalang selalu ditampilkan di bawah setiap kategori.
 </div>
 
-<form method="GET" class="mt-4 flex flex-wrap items-end gap-3">
-    <div>
-        <label for="event" class="block text-xs text-slate-500">Event</label>
-        <select id="event" name="event" class="mt-1 rounded-md border-slate-300 text-sm">
+<section class="card">
+    <form method="GET">
+        <label for="event">Event</label>
+        <select id="event" name="event" onchange="this.form.submit()">
             @foreach ($events as $option)
-                <option value="{{ $option->id }}" @selected($event && $event->id === $option->id)>
-                    {{ $option->name }}
-                </option>
+                <option value="{{ $option->id }}" @selected($event && $event->id === $option->id)>{{ $option->name }}</option>
             @endforeach
         </select>
-    </div>
-    <button class="rounded-md bg-slate-800 px-4 py-2 text-sm font-medium text-white">Tampilkan</button>
-</form>
+        <div class="actions">
+            <button class="button primary" type="submit">Tampilkan</button>
+        </div>
+    </form>
+</section>
 
 @if (! $event)
-    <p class="mt-6 text-sm text-slate-500">Belum ada event.</p>
+    <p class="muted">Belum ada event.</p>
 @endif
 
-<div class="mt-6 space-y-6">
-    @foreach ($categories as $row)
-        @php($category = $row['category'])
-        <div class="rounded-xl border border-slate-200 bg-white p-5">
-            <div class="flex items-center justify-between">
-                <div>
-                    <h2 class="font-semibold text-lg">{{ $category->level->label() }} — {{ $category->name }}</h2>
-                    <p class="text-xs text-slate-500">Status: {{ $category->status->label() }}</p>
-                </div>
-                @if ($category->isPublished())
-                    <span class="rounded-full bg-emerald-100 px-3 py-1 text-xs text-emerald-700">Dipublikasikan</span>
-                @elseif ($row['publishable'])
-                    <form method="POST" action="{{ route('chief.publication.publish', $category) }}">
-                        @csrf
-                        <button class="rounded-lg bg-indigo-500 px-4 py-2 text-sm font-medium text-white hover:bg-indigo-400">Publikasikan</button>
-                    </form>
-                @else
-                    <span class="rounded-full bg-slate-100 px-3 py-1 text-xs text-slate-500">Belum dapat dipublikasikan</span>
-                @endif
+@foreach ($categories as $row)
+    @php($category = $row['category'])
+    <section class="card level-card">
+        <span class="eyebrow purple">{{ $category->level->publicLabel() }} · {{ $category->name }}</span>
+        <h2>{{ $category->level->publicLabel() }} — {{ $category->name }}</h2>
+        <p class="muted">Status kategori: {{ $category->status->label() }}</p>
+
+        @if ($category->isPublished())
+            <span class="badge green">✓ Dipublikasikan</span>
+            <p class="publish-meta">Hasil sudah resmi. Jejak pengesahan tersimpan di audit log.</p>
+            <div class="actions">
+                <a class="button primary" href="{{ route('public.results.category', $category) }}">Buka hasil resmi</a>
             </div>
-
+        @elseif ($row['publishable'])
+            <span class="badge yellow">Siap dipublikasikan</span>
+            <p class="publish-meta">Semua run selesai dan semua skor telah disetujui.</p>
+            <form method="POST" action="{{ route('chief.publication.publish', $category) }}">
+                @csrf
+                <div class="actions">
+                    <button class="button yellow" type="submit">Sahkan &amp; publikasikan</button>
+                </div>
+            </form>
+        @else
+            <span class="badge">Belum dapat dipublikasikan</span>
             @if (! empty($row['reasons']))
-                <ul class="mt-3 list-disc space-y-1 rounded-lg border border-amber-200 bg-amber-50 px-5 py-3 text-sm text-amber-800">
-                    @foreach ($row['reasons'] as $reason)
-                        <li>{{ $reason }}</li>
-                    @endforeach
-                </ul>
+                <div class="warning">
+                    <ul>
+                        @foreach ($row['reasons'] as $reason)
+                            <li>{{ $reason }}</li>
+                        @endforeach
+                    </ul>
+                </div>
             @endif
+        @endif
 
-            @if ($row['standings']->isNotEmpty())
-                <details class="mt-4">
-                    <summary class="cursor-pointer text-sm font-medium text-slate-600">Pratinjau klasemen</summary>
-                    <table class="mt-2 w-full text-sm">
-                        <thead class="text-slate-500">
-                            <tr>
-                                <th class="px-3 py-2 text-left">#</th>
-                                <th class="px-3 py-2 text-left">Tim</th>
-                                <th class="px-3 py-2 text-right">Skor Terbaik</th>
-                            </tr>
-                        </thead>
-                        <tbody class="divide-y divide-slate-100">
-                            @foreach ($row['standings'] as $standing)
-                                <tr>
-                                    <td class="px-3 py-2">{{ $standing['rank'] }}</td>
-                                    <td class="px-3 py-2">{{ $standing['team']->name }}</td>
-                                    <td class="px-3 py-2 text-right font-mono">{{ $standing['best_total'] }}</td>
-                                </tr>
-                            @endforeach
-                        </tbody>
-                    </table>
-                </details>
-            @endif
-        </div>
-    @endforeach
-</div>
+        @if ($row['standings']->isNotEmpty())
+            <details>
+                <summary>Pratinjau klasemen</summary>
+                <div class="rows">
+                    @foreach ($row['standings'] as $standing)
+                        <div class="data-row">
+                            <span class="rank {{ $standing['rank'] === 1 ? 'rank-1' : '' }}">{{ $standing['rank'] }}</span>
+                            <div>
+                                <strong>{{ $standing['team']->name }}</strong>
+                                <span>{{ $standing['team']->school?->name }} · {{ $standing['runs'] }} run</span>
+                            </div>
+                            <div class="score">{{ $standing['best_total'] }}</div>
+                        </div>
+                    @endforeach
+                </div>
+            </details>
+        @endif
+    </section>
+@endforeach
 
 @if ($event && $categories->isEmpty())
-    <p class="mt-6 text-sm text-slate-500">Event ini belum memiliki kategori.</p>
+    <p class="muted">Event ini belum memiliki kategori.</p>
 @endif
 @endsection

@@ -1,41 +1,62 @@
-@extends('layouts.role')
+@extends('layouts.roborace-juri')
 
-@section('title', 'Skor Saya')
-@section('heading', 'Skor Saya')
+@section('title', 'Nilai Manual')
+
+@php($page = 'manual')
 
 @section('content')
-<div class="rounded-xl border border-slate-200 bg-blue-50 px-4 py-3 text-sm text-blue-800">
-    Anda hanya melihat skor yang Anda tulis sendiri. Skor juri lain tidak ditampilkan.
-</div>
+<div class="page light">
+    <header class="page-hero">
+        <div>
+            <div class="event-row">
+                <span>● LANGSUNG · {{ now()->translatedFormat('d M Y') }}</span>
+                <b>Seri Pilot</b>
+            </div>
+            <h1>Amati detail. Nilai dengan adil.</h1>
+            <p>{{ auth()->user()->name }} · Skor yang Anda tulis sendiri, juri lain tidak ditampilkan.</p>
+        </div>
+        <img class="hero-mascot" src="{{ asset('assets/17d7a.png') }}" alt="Maskot RoboRace">
+    </header>
+    <main class="manual-space">
+        <section class="card guide">
+            <div>
+                <i>1</i>
+                <span>
+                    <b>Anda hanya melihat skor Anda</b>
+                    <p>Skor juri lain tidak ditampilkan demi menjaga independensi penilaian.</p>
+                </span>
+            </div>
+            <div>
+                <i>2</i>
+                <span>
+                    <b>Simpan draft sebelum mengirim</b>
+                    <p>Draft dapat diubah kapan saja. Setelah diajukan, hanya Chief Judge yang dapat membuka kembali.</p>
+                </span>
+            </div>
+        </section>
 
-<div class="mt-4 overflow-hidden rounded-xl border border-slate-200 bg-white">
-    <table class="w-full text-sm">
-        <thead class="bg-slate-50 text-slate-500">
-            <tr>
-                <th class="px-4 py-3 text-left">Tim</th>
-                <th class="px-4 py-3 text-left">Arena</th>
-                <th class="px-4 py-3 text-left">Status</th>
-                <th class="px-4 py-3 text-right">Total</th>
-                <th class="px-4 py-3"></th>
-            </tr>
-        </thead>
-        <tbody class="divide-y divide-slate-100">
+        <section class="card recap standalone">
+            <span class="eyebrow" style="color:#8a68d4;font:11px 'JetBrains Mono'">SKOR YANG SAYA TULIS</span>
+            <h2>Skor saya</h2>
             @forelse ($scores as $score)
-                <tr>
-                    <td class="px-4 py-3">{{ $score->run?->team?->name }}</td>
-                    <td class="px-4 py-3">{{ $score->run?->arena?->name }}</td>
-                    <td class="px-4 py-3">{{ $score->status->label() }}</td>
-                    <td class="px-4 py-3 text-right font-mono">{{ $score->total }}</td>
-                    <td class="px-4 py-3 text-right">
-                        @if ($score->status === \App\Enums\ScoreStatus::Draft)
-                            <a href="{{ route('judge.scores.edit', $score->run) }}" class="text-indigo-600 hover:underline">Lanjutkan</a>
-                        @endif
-                    </td>
-                </tr>
+                <div>
+                    <span>
+                        <b>{{ $score->run?->team?->name }} · {{ $score->run?->arena?->name }}</b>
+                        <small>{{ $score->status->label() }}</small>
+                    </span>
+                    <strong>{{ $score->total }}</strong>
+                    <em class="{{ $score->status->value === 'approved' ? '' : 'submitted' }}">{{ $score->status->label() }}</em>
+                </div>
             @empty
-                <tr><td colspan="5" class="px-4 py-6 text-center text-slate-500">Belum ada skor.</td></tr>
+                <p class="muted">Belum ada skor.</p>
             @endforelse
-        </tbody>
-    </table>
+        </section>
+
+        <section class="card vote-record">
+            <h2>Lanjutkan penilaian</h2>
+            <p>Buka tugas untuk mengisi atau melanjutkan draft penilaian Anda.</p>
+            <a class="chip active" href="{{ route('judge.tasks.index') }}">Lihat Tugas Penilaian</a>
+        </section>
+    </main>
 </div>
 @endsection

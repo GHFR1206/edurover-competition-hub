@@ -1,0 +1,10 @@
+<svg preserveAspectRatio="none" overflow="visible" style="display: block;" width="24" height="28" viewBox="0 0 24 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+<g id="Ikon remote">
+<circle id="Lampu" cx="12.5" cy="22.5" r="1.5" fill="white"/>
+<rect id="Tombol" x="11" y="11" width="2" height="6" rx="1" fill="white"/>
+<rect id="Tombol_2" x="9" y="13" width="6" height="2" rx="1" fill="white"/>
+<rect id="Badan remote" x="6" y="9" width="12" height="17" rx="4" stroke-width="2" stroke="white"/>
+<circle id="Ujung antena" cx="12" cy="2" r="2" fill="white"/>
+<rect id="Antena" x="11" y="2" width="2" height="6" rx="1" fill="white"/>
+</g>
+</svg>

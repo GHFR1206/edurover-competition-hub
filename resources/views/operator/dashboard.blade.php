@@ -1,41 +1,83 @@
-@extends('layouts.role')
+@extends('layouts.roborace-operator')
 
 @section('title', 'Dashboard Operator')
-@section('heading', 'Dashboard Operator Arena')
+
+@php($page = 'operator')
 
 @section('content')
-<div class="grid gap-4 sm:grid-cols-2">
-    <div class="rounded-xl border border-slate-200 bg-white p-5">
-        <p class="text-xs text-slate-500">Arena Ditugaskan</p>
-        <p class="text-3xl font-bold">{{ $arenas->count() }}</p>
+<header class="hero" id="top">
+    <div class="event-row">
+        <span class="live-chip">● LANGSUNG · {{ now()->translatedFormat('d M Y') }}</span>
+        <span class="series-chip">Seri Pilot</span>
     </div>
-    <div class="rounded-xl border border-slate-200 bg-white p-5">
-        <p class="text-xs text-slate-500">Run Aktif</p>
-        <p class="text-3xl font-bold">{{ $activeRuns->count() }}</p>
+    <div class="hero-content">
+        <div>
+            <h1>Jaga ritme. Nyalakan arena.</h1>
+            <p>{{ auth()->user()->name }} · Pantau run aktif dan kendalikan arena yang Anda tugaskan.</p>
+        </div>
+        <img class="hero-mascot" src="{{ asset('assets/dc500.png') }}" alt="Maskot RoboRace">
     </div>
-</div>
+</header>
 
-<h2 class="mt-8 font-semibold text-lg">Run Aktif</h2>
-<div class="mt-3 overflow-hidden rounded-xl border border-slate-200 bg-white">
-    <table class="w-full text-sm">
-        <thead class="bg-slate-50 text-slate-500">
-            <tr>
-                <th class="px-4 py-3 text-left">Arena</th>
-                <th class="px-4 py-3 text-left">Tim</th>
-                <th class="px-4 py-3 text-left">Status</th>
-            </tr>
-        </thead>
-        <tbody class="divide-y divide-slate-100">
-            @forelse ($activeRuns as $run)
-                <tr>
-                    <td class="px-4 py-3">{{ $run->arena?->name }}</td>
-                    <td class="px-4 py-3">{{ $run->team?->name }}</td>
-                    <td class="px-4 py-3">{{ $run->status->label() }}</td>
-                </tr>
+<main class="main-content">
+    <div class="ornament gear">✿</div>
+    <div class="ornament flag">▦</div>
+    <div class="ornament hexagon"></div>
+    <div class="ornament triangle"></div>
+
+    <div class="arena-tabs">
+        <span class="chip active">Arena Ditugaskan · {{ $arenas->count() }}</span>
+        <a class="chip" href="{{ route('operator.arenas.index') }}">Buka daftar arena</a>
+    </div>
+
+    <section class="run-card reveal">
+        @if ($activeRuns->isEmpty())
+            <div class="empty-run">
+                <span class="run-label">RUN ARENA</span>
+                <h2>Belum ada run berjalan.</h2>
+                <p>Pilih tim berstatus Siap mulai dari antrean sesi arena.</p>
+            </div>
+        @else
+            <span class="run-label">● {{ $activeRuns->count() }} RUN AKTIF</span>
+            <div class="run-grid">
+                @foreach ($activeRuns as $run)
+                    <div class="active-robot">
+                        <h2>{{ $run->team?->name }} · {{ $run->arena?->name }}</h2>
+                        <p>{{ $run->team?->school?->name }} · {{ $run->category?->level->publicLabel() }}</p>
+                        <div class="timer">{{ $run->status->label() }}</div>
+                    </div>
+                @endforeach
+            </div>
+            <div class="run-actions">
+                <a class="button primary" href="{{ route('operator.arenas.index') }}">Kontrol arena</a>
+            </div>
+        @endif
+    </section>
+
+    <section class="content-card reveal">
+        <span class="eyebrow">RINGKASAN</span>
+        <h2>Arena saya</h2>
+        <div class="queue-list">
+            @forelse ($arenas as $arena)
+                <div class="queue-row">
+                    <div class="queue-info">
+                        <h3>{{ $arena->name }}</h3>
+                        <p>{{ $arena->location ?? 'Lokasi belum diisi' }} · {{ $arena->event?->name ?? 'Event' }}</p>
+                    </div>
+                    <div class="queue-meta">
+                        <span class="status">{{ ucfirst($arena->status) }}</span>
+                        <a class="chip" href="{{ route('operator.arenas.show', $arena) }}">Buka</a>
+                    </div>
+                </div>
             @empty
-                <tr><td colspan="3" class="px-4 py-6 text-center text-slate-500">Tidak ada run aktif.</td></tr>
+                <p class="empty-list">Anda belum ditugaskan ke arena mana pun.</p>
             @endforelse
-        </tbody>
-    </table>
-</div>
+        </div>
+    </section>
+
+    <div class="mascot-message">
+        <img src="{{ asset('assets/dc500.png') }}" alt="">
+        <strong>Operator menjaga ritme arena. Keputusan poin tetap berada di tangan juri dan Chief Judge.</strong>
+    </div>
+</main>
 @endsection

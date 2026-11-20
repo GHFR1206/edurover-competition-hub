@@ -1,0 +1,9 @@
+<svg preserveAspectRatio="none" overflow="visible" style="display: block;" width="28" height="37" viewBox="0 0 28 37" fill="none" xmlns="http://www.w3.org/2000/svg">
+<g id="Star / bintang">
+<path d="M14 0L17.9657 12.8691L28 14.1327L20.4167 23.3499L22.6525 37L14 29.8274L5.34752 37L7.58333 23.3499L0 14.1327L10.0343 12.8691L14 0Z" fill="#F5D23C"/>
+<mask id="stroke0_0_65" fill="white">
+<path d="M14 0L17.9657 12.8691L28 14.1327L20.4167 23.3499L22.6525 37L14 29.8274L5.34752 37L7.58333 23.3499L0 14.1327L10.0343 12.8691L14 0Z"/>
+</mask>
+<path d="M14 0L17.9657 12.8691L28 14.1327L20.4167 23.3499L22.6525 37L14 29.8274L5.34752 37L7.58333 23.3499L0 14.1327L10.0343 12.8691L14 0Z" stroke-width="3" stroke="white" mask="url(#stroke0_0_65)"/>
+</g>
+</svg>

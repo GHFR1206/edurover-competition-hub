@@ -1,0 +1,32 @@
+<svg preserveAspectRatio="none" overflow="visible" style="display: block;" width="1180" height="500" viewBox="0 0 1180 500" fill="none" xmlns="http://www.w3.org/2000/svg">
+<g id="Ornamen langit" clip-path="url(#clip0_0_7)">
+<path id="Awan" opacity="0.7" d="M1061 400H899C882.984 400 870 412.984 870 429C870 445.016 882.984 458 899 458H1061C1077.02 458 1090 445.016 1090 429C1090 412.984 1077.02 400 1061 400Z" fill="white"/>
+<path id="Awan_2" opacity="0.7" d="M771 210H679C668.507 210 660 218.507 660 229C660 239.493 668.507 248 679 248H771C781.493 248 790 239.493 790 229C790 218.507 781.493 210 771 210Z" fill="white"/>
+<path id="Awan_3" opacity="0.7" d="M1071 75H909C892.984 75 880 87.9837 880 104C880 120.016 892.984 133 909 133H1071C1087.02 133 1100 120.016 1100 104C1100 87.9837 1087.02 75 1071 75Z" fill="white"/>
+<g id="Bintang">
+<path d="M1113 350L1117 362L1130 366L1117 370L1113 382L1109 370L1096 366L1109 362L1113 350Z" fill="#F5D23C"/>
+<mask id="stroke0_0_7" fill="white">
+<path d="M1113 350L1117 362L1130 366L1117 370L1113 382L1109 370L1096 366L1109 362L1113 350Z"/>
+</mask>
+<path d="M1113 350L1117 362L1130 366L1117 370L1113 382L1109 370L1096 366L1109 362L1113 350Z" stroke-width="4" stroke="white" mask="url(#stroke0_0_7)"/>
+</g>
+<g id="Bintang_2">
+<path d="M45 66L50 80L65 85L50 90L45 104L40 90L25 85L40 80L45 66Z" fill="#F5D23C"/>
+<mask id="stroke1_0_7" fill="white">
+<path d="M45 66L50 80L65 85L50 90L45 104L40 90L25 85L40 80L45 66Z"/>
+</mask>
+<path d="M45 66L50 80L65 85L50 90L45 104L40 90L25 85L40 80L45 66Z" stroke-width="4" stroke="white" mask="url(#stroke1_0_7)"/>
+</g>
+<path id="Cahaya matahari" d="M950 320C1043.89 320 1120 243.888 1120 150C1120 56.1116 1043.89 -20 950 -20C856.112 -20 780 56.1116 780 150C780 243.888 856.112 320 950 320Z" fill="url(#paint0_radial_0_7)"/>
+</g>
+<defs>
+<radialGradient id="paint0_radial_0_7" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(950 150) scale(170)">
+<stop stop-color="#FFE98A"/>
+<stop offset="0.55" stop-color="#FFD84D"/>
+<stop offset="1" stop-color="#FFD84D" stop-opacity="0"/>
+</radialGradient>
+<clipPath id="clip0_0_7">
+<rect width="1180" height="500" fill="white"/>
+</clipPath>
+</defs>
+</svg>

@@ -1,35 +1,46 @@
-@extends('layouts.role')
+@extends('layouts.roborace-coach')
 
 @section('title', 'Tim Saya')
-@section('heading', 'Tim Saya')
+
+@php($page = 'team')
 
 @section('content')
-<div class="overflow-hidden rounded-xl border border-slate-200 bg-white">
-    <table class="w-full text-sm">
-        <thead class="bg-slate-50 text-slate-500">
-            <tr>
-                <th class="px-4 py-3 text-left">Tim</th>
-                <th class="px-4 py-3 text-left">Kategori</th>
-                <th class="px-4 py-3 text-left">Sekolah</th>
-                <th class="px-4 py-3 text-left">Status</th>
-                <th class="px-4 py-3"></th>
-            </tr>
-        </thead>
-        <tbody class="divide-y divide-slate-100">
-            @forelse ($teams as $team)
-                <tr>
-                    <td class="px-4 py-3 font-medium">{{ $team->name }}</td>
-                    <td class="px-4 py-3">{{ $team->category->level->label() }}</td>
-                    <td class="px-4 py-3 text-slate-500">{{ $team->school?->name }}</td>
-                    <td class="px-4 py-3">{{ $team->status->label() }}</td>
-                    <td class="px-4 py-3 text-right">
-                        <a href="{{ route('coach.teams.show', $team) }}" class="text-indigo-600 hover:underline">Detail</a>
-                    </td>
-                </tr>
-            @empty
-                <tr><td colspan="5" class="px-4 py-6 text-center text-slate-500">Belum ada tim.</td></tr>
-            @endforelse
-        </tbody>
-    </table>
-</div>
+<section class="hero hero-schedule">
+    <div class="content-width">
+        <div class="event-row">
+            <span class="live-chip">● LANGSUNG · {{ now()->translatedFormat('d M Y') }}</span>
+            <span class="series-chip">Seri Pilot</span>
+        </div>
+        <div class="hero-row">
+            <div>
+                <h1>Tim saya</h1>
+                <p>Semua tim sekolah Anda beserta statusnya.</p>
+            </div>
+            <img class="hero-mascot schedule-mascot" src="{{ asset('assets/17d7a.png') }}" alt="">
+        </div>
+    </div>
+</section>
+
+<main class="content-zone">
+    <div class="content-width page-stack">
+        <section class="card reveal">
+            <span class="eyebrow">DAFTAR TIM · {{ $teams->count() }} TIM</span>
+            <h2>Data tim</h2>
+            <div class="data-list">
+                @forelse ($teams as $team)
+                    <div class="data-row">
+                        <div>
+                            <strong>{{ $team->name }}</strong>
+                            <span>{{ $team->category?->level->publicLabel() }} · {{ $team->school?->name }} · {{ $team->runs->count() }} run</span>
+                        </div>
+                        <span class="status-badge {{ $team->status->value === 'verified' ? 'success' : 'warning' }}">{{ $team->status->label() }}</span>
+                        <a class="button secondary" href="{{ route('coach.teams.show', $team) }}">Detail</a>
+                    </div>
+                @empty
+                    <p>Belum ada tim.</p>
+                @endforelse
+            </div>
+        </section>
+    </div>
+</main>
 @endsection

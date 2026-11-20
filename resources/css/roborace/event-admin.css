@@ -1,0 +1,700 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+
+:root {
+  color: #121326;
+  background: #ece7ff;
+  font-family:"Nunito", sans-serif;font-weight:400;
+  font-synthesis: none;
+}
+@layer base {
+  body {
+    min-width: 320px;
+    min-height: 100vh;
+    background: #ece7ff;
+  }
+  button,
+  input,
+  select,
+  textarea {
+    outline: none;
+  }
+  button {
+    cursor: pointer;
+  }
+  button:disabled {
+    cursor: not-allowed;
+  }
+}
+* {
+  scrollbar-color: #8a68d4 #ece7ff;
+}
+.app {
+  min-height: 100vh;
+  overflow: hidden;
+  background: #ece7ff;
+}
+.navbar {
+  position: relative;
+  z-index: 20;
+  min-height: 72px;
+  padding: 12px 24px;
+  display: flex;
+  gap: 24px;
+  align-items: center;
+  background: rgba(255, 255, 255, 0.78);
+  backdrop-filter: blur(8px);
+  box-shadow: 0 2px 4px rgba(94, 59, 162, 0.08);
+}
+.brand {
+  white-space: nowrap;
+  color: #5e3ba2;
+  font-family:"Lilita One";font-weight:400;
+  font-size: 28px;
+  line-height: 1;
+}
+.brand span {
+  color: #e0a100;
+}
+.navbar nav {
+  flex: 1;
+  display: flex;
+  gap: 8px;
+}
+.navbar nav button {
+  min-height: 44px;
+  padding: 10px 12px;
+  border-radius: 999px;
+  color: #3a3b5a;
+  font: 600 15px "Fredoka";
+  font-variation-settings: "wdth" 100;
+  transition: 0.2s ease;
+}
+.navbar nav button:hover,
+.navbar nav button.active {
+  color: #5e3ba2;
+  background: #ece7ff;
+}
+.admin-label,
+.live,
+.badge,
+.mini-success {
+  border-radius: 999px;
+  padding: 7px 12px;
+  font: 600 13px "Fredoka";
+}
+.admin-label {
+  color: #7a5a00;
+  background: #fff6cc;
+  white-space: nowrap;
+}
+.hero {
+  padding: 32px max(28px, calc((100% - 1040px) / 2)) 16px;
+}
+.live-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: #5e3ba2;
+  font: 600 13px "Fredoka";
+}
+.live {
+  color: #121326;
+  background: #f5d23c;
+}
+.hero-content {
+  min-height: 165px;
+  display: flex;
+  align-items: center;
+  gap: 18px;
+}
+.hero-content > div {
+  flex: 1;
+}
+h1 {
+  color: #121326;
+  font: 400 44px/1.1 "Lilita One";
+}
+.hero p {
+  margin-top: 10px;
+  color: #3a3b5a;
+  font: 600 17px/1.5 "Nunito";
+}
+.mascot {
+  width: 118px;
+  height: 151px;
+  object-fit: contain;
+  animation: mascot-float 4s ease-in-out infinite;
+}
+main {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 26px;
+  padding: 24px max(28px, calc((100% - 1040px) / 2)) 72px;
+  background: #ece7ff;
+}
+main::before {
+  content: "";
+  position: absolute;
+  z-index: 0;
+  width: 1180px;
+  height: 500px;
+  left: 50%;
+  top: 0;
+  transform: translateX(-50%);
+  background: url("/assets/98d5a.svg") top center/1180px 500px no-repeat;
+  pointer-events: none;
+}
+.page-reports main::before {
+  background-image: url("/assets/report-ornament.svg");
+}
+main > *:not(.decorations) {
+  position: relative;
+  z-index: 1;
+}
+.card {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  padding: 26px;
+  border-radius: 26px;
+  background: white;
+  box-shadow: 0 10px 15px rgba(94, 59, 162, 0.12);
+  animation: card-in 0.55s ease both;
+  transition:
+    transform 0.22s ease,
+    box-shadow 0.22s ease,
+    opacity 0.2s ease;
+}
+.card:nth-of-type(2) {
+  animation-delay: 0.08s;
+}
+.card:nth-of-type(3) {
+  animation-delay: 0.16s;
+}
+.card:nth-of-type(4) {
+  animation-delay: 0.24s;
+}
+.card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 14px 24px rgba(94, 59, 162, 0.15);
+}
+.card.subdued {
+  opacity: 0.92;
+}
+h2 {
+  color: #5e3ba2;
+  font: 400 28px/1.15 "Lilita One";
+}
+.eyebrow {
+  color: #8a68d4;
+  font: 800 11px "JetBrains Mono";
+  letter-spacing: 0.02em;
+}
+.muted {
+  color: #6e7090;
+  font: 600 16px/1.5 "Nunito";
+}
+form {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 18px;
+  width: 100%;
+}
+.form-grid {
+  width: 100%;
+  display: grid;
+  gap: 18px 26px;
+}
+.form-grid.two {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+.form-grid.three {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+.field {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  color: #5e3ba2;
+  font: 600 15px "Fredoka";
+}
+.field input,
+.field select,
+.field textarea {
+  width: 100%;
+  min-height: 48px;
+  padding: 12px;
+  border: 2px solid #c9b8f0;
+  border-radius: 12px;
+  color: #6e7090;
+  background: white;
+  font: 400 16px/1.4 "Nunito";
+  transition:
+    border-color 0.2s,
+    box-shadow 0.2s;
+}
+.field textarea {
+  min-height: 74px;
+  resize: vertical;
+}
+.field input:focus,
+.field select:focus,
+.field textarea:focus {
+  border-color: #5e3ba2;
+  box-shadow: 0 0 0 3px rgba(94, 59, 162, 0.1);
+}
+.button {
+  min-height: 44px;
+  padding: 10px 20px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: 2px solid #c9b8f0;
+  border-radius: 999px;
+  color: #5e3ba2;
+  background: white;
+  font: 600 16px "Fredoka";
+  white-space: nowrap;
+  transition: 0.2s ease;
+}
+.button:hover:not(:disabled) {
+  transform: translateY(-2px);
+  border-color: #8a68d4;
+}
+.button.primary {
+  color: white;
+  border: 0;
+  background: linear-gradient(160deg, #5e3ba2, #8a68d4 55%, #c9b8f0);
+  box-shadow: 0 8px 18px rgba(94, 59, 162, 0.28);
+}
+.button.yellow {
+  color: #121326;
+  border: 4px solid rgba(245, 210, 60, 0.35);
+  background: linear-gradient(160deg, #f5d23c, #ffb938);
+}
+.button:disabled {
+  opacity: 0.48;
+}
+.chips,
+.actions,
+.row-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+}
+.chip {
+  min-height: 44px;
+  padding: 10px 18px;
+  border-radius: 999px;
+  color: #5e3ba2;
+  background: white;
+  box-shadow: 0 2px 8px rgba(94, 59, 162, 0.08);
+  font: 600 15px "Fredoka";
+  transition: 0.2s ease;
+}
+.chip:hover {
+  transform: translateY(-2px);
+}
+.chip.active {
+  color: white;
+  background: #5e3ba2;
+}
+.setup-tabs {
+  margin-bottom: -8px;
+}
+.rows {
+  display: flex;
+  flex-direction: column;
+}
+.row,
+.event-entry {
+  padding: 16px 0;
+  border-bottom: 1px dashed #c9b8f0;
+}
+.row:last-child,
+.event-entry:last-child {
+  border-bottom: 0;
+}
+.row {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+.row-copy {
+  min-width: 0;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+.row-copy strong {
+  color: #121326;
+  font: 600 18px "Fredoka";
+}
+.row-copy span {
+  color: #6e7090;
+  font: 600 14px/1.5 "Nunito";
+}
+.event-entry > .button {
+  margin-top: 10px;
+}
+.badge {
+  white-space: nowrap;
+  color: #5e3ba2;
+  background: #ece7ff;
+}
+.badge-open-registrasi,
+.badge-berjalan,
+.badge-◔-sementara {
+  color: #7a5a00;
+  background: #fff6cc;
+}
+.badge-ongoing,
+.badge-selesai,
+.badge-aktif,
+.badge-✓-resmi {
+  color: #14794f;
+  background: #ddf5ea;
+}
+.notice,
+.audit {
+  padding: 18px;
+  border-radius: 16px;
+  color: #14794f;
+  background: #ddf5ea;
+  font: 800 15px/1.4 "Nunito";
+  animation: card-in 0.3s ease both;
+}
+.notice.warning {
+  color: #7a5a00;
+  background: #fff6cc;
+}
+.notice.error {
+  color: #a22f46;
+  background: #ffe5ea;
+}
+.mini-success {
+  align-self: flex-start;
+  color: #14794f;
+  background: #ddf5ea;
+}
+.rules {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.rule {
+  display: flex;
+  align-items: flex-end;
+  gap: 48px;
+  padding: 18px;
+  border-radius: 16px;
+  background: #f7f4ff;
+}
+.rule-level {
+  align-self: flex-start;
+  min-width: 46px;
+  color: #5e3ba2;
+  font: 600 12px "Fredoka";
+}
+.rule div {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  min-width: 72px;
+}
+.rule strong {
+  color: #5e3ba2;
+  font: 400 24px "Lilita One";
+}
+.rule div span {
+  color: #6e7090;
+  font: 600 12px "Nunito";
+}
+.checklist {
+  color: #121326;
+  font: 600 14px/1.5 "Nunito";
+}
+.checklist .done {
+  color: #14794f;
+}
+.jury-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+}
+.jury {
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  border-radius: 18px;
+  background: #f7f4ff;
+}
+.jury > span {
+  align-self: flex-start;
+  padding: 6px 12px;
+  border-radius: 999px;
+  color: #5e3ba2;
+  background: #ece7ff;
+  font: 600 13px "Fredoka";
+}
+.jury > div {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.jury button {
+  width: 40px;
+  height: 40px;
+  border: 2px solid #c9b8f0;
+  border-radius: 50%;
+  color: #5e3ba2;
+  background: white;
+  font-size: 22px;
+}
+.jury strong {
+  color: #5e3ba2;
+  font: 400 34px "Lilita One";
+}
+.jury b {
+  font: 600 15px "Fredoka";
+}
+.jury small {
+  color: #6e7090;
+  font: 600 12px/1.5 "Nunito";
+}
+.stats {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+}
+.card.stat {
+  position: relative;
+  padding: 24px;
+  border-radius: 36px;
+  gap: 8px;
+}
+.stat > strong {
+  color: #5e3ba2;
+  font: 400 52px "Lilita One";
+  animation: number-up 0.6s ease both;
+}
+.stat small {
+  color: #6e7090;
+  font: 600 13px/1.5 "Nunito";
+}
+.stat i {
+  position: absolute;
+  width: 6px;
+  height: 14px;
+  top: -14px;
+  left: 50%;
+  border-radius: 3px;
+  background: #b9b2f2;
+}
+.stat i::before {
+  content: "";
+  position: absolute;
+  width: 12px;
+  height: 12px;
+  left: -3px;
+  top: -7px;
+  background: url("/assets/33664.svg") center/12px 12px no-repeat;
+}
+.decorations {
+  position: absolute;
+  z-index: 2;
+  inset: 0;
+  pointer-events: none;
+  font-family: sans-serif;
+  font-weight: bold;
+}
+.decorations span {
+  position: absolute;
+}
+.gear {
+  top: 20px;
+  left: 16px;
+  color: #8a68d4;
+  font-size: 30px;
+  animation: gear 12s linear infinite;
+}
+.flag {
+  top: 16px;
+  right: 18px;
+  color: #121326;
+  font-size: 30px;
+}
+.hex {
+  top: 88px;
+  right: 18px;
+  color: #f5d23c;
+  font-size: 42px;
+}
+.triangle {
+  top: 370px;
+  left: 8px;
+  color: #ffb938;
+  font-size: 28px;
+  text-shadow: 0 0 0 white;
+}
+footer {
+  position: relative;
+  min-height: 190px;
+  padding: 58px 32px 24px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  color: #aaa5c8;
+  background: #15143a;
+  font: 400 13px "Inter";
+}
+footer::before {
+  content: "";
+  position: absolute;
+  height: 90px;
+  top: -60px;
+  left: 0;
+  right: 0;
+  background: url("/assets/c9747.svg") center/100% 90px no-repeat;
+}
+footer strong {
+  color: #d8d2f4;
+  font: 700 18px "Inter";
+}
+footer i {
+  width: 100%;
+  height: 1px;
+  margin-top: 6px;
+  background: rgba(170, 165, 200, 0.35);
+}
+footer small {
+  font-size: 12px;
+}
+.checker {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 24px;
+  background-color: white;
+  background-image:
+    linear-gradient(45deg, #000 25%, transparent 25%),
+    linear-gradient(-45deg, #000 25%, transparent 25%),
+    linear-gradient(45deg, transparent 75%, #000 75%),
+    linear-gradient(-45deg, transparent 75%, #000 75%);
+  background-size: 24px 24px;
+  background-position:
+    0 0,
+    0 12px,
+    12px -12px,
+    -12px 0;
+}
+@keyframes card-in {
+  from {
+    opacity: 0;
+    transform: translateY(18px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+@keyframes number-up {
+  from {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+@keyframes mascot-float {
+  0%,
+  100% {
+    transform: translateY(0) rotate(-1deg);
+  }
+  50% {
+    transform: translateY(-8px) rotate(1deg);
+  }
+}
+@keyframes gear {
+  to {
+    transform: rotate(360deg);
+  }
+}
+@media (max-width: 760px) {
+  .navbar {
+    gap: 10px;
+    flex-wrap: wrap;
+  }
+  .navbar nav {
+    order: 3;
+    width: 100%;
+    overflow-x: auto;
+  }
+  .navbar nav button {
+    font-size: 13px;
+  }
+  .admin-label {
+    margin-left: auto;
+  }
+  .hero {
+    padding-top: 24px;
+  }
+  .hero-content {
+    min-height: 145px;
+  }
+  h1 {
+    font-size: 36px;
+  }
+  .mascot {
+    width: 92px;
+    height: 125px;
+  }
+  main {
+    padding-inline: 18px;
+  }
+  .form-grid.two,
+  .form-grid.three,
+  .jury-grid,
+  .stats {
+    grid-template-columns: 1fr;
+  }
+  .row {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+  .row-actions {
+    width: 100%;
+  }
+  .rule {
+    gap: 18px;
+    flex-wrap: wrap;
+  }
+  .rule div {
+    min-width: 56px;
+  }
+  .card {
+    padding: 22px;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+    transition-duration: 0.01ms !important;
+  }
+}

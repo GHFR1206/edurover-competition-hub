@@ -1,0 +1,1512 @@
+@import "tailwindcss";
+
+@font-face {
+  font-family: "Fredoka:Bold";
+  src: url("https://static.figma.com/font/Fredoka_wdth_wght__1") format("woff2");
+  font-style: normal;
+  font-weight: 700;
+}
+@font-face {
+  font-family: "Fredoka:Medium";
+  src: url("https://static.figma.com/font/Fredoka_wdth_wght__1") format("woff2");
+  font-style: normal;
+  font-weight: 500;
+}
+@font-face {
+  font-family: "Fredoka:Regular";
+  src: url("https://static.figma.com/font/Fredoka_wdth_wght__1") format("woff2");
+  font-style: normal;
+  font-weight: 400;
+}
+@font-face {
+  font-family: "Fredoka:SemiBold";
+  src: url("https://static.figma.com/font/Fredoka_wdth_wght__1") format("woff2");
+  font-style: normal;
+  font-weight: 600;
+}
+@font-face {
+  font-family: "Inter:Bold";
+  src: url("https://static.figma.com/font/Inter_1") format("woff2");
+  font-style: normal;
+  font-weight: 700;
+}
+@font-face {
+  font-family: "Inter:Regular";
+  src: url("https://static.figma.com/font/Inter_1") format("woff2");
+  font-style: normal;
+  font-weight: 400;
+}
+@font-face {
+  font-family: "JetBrains Mono:ExtraBold";
+  src: url("https://static.figma.com/font/JetBrainsMono_wght__1") format("woff2");
+  font-style: normal;
+  font-weight: 800;
+}
+@font-face {
+  font-family: "JetBrains Mono:Regular";
+  src: url("https://static.figma.com/font/JetBrainsMono_wght__1") format("woff2");
+  font-style: normal;
+  font-weight: 400;
+}
+@font-face {
+  font-family: "Lilita One:Regular";
+  src: url("https://static.figma.com/font/LilitaOne-Regular_1") format("woff2");
+  font-style: normal;
+  font-weight: 400;
+}
+@font-face {
+  font-family: "Noto Sans Math:Regular";
+  src: url("https://static.figma.com/font/NotoSansMath-Regular_1") format("woff2");
+  font-style: normal;
+  font-weight: 400;
+}
+@font-face {
+  font-family: "Noto Sans Symbols2:Regular";
+  src: url("https://static.figma.com/font/NotoSansSymbols2-Regular_5") format("woff2");
+  font-style: normal;
+  font-weight: 400;
+}
+@font-face {
+  font-family: "Noto Sans Symbols:Medium";
+  src: url("https://static.figma.com/font/NotoSansSymbols-VF_2") format("woff2");
+  font-style: normal;
+  font-weight: 500;
+}
+@font-face {
+  font-family: "Noto Sans Symbols:Regular";
+  src: url("https://static.figma.com/font/NotoSansSymbols-VF_2") format("woff2");
+  font-style: normal;
+  font-weight: 400;
+}
+@font-face {
+  font-family: "Noto Sans Symbols:SemiBold";
+  src: url("https://static.figma.com/font/NotoSansSymbols-VF_2") format("woff2");
+  font-style: normal;
+  font-weight: 600;
+}
+@font-face {
+  font-family: "Noto Sans:Medium";
+  src: url("https://static.figma.com/font/NotoSans-VF_3") format("woff2");
+  font-style: normal;
+  font-weight: 500;
+}
+@font-face {
+  font-family: "Noto Sans:Regular";
+  src: url("https://static.figma.com/font/NotoSans-VF_3") format("woff2");
+  font-style: normal;
+  font-weight: 400;
+}
+@font-face {
+  font-family: "Noto Sans:SemiBold";
+  src: url("https://static.figma.com/font/NotoSans-VF_3") format("woff2");
+  font-style: normal;
+  font-weight: 600;
+}
+@font-face {
+  font-family: "Nunito:ExtraBold";
+  src: url("https://static.figma.com/font/Nunito_wght__1") format("woff2");
+  font-style: normal;
+  font-weight: 800;
+}
+@font-face {
+  font-family: "Nunito:Regular";
+  src: url("https://static.figma.com/font/Nunito_wght__1") format("woff2");
+  font-style: normal;
+  font-weight: 400;
+}
+@font-face {
+  font-family: "Nunito:SemiBold";
+  src: url("https://static.figma.com/font/Nunito_wght__1") format("woff2");
+  font-style: normal;
+  font-weight: 600;
+}
+
+:root {
+  color: #121326;
+  background: #ece7ff;
+  font-family: "Nunito:SemiBold", sans-serif;
+  font-synthesis: none;
+}
+* {
+  box-sizing: border-box;
+}
+button,
+input,
+textarea {
+  font: inherit;
+}
+button {
+  cursor: pointer;
+}
+button:focus-visible,
+input:focus-visible,
+textarea:focus-visible {
+  outline: 3px solid #f5d23c;
+  outline-offset: 2px;
+}
+.app-shell {
+  min-height: 100vh;
+  background: #ece7ff;
+}
+.navbar {
+  position: sticky;
+  top: 0;
+  z-index: 40;
+  height: 64px;
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  padding: 0 24px;
+  background: rgba(255, 255, 255, 0.78);
+  box-shadow: 0 2px 8px rgba(94, 59, 162, 0.08);
+  backdrop-filter: blur(8px);
+  min-width: 1120px;
+}
+.brand {
+  border: 0;
+  background: none;
+  color: #5e3ba2;
+  font: 28px "Lilita One:Regular";
+  white-space: nowrap;
+}
+.brand span {
+  color: #e0a100;
+}
+.navlinks {
+  display: flex;
+  gap: 8px;
+  flex: 1;
+}
+.navlinks button {
+  height: 56px;
+  border: 0;
+  border-radius: 999px;
+  background: transparent;
+  padding: 0 16px;
+  color: #3a3b5a;
+  font: 16px "Fredoka:SemiBold";
+}
+.navlinks button.active {
+  background: #ece7ff;
+  color: #5e3ba2;
+}
+.navtools {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+.connection {
+  border: 0;
+  border-radius: 999px;
+  padding: 6px 12px;
+  background: #ddf5ea;
+  color: #14794f;
+  font: 18px "Fredoka:SemiBold";
+  white-space: nowrap;
+}
+.connection.offline {
+  background: #fff6cc;
+  color: #7a5a00;
+}
+.remote-nav {
+  height: 48px;
+  border: 0;
+  border-radius: 999px;
+  padding: 0 16px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: #fff;
+  background: linear-gradient(167deg, #5e3ba2 12%, #8a68d4 54%, #c9b8f0 88%);
+  font: 18px "Fredoka:SemiBold";
+  white-space: nowrap;
+}
+.remote-nav img {
+  width: 24px;
+  height: 28px;
+}
+.remote-nav b {
+  display: grid;
+  place-items: center;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: #f5d23c;
+  color: #5e3ba2;
+  font: 18px "Fredoka:Bold";
+}
+.account-wrap {
+  position: relative;
+}
+.account {
+  height: 48px;
+  border: 1px solid #c9b8f0;
+  border-radius: 999px;
+  background: #fff;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 0 14px 0 6px;
+  color: #5e3ba2;
+  font: 18px "Fredoka:SemiBold";
+  white-space: nowrap;
+}
+.account i {
+  width: 36px;
+  height: 36px;
+  display: grid;
+  place-items: center;
+  background: #ece7ff;
+  border-radius: 50%;
+  font-style: normal;
+}
+.account-menu {
+  position: absolute;
+  right: 0;
+  top: 56px;
+  width: 150px;
+  padding: 8px;
+  background: #fff;
+  border-radius: 16px;
+  box-shadow: 0 10px 30px rgba(21, 20, 58, 0.18);
+}
+.account-menu button {
+  width: 100%;
+  border: 0;
+  background: #fff;
+  color: #5e3ba2;
+  border-radius: 10px;
+  padding: 10px;
+  text-align: left;
+}
+.offline-banner {
+  position: sticky;
+  top: 64px;
+  z-index: 38;
+  height: 54px;
+  display: grid;
+  place-items: center;
+  background: #fff6cc;
+  color: #7a5a00;
+  font: 16px "Fredoka:Regular";
+}
+.page {
+  min-width: 1120px;
+  min-height: 100vh;
+  overflow: hidden;
+}
+.page.light {
+  background: #ece7ff;
+}
+.page-hero {
+  height: 278px;
+  padding: 40px 70px 24px;
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+}
+.event-row {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 44px;
+}
+.event-row span,
+.sky-card em {
+  padding: 7px 12px;
+  background: #f5d23c;
+  border-radius: 999px;
+  font: 13px "Fredoka:SemiBold";
+  font-style: normal;
+}
+.event-row b {
+  padding: 7px 12px;
+  color: #5e3ba2;
+  font: 13px "Fredoka:SemiBold";
+}
+.page-hero h1,
+.leader-hero h1 {
+  font: 44px/1.1 "Lilita One:Regular";
+  margin: 0 0 10px;
+}
+.page-hero p,
+.leader-hero p {
+  font: 17px/1.5 "Nunito:SemiBold";
+  color: #3a3b5a;
+}
+.hero-mascot {
+  width: 118px;
+  height: 158px;
+  object-fit: contain;
+  margin-right: 40px;
+  animation: float 4s ease-in-out infinite;
+}
+.page-content,
+.manual-space {
+  position: relative;
+  padding: 24px 70px 72px;
+  max-width: 1440px;
+  margin: auto;
+}
+.remote-content {
+  display: flex;
+  flex-direction: column;
+  gap: 26px;
+  background-image: url("/assets/98d5a.svg");
+  background-repeat: no-repeat;
+  background-size: 1180px 500px;
+}
+.team-filters,
+.filters,
+.level-filters {
+  display: flex;
+  gap: 10px;
+}
+.chip {
+  min-height: 44px;
+  border: 0;
+  border-radius: 999px;
+  background: #fff;
+  color: #5e3ba2;
+  padding: 10px 18px;
+  box-shadow: 0 2px 8px rgba(94, 59, 162, 0.08);
+  font: 15px "Fredoka:SemiBold";
+  white-space: nowrap;
+}
+.chip.active {
+  background: #5e3ba2;
+  color: #fff;
+}
+.leaderboard .chip {
+  background: rgba(255, 255, 255, 0.1);
+  color: #fff;
+}
+.leaderboard .chip.active {
+  background: #8a68d4;
+}
+.card {
+  background: #fff;
+  border-radius: 26px;
+  padding: 28px;
+  box-shadow: 0 10px 15px rgba(94, 59, 162, 0.12);
+  transition: transform 0.2s ease;
+}
+.card:hover {
+  transform: translateY(-2px);
+}
+.card h2,
+.recap h2 {
+  font: 28px/1.15 "Lilita One:Regular";
+  color: #5e3ba2;
+  margin: 0;
+}
+.achievement-card {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+.achievement-card code,
+.manual-team code {
+  font: 11px "JetBrains Mono:ExtraBold";
+  color: #8a68d4;
+}
+.muted {
+  color: #6e7090;
+  font-size: 16px;
+}
+.checkpoints {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+.checkpoint {
+  position: relative;
+  padding: 20px;
+  background: #f7f4ff;
+  border-radius: 22px;
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 16px;
+  animation: rise 0.45s both;
+}
+.checkpoint h3 {
+  margin: 0 0 8px;
+  color: #5e3ba2;
+  font: 28px/1.15 "Lilita One:Regular";
+}
+.checkpoint span {
+  font-size: 14px;
+}
+.checkpoint em,
+.vote-record em,
+.recap em {
+  font-style: normal;
+  border-radius: 999px;
+  padding: 7px 12px;
+  height: max-content;
+  font: 13px "Fredoka:SemiBold";
+}
+.checkpoint em.success,
+.vote-record em,
+.recap em {
+  color: #14794f;
+  background: #ddf5ea;
+}
+.checkpoint em.warning {
+  color: #7a5a00;
+  background: #fff6cc;
+}
+.checkpoint em.neutral {
+  color: #5e3ba2;
+  background: #ece7ff;
+}
+.progress {
+  grid-column: 1/-1;
+  height: 8px;
+  background: #ddd2f2;
+  border-radius: 99px;
+  overflow: hidden;
+}
+.progress i {
+  display: block;
+  height: 100%;
+  background: #8a68d4;
+  border-radius: 99px;
+  transition: width 0.5s ease;
+}
+.yellow-note {
+  background: #fff6cc;
+  color: #7a5a00;
+  border-radius: 16px;
+  padding: 20px;
+  font: 15px "Nunito:ExtraBold";
+}
+.vote-record {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 20px;
+}
+.vote-record small {
+  color: #6e7090;
+}
+.mascot-message {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  padding: 18px;
+  color: #5e3ba2;
+  font-size: 15px;
+}
+.mascot-message img {
+  width: 64px;
+  height: 85px;
+  object-fit: contain;
+  animation: float 4s ease-in-out infinite;
+}
+footer {
+  position: relative;
+  height: 166px;
+  margin-top: 90px;
+  padding: 40px 32px 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  align-items: center;
+  text-align: center;
+  background: #15143a;
+  color: #aaa5c8;
+  font-family: "Inter:Regular";
+}
+footer::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: -90px;
+  height: 90px;
+  background: url("/assets/dc463.svg") center bottom / cover no-repeat;
+  pointer-events: none;
+}
+footer.dark::before {
+  background-image: url("/assets/36c9c.svg");
+}
+footer strong {
+  color: #d8d2f4;
+  font: 18px "Inter:Bold";
+}
+footer hr {
+  width: 100%;
+  border: 0;
+  border-top: 1px solid rgba(170, 165, 200, 0.35);
+  margin: 4px;
+}
+.checker {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 24px;
+  background-color: #fff;
+  background-image:
+    linear-gradient(45deg, #000 25%, transparent 25%),
+    linear-gradient(-45deg, #000 25%, transparent 25%),
+    linear-gradient(45deg, transparent 75%, #000 75%),
+    linear-gradient(-45deg, transparent 75%, #000 75%);
+  background-size: 24px 24px;
+  background-position:
+    0 0,
+    0 12px,
+    12px -12px,
+    -12px 0;
+}
+.floating-remote {
+  position: fixed;
+  z-index: 30;
+  right: 48px;
+  bottom: 48px;
+  height: 64px;
+  border: 0;
+  border-radius: 999px;
+  padding: 0 24px;
+  color: #fff;
+  background: linear-gradient(167deg, #5e3ba2, #8a68d4 54%, #c9b8f0);
+  box-shadow: 0 24px 60px rgba(94, 59, 162, 0.3);
+  font: 20px "Fredoka:SemiBold";
+}
+.toast {
+  position: fixed;
+  z-index: 80;
+  top: 24px;
+  left: 50%;
+  transform: translateX(-50%);
+  padding: 14px 24px;
+  border-radius: 18px;
+  background: #ddf5ea;
+  color: #14794f;
+  font: 18px "Fredoka:SemiBold";
+  box-shadow: 0 8px 30px rgba(21, 20, 58, 0.14);
+  animation: toast 0.25s ease both;
+}
+
+/* Remote */
+.popup-layer {
+  position: fixed;
+  z-index: 60;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  padding: 20px;
+  background: rgba(40, 28, 90, 0.42);
+  backdrop-filter: blur(3px);
+  animation: fade 0.2s both;
+}
+.remote-popup {
+  width: 390px;
+  height: 790px;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  background: #fff;
+  border-radius: 36px;
+  box-shadow: 0 30px 80px rgba(21, 20, 58, 0.45);
+  animation: popup 0.28s ease both;
+  overflow: hidden;
+}
+.popup-head {
+  height: 74px;
+  flex: none;
+}
+.popup-title {
+  height: 56px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.popup-title h2 {
+  font: 24px "Lilita One:Regular";
+  color: #5e3ba2;
+}
+.popup-title button {
+  width: 56px;
+  height: 56px;
+  border: 0;
+  border-radius: 50%;
+  background: #fff;
+  color: #5e3ba2;
+  font: 42px/1 "Fredoka:Regular";
+}
+.popup-identity {
+  height: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font: 14px "Fredoka:Medium";
+  color: #3a3b5a;
+}
+.popup-identity b {
+  padding: 3px 7px;
+  border-radius: 999px;
+  background: #ddf5ea;
+  color: #14794f;
+  font: 12px "Fredoka:SemiBold";
+}
+.popup-identity b.offline {
+  background: #fff6cc;
+  color: #7a5a00;
+}
+.lcd {
+  min-height: 170px;
+  flex: 1;
+  padding: 8px 14px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  border: 2px solid rgba(185, 178, 242, 0.35);
+  border-radius: 36px;
+  color: #fff;
+  background: linear-gradient(140deg, #15143a 12%, #2a2b55 58%, #3b2a7a 88%);
+  transform-origin: center center;
+  animation: pulse 3s ease-in-out infinite;
+}
+.lcd.flip {
+  animation: flip 0.52s ease;
+}
+.lcd-top,
+.lcd-meta {
+  width: 100%;
+  height: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.lcd-top span {
+  padding: 1px 10px;
+  border-radius: 999px;
+  background: #f5d23c;
+  color: #5e3ba2;
+  font: 13px/18px "Fredoka:SemiBold";
+}
+.lcd-top small {
+  color: #c9b8f0;
+  font: 11px "JetBrains Mono:Regular";
+}
+.lcd-center {
+  flex: 1;
+  min-height: 98px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+}
+.lcd-center strong {
+  color: #f5d23c;
+  font: 72px/72px "Lilita One:Regular";
+  text-shadow: 0 0 16px rgba(245, 210, 60, 0.25);
+}
+.lcd-center b {
+  font: 22px/24px "Fredoka:Bold";
+}
+.lcd-center.review strong {
+  font-size: 28px;
+  line-height: 34px;
+}
+.lcd-center.review b {
+  font-size: 16px;
+}
+.lcd-meta span {
+  font: 15px "Fredoka:SemiBold";
+}
+.lcd-meta time {
+  color: #c9b8f0;
+  font: 14px "JetBrains Mono:ExtraBold";
+}
+.lcd-note {
+  font: 12px/16px "Fredoka:Regular";
+  opacity: 0.8;
+}
+.empty-lcd {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+}
+.empty-lcd img {
+  height: 88px;
+  width: 68px;
+  object-fit: contain;
+}
+.empty-lcd strong {
+  font: 18px "Fredoka:SemiBold";
+}
+.vote-actions {
+  height: 100px;
+  padding-bottom: 8px;
+  display: flex;
+  gap: 16px;
+  flex: none;
+}
+.vote-actions button {
+  height: 92px;
+  flex: 1;
+  border: 0;
+  border-radius: 36px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+  transition:
+    transform 0.1s,
+    box-shadow 0.1s;
+}
+.vote-actions button:active {
+  transform: translateY(7px);
+  box-shadow: none;
+}
+.vote-actions button:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+.vote-actions img {
+  width: 34px;
+  height: 34px;
+}
+.vote-actions span {
+  font: 24px "Fredoka:Bold";
+}
+.reject {
+  background: #ff9aab;
+  color: #5a0f1d;
+  box-shadow: 0 8px 0 #e5566d;
+}
+.approve {
+  background: #8fe3bc;
+  color: #0a4630;
+  box-shadow: 0 8px 0 #2eb67d;
+}
+.last-choice {
+  height: 56px;
+  display: flex;
+  align-items: center;
+  padding-left: 12px;
+  background: #ece7ff;
+  color: #5e3ba2;
+  border-radius: 18px;
+  font: 14px "Fredoka:Regular";
+  flex: none;
+}
+.last-choice span {
+  flex: 1;
+}
+.last-choice button {
+  height: 56px;
+  width: 68px;
+  border: 1.5px solid #5e3ba2;
+  border-radius: 18px;
+  background: transparent;
+  color: #5e3ba2;
+  font: 16px "Fredoka:SemiBold";
+}
+.quorum {
+  height: 102px;
+  flex: none;
+  overflow: hidden;
+}
+.quorum h3,
+.queue h3 {
+  margin: 0;
+  color: #5e3ba2;
+  font: 16px/18px "Fredoka:Bold";
+}
+.jurors {
+  height: 58px;
+  display: flex;
+  gap: 12px;
+}
+.jurors button {
+  flex: 1;
+  border: 0;
+  background: none;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  color: #5e3ba2;
+}
+.jurors i {
+  width: 40px;
+  height: 40px;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  background: #fff;
+  font: 24px/28px "Fredoka:Regular";
+  font-style: normal;
+}
+.jurors .voted i {
+  color: #14794f;
+  background: #ddf5ea;
+}
+.jurors .you i {
+  border: 3px solid #f5d23c;
+}
+.jurors span {
+  font: 14px/18px "Fredoka:SemiBold";
+}
+.quorum p {
+  margin: 0;
+  text-align: center;
+  color: #6e7090;
+  font: 13px/18px "Fredoka:Regular";
+}
+.queue {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  flex: none;
+}
+.queue > div {
+  display: flex;
+  gap: 4px;
+  flex-wrap: wrap;
+  min-height: 28px;
+}
+.queue span {
+  height: 28px;
+  display: flex;
+  align-items: center;
+  padding: 0 8px;
+  border-radius: 99px;
+  background: #ece7ff;
+  color: #5e3ba2;
+  font: 12px "Fredoka:Medium";
+}
+.queue span.done {
+  background: #ddf5ea;
+  color: #14794f;
+}
+.chief-note {
+  margin: 0;
+  color: #7a5a00;
+  font: 12px/14px "Fredoka:Regular";
+}
+.mobile-offline {
+  display: none;
+}
+
+/* Manual */
+.manual-space {
+  padding-top: 32px;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+.guide {
+  padding: 20px;
+  display: grid;
+  gap: 12px;
+}
+.guide > div {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.guide i {
+  width: 40px;
+  height: 40px;
+  display: grid;
+  place-items: center;
+  flex: none;
+  border-radius: 20px;
+  background: #fff6cc;
+  color: #7a5a00;
+  font: 16px "Fredoka:Bold";
+  font-style: normal;
+}
+.guide b {
+  font: 18px "Fredoka:Bold";
+}
+.guide p {
+  margin: 4px 0 0;
+  color: #6e7090;
+  font-size: 15px;
+}
+.manual-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 28px;
+  align-items: start;
+}
+.manual-team {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  cursor: pointer;
+}
+.detail-card > .manual-team {
+  padding: 0;
+  box-shadow: none;
+}
+.detail-card > .manual-team:hover {
+  transform: none;
+}
+.team-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.team-head h2 {
+  margin-top: 6px;
+}
+.team-head em {
+  padding: 8px 14px;
+  border-radius: 99px;
+  background: #fff6cc;
+  color: #7a5a00;
+  font: 13px "Fredoka:SemiBold";
+  font-style: normal;
+}
+.team-head em.submitted {
+  background: #ddf5ea;
+  color: #14794f;
+}
+.meta-chips,
+.evidence {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+.meta-chips span {
+  padding: 8px 12px;
+  border-radius: 99px;
+  background: #ece7ff;
+  color: #5e3ba2;
+  font: 13px "Fredoka:SemiBold";
+}
+.legacy {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+.legacy span {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.legacy b,
+.summary-grid b {
+  color: #5e3ba2;
+  font: 13px "Fredoka:SemiBold";
+}
+.legacy strong {
+  color: #5e3ba2;
+  font: 28px "Lilita One:Regular";
+}
+.legacy small,
+.summary-grid small {
+  color: #6e7090;
+}
+.legacy p {
+  margin: 0;
+  font-size: 14px;
+}
+.evidence span,
+.evidence button {
+  padding: 8px 14px;
+  border-radius: 99px;
+  border: 0;
+  background: #fff6cc;
+  color: #7a5a00;
+  font: 13px "Fredoka:SemiBold";
+}
+.evidence button {
+  background: #fff;
+  border: 2px solid #c9b8f0;
+  color: #5e3ba2;
+}
+.preview-copy {
+  padding-top: 12px;
+  border-top: 1px dashed #c9b8f0;
+  color: #6e7090;
+}
+.summary-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px 12px;
+}
+.summary-grid span {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.summary-grid strong {
+  color: #5e3ba2;
+  font: 24px "Lilita One:Regular";
+}
+.audit h3,
+.parameters h3 {
+  font: 18px "Fredoka:Bold";
+}
+.audit > div {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 12px;
+  padding: 16px;
+  background: #fff6cc;
+  border-radius: 16px;
+}
+.audit span {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  color: #6e7090;
+}
+.audit b {
+  color: #5e3ba2;
+  font: 13px "Fredoka:SemiBold";
+}
+.audit p {
+  color: #6e7090;
+  font-size: 14px;
+}
+.recap {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+.recap > div {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  padding-bottom: 16px;
+  border-bottom: 1px dashed #ddd2f2;
+}
+.recap > div span {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+.recap > div strong {
+  color: #5e3ba2;
+  font: 28px "Lilita One:Regular";
+}
+.recap small {
+  color: #6e7090;
+}
+.standalone {
+  margin-top: 0;
+}
+.detail-card {
+  display: flex;
+  flex-direction: column;
+  gap: 28px;
+}
+.parameters {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+.parameters > p {
+  color: #6e7090;
+}
+.parameter {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 16px 0;
+  border-top: 1px dashed #ddd2f2;
+}
+.parameter > div {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.parameter > div b {
+  flex: 1;
+  font: 15px "Fredoka:SemiBold";
+}
+.parameter > div span {
+  color: #6e7090;
+  font: 14px "Fredoka:SemiBold";
+}
+.parameter input[type="number"] {
+  width: 64px;
+  height: 43px;
+  border: 2px solid #c9b8f0;
+  border-radius: 12px;
+  text-align: center;
+  color: #5e3ba2;
+}
+.parameter em {
+  padding: 8px 12px;
+  border-radius: 99px;
+  background: #fff6cc;
+  color: #7a5a00;
+  font: 13px "Fredoka:SemiBold";
+  font-style: normal;
+}
+.parameter p {
+  color: #6e7090;
+  font-size: 14px;
+}
+.parameter label {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  font: 15px "Fredoka:SemiBold";
+}
+.parameter textarea,
+.file-field {
+  height: 56px;
+  border: 2px solid #c9b8f0;
+  border-radius: 12px;
+  padding: 14px;
+  color: #6e7090;
+  resize: none;
+}
+.form-actions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.form-actions button,
+.locked {
+  padding: 9px 14px;
+  border-radius: 99px;
+  border: 2px solid #c9b8f0;
+  background: #fff;
+  color: #5e3ba2;
+  font: 13px "Fredoka:SemiBold";
+}
+.form-actions button:disabled,
+.locked {
+  opacity: 0.55;
+}
+.form-actions span {
+  padding: 8px 12px;
+  border-radius: 99px;
+  background: #fff6cc;
+  color: #7a5a00;
+  font: 12px "Fredoka:SemiBold";
+}
+.upload {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  color: #5e3ba2;
+  font: 15px "Fredoka:SemiBold";
+}
+.upload input {
+  max-width: 220px;
+}
+.upload span {
+  color: #7a5a00;
+  background: #fff6cc;
+  padding: 8px 12px;
+  border-radius: 99px;
+}
+
+/* Leaderboard */
+.leaderboard {
+  color: #fff;
+  background: linear-gradient(to bottom, #15143a, #2a2b55 55%, #3b2a7a);
+}
+.leader-hero {
+  position: relative;
+  height: 210px;
+  padding: 32px 70px 16px;
+}
+.leader-hero .event-row {
+  margin-bottom: 16px;
+}
+.leader-hero .event-row b {
+  color: #f5d23c;
+}
+.leader-hero p {
+  color: #c9b8f0;
+}
+.leader-hero img {
+  position: absolute;
+  right: 70px;
+  top: 0;
+  width: 174px;
+  height: 186px;
+  object-fit: contain;
+  animation: float 4s ease-in-out infinite;
+}
+.leader-content {
+  padding: 24px 70px 80px;
+  max-width: 1440px;
+  margin: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 26px;
+  background-image: url("/assets/0b314.svg");
+  background-repeat: no-repeat;
+  background-size: 1180px 500px;
+}
+.sky-card {
+  padding: 26px;
+  border: 1.5px solid #8a68d4;
+  border-radius: 26px;
+  background: #15143a;
+  display: flex;
+  align-items: center;
+  gap: 26px;
+}
+.sky-card > div:first-child {
+  flex: 1;
+}
+.sky-card h2 {
+  font: 34px/1.15 "Lilita One:Regular";
+  margin: 12px 0;
+}
+.sky-card p {
+  color: #c9b8f0;
+}
+.planet {
+  position: relative;
+  width: 150px;
+  height: 130px;
+}
+.planet img:first-child {
+  position: absolute;
+  width: 74px;
+  height: 74px;
+  left: 38px;
+  top: 30px;
+}
+.planet img:nth-child(2) {
+  position: absolute;
+  width: 136px;
+  height: 33px;
+  left: 7px;
+  top: 53px;
+}
+.planet i {
+  position: absolute;
+  right: 10px;
+  color: #f5d23c;
+  font-size: 30px;
+  font-style: normal;
+}
+.circuit {
+  width: 100%;
+  height: 30px;
+}
+.rankings {
+  display: flex;
+  flex-direction: column;
+  gap: 22px;
+}
+.rankings article {
+  display: flex;
+  align-items: center;
+  gap: 22px;
+  padding: 22px;
+  border: 1.5px solid rgba(185, 178, 242, 0.35);
+  border-radius: 22px;
+  background: rgba(255, 255, 255, 0.07);
+  animation: rise 0.45s both;
+}
+.rankings article:nth-child(2) {
+  animation-delay: 80ms;
+}
+.rankings article:nth-child(3) {
+  animation-delay: 160ms;
+}
+.rankings article.first {
+  background: rgba(255, 201, 60, 0.14);
+  border-color: rgba(255, 201, 60, 0.5);
+}
+.hex {
+  width: 48px;
+  height: 52px;
+  display: grid;
+  place-items: center;
+  background: #8a68d4;
+  clip-path: polygon(50% 0, 95% 25%, 95% 75%, 50% 100%, 5% 75%, 5% 25%);
+  font: 26px "Lilita One:Regular";
+}
+.first .hex {
+  background: #f5d23c;
+  color: #15143a;
+}
+.rank-team {
+  flex: 1;
+}
+.rank-team h3 {
+  margin: 0 0 6px;
+  font: 24px "Fredoka:SemiBold";
+}
+.rank-team code {
+  font: 12px "JetBrains Mono:Regular";
+}
+.rank-team p,
+.rank-team small {
+  margin: 0;
+  color: #c9b8f0;
+}
+.rankings article > em {
+  padding: 7px 12px;
+  border: 1.5px solid #f5d23c;
+  border-radius: 99px;
+  background: #fff6cc;
+  color: #7a5a00;
+  font: 13px "Fredoka:SemiBold";
+  font-style: normal;
+}
+.rankings article > em.official {
+  background: #ddf5ea;
+  color: #14794f;
+}
+.rankings article > strong {
+  width: 120px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  font: 52px "Lilita One:Regular";
+}
+.rankings article.first > strong {
+  color: #ffc93c;
+}
+.rankings article > strong small {
+  color: #8a68d4;
+  font: 10px "JetBrains Mono:Regular";
+}
+
+@keyframes fade {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+@keyframes popup {
+  from {
+    opacity: 0;
+    transform: scale(0.94);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+@keyframes toast {
+  from {
+    opacity: 0;
+    transform: translate(-50%, -12px);
+  }
+  to {
+    opacity: 1;
+    transform: translate(-50%, 0);
+  }
+}
+@keyframes rise {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+@keyframes float {
+  0%,
+  100% {
+    transform: translateY(0) rotate(-1deg);
+  }
+  50% {
+    transform: translateY(-8px) rotate(1deg);
+  }
+}
+@keyframes pulse {
+  0%,
+  100% {
+    box-shadow: 0 0 0 rgba(138, 104, 212, 0);
+  }
+  50% {
+    box-shadow: 0 0 24px rgba(138, 104, 212, 0.2);
+  }
+}
+@keyframes flip {
+  0% {
+    transform: rotateX(0);
+  }
+  45% {
+    transform: rotateX(88deg);
+  }
+  55% {
+    transform: rotateX(-88deg);
+  }
+  100% {
+    transform: rotateX(0);
+  }
+}
+
+@media (max-width: 600px) {
+  body {
+    min-width: 0;
+  }
+  .app-shell {
+    width: 100%;
+    min-width: 0;
+  }
+  .navbar,
+  .page {
+    min-width: 0;
+  }
+  .navbar {
+    display: none;
+  }
+  .offline-banner {
+    display: none;
+  }
+  .page {
+    display: none;
+  }
+  .popup-layer {
+    padding: 0;
+    background: #fff;
+    display: block;
+  }
+  .remote-popup {
+    width: 100%;
+    height: 100dvh;
+    min-height: 790px;
+    border-radius: 0;
+    box-shadow: none;
+    padding: 20px;
+  }
+  .mobile-offline {
+    display: block;
+    position: absolute;
+    z-index: 2;
+    top: 0;
+    left: 0;
+    right: 0;
+    padding: 9px 16px;
+    background: #fff6cc;
+    color: #7a5a00;
+    text-align: center;
+    font: 12px "Fredoka:Regular";
+  }
+  .mobile-offline + .remote-popup {
+    padding-top: 42px;
+  }
+  .toast {
+    top: 12px;
+    max-width: calc(100% - 24px);
+    font-size: 14px;
+    white-space: nowrap;
+  }
+  .floating-remote {
+    display: none;
+  }
+}

@@ -1,8 +1,12 @@
 <?php
 
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\Public\ArchiveController;
+use App\Http\Controllers\Public\EventController;
 use App\Http\Controllers\Public\LandingController;
+use App\Http\Controllers\Public\LeaderboardController;
 use App\Http\Controllers\Public\ResultsController;
+use App\Http\Controllers\Public\ScheduleController;
 use App\Http\Controllers\RoleDashboardController;
 use Illuminate\Support\Facades\Route;
 
@@ -13,8 +17,12 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', LandingController::class)->name('home');
+Route::get('/event', EventController::class)->name('public.events');
+Route::get('/jadwal', ScheduleController::class)->name('public.schedule');
+Route::get('/leaderboard', LeaderboardController::class)->name('public.leaderboard');
 Route::get('/hasil', [ResultsController::class, 'index'])->name('public.results');
 Route::get('/hasil/{category:uuid}', [ResultsController::class, 'show'])->name('public.results.category');
+Route::get('/arsip', ArchiveController::class)->name('public.archive');
 
 /*
 |--------------------------------------------------------------------------
@@ -48,6 +56,16 @@ Route::middleware(['auth', 'active'])->group(function () {
     Route::middleware('role:chief_judge')
         ->prefix('chief')->name('chief.')
         ->group(base_path('routes/role/chief.php'));
+
+    // Event Admin
+    Route::middleware('role:event_admin')
+        ->prefix('event-admin')->name('eventadmin.')
+        ->group(base_path('routes/role/event-admin.php'));
+
+    // Super Admin
+    Route::middleware('role:super_admin')
+        ->prefix('super-admin')->name('superadmin.')
+        ->group(base_path('routes/role/super-admin.php'));
 });
 
 require __DIR__.'/auth.php';

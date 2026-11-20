@@ -1,25 +1,32 @@
-<x-guest-layout>
-    <div class="mb-4 text-sm text-gray-600">
-        {{ __('Forgot your password? No problem. Just let us know your email address and we will email you a password reset link that will allow you to choose a new one.') }}
-    </div>
+@extends('layouts.roborace-auth')
 
-    <!-- Session Status -->
-    <x-auth-session-status class="mb-4" :status="session('status')" />
+@section('title', 'Lupa Kata Sandi · RoboRace')
+@section('layout-class', 'auth-layout--compact')
+@section('sky', 'cf19b.svg')
 
-    <form method="POST" action="{{ route('password.email') }}">
-        @csrf
+@section('intro-title', 'Tenang, kita cari jalannya')
+@section('intro-description', 'Masukkan emailmu dan kami kirim tautan untuk membuat kata sandi baru.')
+@section('intro-mascot', '6db8f.png')
 
-        <!-- Email Address -->
-        <div>
-            <x-input-label for="email" :value="__('Email')" />
-            <x-text-input id="email" class="block mt-1 w-full" type="email" name="email" :value="old('email')" required autofocus />
-            <x-input-error :messages="$errors->get('email')" class="mt-2" />
-        </div>
+@section('content')
+<form class="auth-card forgot-card" method="POST" action="{{ route('password.email') }}" novalidate>
+    @csrf
 
-        <div class="flex items-center justify-end mt-4">
-            <x-primary-button>
-                {{ __('Email Password Reset Link') }}
-            </x-primary-button>
-        </div>
-    </form>
-</x-guest-layout>
+    @if (session('status'))
+        <div class="success-note">{{ session('status') }}</div>
+    @endif
+
+    <h2>Lupa kata sandi</h2>
+    <p class="card-description">Tautan berlaku 30 menit.</p>
+
+    <label class="field">
+        <span>Email</span>
+        <input name="email" type="email" value="{{ old('email') }}" placeholder="nama@sekolah.sch.id"
+               required autofocus autocomplete="username" @if ($errors->has('email')) aria-invalid="true" @endif>
+        @error('email') <small class="field-error">{{ $message }}</small> @enderror
+    </label>
+
+    <button class="submit-button" type="submit">Kirim tautan reset</button>
+    <a class="text-button back-button" href="{{ route('login') }}">← Kembali ke Masuk</a>
+</form>
+@endsection

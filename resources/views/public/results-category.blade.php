@@ -1,36 +1,75 @@
-@extends('layouts.public')
+@extends('layouts.roborace-public')
 
-@section('title', 'Klasemen ' . $category->level->label() . ' — NanoRobotic Competition Hub')
+@section('title', 'RoboRace · Klasemen ' . $category->level->publicLabel())
 
 @section('content')
-<div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-14">
-    <a href="{{ route('public.results') }}" class="text-sm text-indigo-400 hover:text-indigo-300">&larr; Kembali</a>
-    <h1 class="mt-4 text-3xl font-bold">Klasemen {{ $category->level->label() }}</h1>
-    <p class="mt-1 text-slate-400">{{ $category->name }}</p>
+<div class="app results-page">
+    <x-roborace.header :page="$page" />
 
-    <div class="mt-8 overflow-hidden rounded-xl border border-slate-800">
-        <table class="w-full text-sm">
-            <thead class="bg-slate-900 text-slate-400">
-                <tr>
-                    <th class="px-4 py-3 text-left">Peringkat</th>
-                    <th class="px-4 py-3 text-left">Tim</th>
-                    <th class="px-4 py-3 text-left">Sekolah</th>
-                    <th class="px-4 py-3 text-right">Skor Terbaik</th>
-                </tr>
-            </thead>
-            <tbody class="divide-y divide-slate-800 bg-slate-950">
-                @forelse ($standings as $row)
-                    <tr>
-                        <td class="px-4 py-3 font-semibold">{{ $row['rank'] }}</td>
-                        <td class="px-4 py-3">{{ $row['team']->name }}</td>
-                        <td class="px-4 py-3 text-slate-400">{{ $row['team']->school?->name }}</td>
-                        <td class="px-4 py-3 text-right font-mono">{{ $row['best_total'] }}</td>
-                    </tr>
-                @empty
-                    <tr><td colspan="4" class="px-4 py-6 text-center text-slate-500">Belum ada hasil.</td></tr>
-                @endforelse
-            </tbody>
-        </table>
-    </div>
+    <main class="results-main">
+        <img class="sunburst" src="{{ asset('assets/4a0a9.svg') }}" alt="">
+        <section class="results-title">
+            <x-roborace.live-badge />
+            <h1>Klasemen {{ $category->level->publicLabel() }}</h1>
+            <p>{{ $category->name }} · {{ $category->level->challengeName() }}</p>
+            <x-roborace.mascot src="786e4.png" />
+        </section>
+
+        @if ($podium->isNotEmpty())
+            <div class="podium">
+                <div class="podium-place second">
+                    <b>2</b>
+                    <strong>{{ $podium[1]['team']->name ?? '—' }}</strong>
+                    <span>{{ isset($podium[1]) ? $podium[1]['best_total'].' poin' : 'Menunggu' }}</span>
+                </div>
+                <div class="podium-place first">
+                    <small>🏆 JUARA 1</small>
+                    <b>1</b>
+                    <strong>{{ $podium[0]['team']->name }}</strong>
+                    <span>{{ $podium[0]['best_total'] }} poin</span>
+                </div>
+                <div class="podium-place third">
+                    <b>3</b>
+                    <strong>{{ $podium[2]['team']->name ?? '—' }}</strong>
+                    <span>{{ isset($podium[2]) ? $podium[2]['best_total'].' poin' : 'Menunggu hasil valid' }}</span>
+                </div>
+            </div>
+        @endif
+
+        <div class="result-filter" style="margin-top:24px">
+            <span>✓ {{ $category->level->publicLabel() }} · DIPUBLIKASIKAN {{ $category->publication?->published_at?->format('d M Y') }}</span>
+        </div>
+
+        <article class="card results-table reveal">
+            <div class="table-head">
+                <span>Rank</span>
+                <span>Tim · Sekolah</span>
+                <span>Total skor</span>
+                <span>Waktu</span>
+                <span></span>
+            </div>
+            @forelse ($standings as $row)
+                <div class="result-row">
+                    <b>{{ $row['rank'] }}</b>
+                    <div>
+                        <strong>{{ $row['team']->name }}</strong>
+                        <small>{{ $row['team']->school?->name }} · {{ $row['team']->short_name ?? '—' }}</small>
+                    </div>
+                    <strong>{{ $row['best_total'] }}</strong>
+                    <span>{{ $row['runs'] }} run</span>
+                    <span></span>
+                </div>
+            @empty
+                <div class="result-row"><div><strong>Belum ada hasil</strong></div></div>
+            @endforelse
+            <small class="table-note">
+                Skor dihitung dari skor yang telah disetujui Chief Judge. Kategori sudah dipublikasikan secara resmi.
+            </small>
+        </article>
+
+        <a class="outline-btn" style="margin-top:20px" href="{{ route('public.results') }}">← Kembali ke Hasil</a>
+    </main>
+
+    <x-roborace.footer />
 </div>
 @endsection

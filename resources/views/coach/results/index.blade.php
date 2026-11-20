@@ -1,22 +1,53 @@
-@extends('layouts.role')
+@extends('layouts.roborace-coach')
 
-@section('title', 'Hasil Tim')
-@section('heading', 'Hasil Tim Saya')
+@section('title', 'Hasil')
+
+@php($page = 'results')
 
 @section('content')
-<div class="rounded-xl border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-800">
-    Skor <strong>Diajukan (belum resmi)</strong> masih dapat berubah. Skor <strong>Disetujui</strong> bersifat resmi.
-    Nilai <strong>Draft</strong> tidak pernah ditampilkan kepada coach.
-</div>
+<section class="hero">
+    <div class="content-width">
+        <div class="event-row">
+            <span class="live-chip">● LANGSUNG · {{ now()->translatedFormat('d M Y') }}</span>
+            <span class="series-chip">Seri Pilot</span>
+        </div>
+        <div class="hero-row">
+            <div>
+                <h1>Kerja kerasmu, tercatat.</h1>
+                <p>Rekap hasil dan sertifikat tim sekolahmu.</p>
+            </div>
+            <img class="hero-mascot" src="{{ asset('assets/786e4.png') }}" alt="">
+        </div>
+    </div>
+</section>
 
-<div class="mt-4 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-    @forelse ($teams as $team)
-        <a href="{{ route('coach.results.show', $team) }}" class="rounded-xl border border-slate-200 bg-white p-5 hover:border-indigo-400">
-            <p class="font-semibold">{{ $team->name }}</p>
-            <p class="text-xs text-slate-500">{{ $team->category->level->label() }} — {{ $team->school?->name }}</p>
-        </a>
-    @empty
-        <p class="text-slate-500 text-sm">Belum ada tim.</p>
-    @endforelse
-</div>
+<main class="content-zone">
+    <div class="ornament" aria-hidden="true">
+        <img src="{{ asset('assets/98d5a.svg') }}" alt="">
+        <span class="gear-cut"><img src="{{ asset('assets/98d5a.svg') }}" alt=""></span>
+    </div>
+    <div class="content-width page-stack">
+        <div class="notice warning">
+            Skor <strong>Diajukan (belum resmi)</strong> masih dapat berubah. Skor <strong>Disetujui</strong> bersifat resmi. Nilai <strong>Draft</strong> tidak pernah ditampilkan kepada coach.
+        </div>
+
+        <section class="card reveal">
+            <span class="eyebrow">PILIH TIM</span>
+            <h2>Hasil tim saya</h2>
+            <div class="data-list">
+                @forelse ($teams as $team)
+                    <div class="data-row">
+                        <div>
+                            <strong>{{ $team->name }}</strong>
+                            <span>{{ $team->category?->level->publicLabel() }} — {{ $team->school?->name }}</span>
+                        </div>
+                        <a class="button secondary" href="{{ route('coach.results.show', $team) }}">Lihat hasil</a>
+                    </div>
+                @empty
+                    <p>Belum ada tim.</p>
+                @endforelse
+            </div>
+        </section>
+    </div>
+</main>
 @endsection

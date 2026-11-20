@@ -1,0 +1,895 @@
+@import "tailwindcss";
+
+@font-face {
+  font-family: "Fredoka:SemiBold";
+  src: url("https://static.figma.com/font/Fredoka_wdth_wght__1") format("woff2");
+  font-style: normal;
+  font-weight: 600;
+}
+@font-face {
+  font-family: "Inter:Bold";
+  src: url("https://static.figma.com/font/Inter_1") format("woff2");
+  font-style: normal;
+  font-weight: 700;
+}
+@font-face {
+  font-family: "Inter:Regular";
+  src: url("https://static.figma.com/font/Inter_1") format("woff2");
+  font-style: normal;
+  font-weight: 400;
+}
+@font-face {
+  font-family: "JetBrains Mono:ExtraBold";
+  src: url("https://static.figma.com/font/JetBrainsMono_wght__1") format("woff2");
+  font-style: normal;
+  font-weight: 800;
+}
+@font-face {
+  font-family: "Lilita One:Regular";
+  src: url("https://static.figma.com/font/LilitaOne-Regular_1") format("woff2");
+  font-style: normal;
+  font-weight: 400;
+}
+@font-face {
+  font-family: "Noto Sans Math:Regular";
+  src: url("https://static.figma.com/font/NotoSansMath-Regular_1") format("woff2");
+  font-style: normal;
+  font-weight: 400;
+}
+@font-face {
+  font-family: "Noto Sans Symbols2:Regular";
+  src: url("https://static.figma.com/font/NotoSansSymbols2-Regular_5") format("woff2");
+  font-style: normal;
+  font-weight: 400;
+}
+@font-face {
+  font-family: "Noto Sans Symbols:Regular";
+  src: url("https://static.figma.com/font/NotoSansSymbols-VF_2") format("woff2");
+  font-style: normal;
+  font-weight: 400;
+}
+@font-face {
+  font-family: "Noto Sans Symbols:SemiBold";
+  src: url("https://static.figma.com/font/NotoSansSymbols-VF_2") format("woff2");
+  font-style: normal;
+  font-weight: 600;
+}
+@font-face {
+  font-family: "Noto Sans:Regular";
+  src: url("https://static.figma.com/font/NotoSans-VF_3") format("woff2");
+  font-style: normal;
+  font-weight: 400;
+}
+@font-face {
+  font-family: "Noto Sans:SemiBold";
+  src: url("https://static.figma.com/font/NotoSans-VF_3") format("woff2");
+  font-style: normal;
+  font-weight: 600;
+}
+@font-face {
+  font-family: "Nunito:ExtraBold";
+  src: url("https://static.figma.com/font/Nunito_wght__1") format("woff2");
+  font-style: normal;
+  font-weight: 800;
+}
+@font-face {
+  font-family: "Nunito:Regular";
+  src: url("https://static.figma.com/font/Nunito_wght__1") format("woff2");
+  font-style: normal;
+  font-weight: 400;
+}
+@font-face {
+  font-family: "Nunito:SemiBold";
+  src: url("https://static.figma.com/font/Nunito_wght__1") format("woff2");
+  font-style: normal;
+  font-weight: 600;
+}
+
+:root {
+  color: #121326;
+  background: #ece7ff;
+  font-family: "Nunito:SemiBold", sans-serif;
+  font-synthesis: none;
+}
+
+@layer base {
+  body {
+    min-width: 320px;
+    min-height: 100vh;
+    background: #ece7ff;
+  }
+  button,
+  input,
+  textarea,
+  select {
+    font: inherit;
+  }
+  button,
+  a,
+  select {
+    -webkit-tap-highlight-color: transparent;
+  }
+  button {
+    cursor: pointer;
+  }
+}
+
+.app-shell {
+  min-height: 100vh;
+  overflow: hidden;
+  background: #ece7ff;
+}
+.navbar {
+  min-height: 72px;
+  padding: 12px 24px;
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  background: rgba(255, 255, 255, 0.78);
+  box-shadow: 0 2px 4px rgba(94, 59, 162, 0.08);
+  backdrop-filter: blur(8px);
+  position: relative;
+  z-index: 10;
+}
+.brand {
+  color: #5e3ba2;
+  font: 400 28px/1 "Lilita One:Regular";
+  text-decoration: none;
+  white-space: nowrap;
+}
+.brand span {
+  color: #e0a100;
+}
+.nav-menu {
+  flex: 1;
+  display: flex;
+  min-height: 44px;
+  align-items: center;
+}
+.nav-active,
+.operator-label {
+  border-radius: 999px;
+  font: 600 13px/normal "Fredoka:SemiBold";
+  font-variation-settings: "wdth" 100;
+}
+.nav-active {
+  padding: 10px 12px;
+  color: #5e3ba2;
+  background: #ece7ff;
+  text-decoration: none;
+  font-size: 15px;
+}
+.operator-label {
+  padding: 7px 12px;
+  color: #7a5a00;
+  background: #fff6cc;
+}
+.hero {
+  padding: 32px 70px 24px;
+}
+.event-row {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+.live-chip,
+.series-chip,
+.run-label {
+  border-radius: 999px;
+  padding: 7px 12px;
+  font: 600 13px/normal "Fredoka:SemiBold";
+  font-variation-settings: "wdth" 100;
+}
+.live-chip {
+  background: #f5d23c;
+}
+.series-chip {
+  color: #5e3ba2;
+}
+.hero-content {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  margin-top: 16px;
+}
+.hero-content > div {
+  flex: 1;
+}
+.hero h1 {
+  margin: 0;
+  color: #121326;
+  font: 400 44px/1.1 "Lilita One:Regular";
+}
+.hero p {
+  margin: 10px 0 0;
+  color: #3a3b5a;
+  font: 600 17px/1.5 "Nunito:SemiBold";
+}
+.hero-mascot {
+  width: 118px;
+  height: 145px;
+  object-fit: contain;
+  animation: mascotFloat 4.2s ease-in-out infinite;
+}
+.main-content {
+  min-height: 1717px;
+  padding: 24px 70px 72px;
+  display: flex;
+  flex-direction: column;
+  gap: 26px;
+  position: relative;
+  isolation: isolate;
+}
+.main-content::before {
+  content: "";
+  position: absolute;
+  z-index: -1;
+  top: 0;
+  left: 0;
+  width: min(100%, 1180px);
+  height: 500px;
+  background: url("/assets/operator-arena/98d5a.svg") top left/1180px 500px no-repeat;
+  pointer-events: none;
+}
+.arena-tabs,
+.filter-row,
+.issue-row,
+.run-actions,
+.badges {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px;
+}
+.chip {
+  min-height: 44px;
+  padding: 10px 20px;
+  border: 0;
+  border-radius: 999px;
+  color: #5e3ba2;
+  background: #fff;
+  box-shadow: 0 2px 8px rgba(94, 59, 162, 0.08);
+  font: 600 15px/normal "Fredoka:SemiBold";
+  font-variation-settings: "wdth" 100;
+  transition:
+    transform 0.2s,
+    box-shadow 0.2s,
+    background 0.2s;
+}
+.chip:hover,
+.button:hover {
+  transform: translateY(-2px);
+}
+.chip.active {
+  color: white;
+  background: #5e3ba2;
+}
+.run-card {
+  padding: 28px;
+  border-radius: 32px;
+  color: white;
+  background: #15143a;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 20px;
+  overflow: hidden;
+}
+.run-label {
+  color: #ffc93c;
+  background: #24204f;
+}
+.run-grid {
+  width: 100%;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
+}
+.active-robot,
+.telemetry {
+  min-width: 0;
+}
+.active-robot h2 {
+  margin: 0;
+  color: white;
+  font: 400 40px/1.15 "Lilita One:Regular";
+}
+.active-robot p,
+.telemetry p {
+  color: #ece7ff;
+  font: 600 16px/1.5 "Nunito:SemiBold";
+}
+.timer {
+  margin-top: 12px;
+  color: #ffc93c;
+  font: 400 64px/1 "Lilita One:Regular";
+  letter-spacing: 0.01em;
+  animation: timerPulse 2.6s ease-in-out infinite;
+}
+.timer small {
+  font-size: 22px;
+}
+.telemetry strong {
+  display: block;
+  margin-bottom: 16px;
+  color: #ece7ff;
+  font: 800 16px/1.5 "Nunito:ExtraBold";
+}
+.badges span,
+.status {
+  padding: 7px 14px;
+  border-radius: 999px;
+  color: #14794f;
+  background: #ddf5ea;
+  font: 600 13px/normal "Fredoka:SemiBold";
+  white-space: nowrap;
+}
+.badges .pending,
+.status-menunggu,
+.status-dipanggil {
+  color: #7a5a00;
+  background: #fff6cc;
+}
+.telemetry p {
+  margin: 16px 0 0;
+  font-size: 14px;
+}
+.button {
+  min-height: 56px;
+  padding: 12px 20px;
+  border-radius: 999px;
+  font: 600 16px/normal "Fredoka:SemiBold";
+  font-variation-settings: "wdth" 100;
+  transition:
+    transform 0.2s,
+    box-shadow 0.2s,
+    filter 0.2s;
+}
+.button.primary {
+  border: 4px solid rgba(245, 210, 60, 0.35);
+  color: #121326;
+  background: linear-gradient(148deg, #f5d23c 12%, #ffb938 88%);
+}
+.button.primary:hover {
+  box-shadow: 0 8px 18px rgba(224, 161, 0, 0.25);
+  filter: saturate(1.08);
+}
+.button.secondary {
+  border: 2px solid #c9b8f0;
+  color: #5e3ba2;
+  background: #fff;
+}
+.empty-run {
+  min-height: 205px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+.empty-run h2 {
+  margin: 18px 0 4px;
+  font: 400 34px/1.15 "Lilita One:Regular";
+}
+.empty-run p {
+  margin: 0;
+  color: #d8d2f4;
+}
+.content-card {
+  padding: 28px;
+  border-radius: 26px;
+  background: white;
+  box-shadow: 0 10px 15px rgba(94, 59, 162, 0.12);
+  transition:
+    transform 0.25s,
+    box-shadow 0.25s;
+}
+.content-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 14px 24px rgba(94, 59, 162, 0.15);
+}
+.content-card h2 {
+  margin: 0 0 18px;
+  color: #5e3ba2;
+  font: 400 28px/1.15 "Lilita One:Regular";
+}
+.queue-list {
+  margin-top: 4px;
+}
+.queue-row {
+  padding: 18px 0;
+  border-bottom: 1px dashed #c9b8f0;
+  display: flex;
+  align-items: center;
+  gap: 24px;
+}
+.queue-info {
+  flex: 1;
+  min-width: 0;
+}
+.queue-info h3 {
+  margin: 0 0 5px;
+  font: 600 18px/normal "Fredoka:SemiBold";
+  font-variation-settings: "wdth" 100;
+}
+.queue-info p {
+  margin: 0;
+  color: #6e7090;
+  font: 600 14px/1.5 "Nunito:SemiBold";
+}
+.queue-meta {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  flex-shrink: 0;
+}
+.status-berjalan {
+  color: #fff;
+  background: #5e3ba2;
+}
+.empty-list {
+  padding: 28px 0 8px;
+  color: #6e7090;
+  text-align: center;
+}
+.eyebrow {
+  display: block;
+  margin-bottom: 18px;
+  color: #8a68d4;
+  font: 800 11px/normal "JetBrains Mono:ExtraBold";
+}
+.issue {
+  border: 2px solid #c9b8f0;
+  color: #5e3ba2;
+  background: #fff;
+}
+.issue.danger {
+  border-color: transparent;
+  color: #b3283f;
+  background: #fde3e7;
+}
+.issue.selected {
+  color: #fff;
+  border-color: #5e3ba2;
+  background: #5e3ba2;
+  box-shadow: 0 0 0 4px rgba(94, 59, 162, 0.14);
+}
+.issue.danger.selected {
+  color: #fff;
+  border-color: #b3283f;
+  background: #b3283f;
+  box-shadow: 0 0 0 4px rgba(179, 40, 63, 0.14);
+}
+.special label {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: 18px;
+  color: #5e3ba2;
+  font: 600 15px/normal "Fredoka:SemiBold";
+}
+.special textarea,
+.special input,
+.special select {
+  width: 100%;
+  min-height: 56px;
+  padding: 14px;
+  border: 2px solid #c9b8f0;
+  border-radius: 12px;
+  outline: 0;
+  color: #6e7090;
+  background: #fff;
+  font: 400 16px/1.4 "Nunito:Regular";
+  transition:
+    border-color 0.2s,
+    box-shadow 0.2s;
+}
+.special .picker-trigger,
+.special select {
+  min-height: 48px;
+  height: 48px;
+}
+.special textarea {
+  resize: vertical;
+}
+.special textarea:focus,
+.special input:focus,
+.special select:focus,
+.special .picker-trigger:focus-visible {
+  border-color: #8a68d4;
+  box-shadow: 0 0 0 3px rgba(138, 104, 212, 0.14);
+}
+.field-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 24px;
+}
+.picker {
+  position: relative;
+  width: 100%;
+  font-family: "Nunito:Regular";
+}
+.picker-trigger {
+  width: 100%;
+  padding: 0 14px;
+  border: 2px solid #c9b8f0;
+  border-radius: 12px;
+  outline: 0;
+  color: #6e7090;
+  background: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  text-align: left;
+  font: 400 16px/1.4 "Nunito:Regular";
+  transition:
+    border-color 0.2s,
+    box-shadow 0.2s;
+}
+.picker-trigger svg {
+  width: 19px;
+  height: 19px;
+  flex: 0 0 19px;
+  fill: none;
+  stroke: #8a68d4;
+  stroke-width: 1.8;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+.calendar-popover,
+.time-popover {
+  position: absolute;
+  z-index: 30;
+  top: calc(100% + 8px);
+  left: 0;
+  width: 100%;
+  min-width: 280px;
+  padding: 12px;
+  border: 1px solid #e4dcf7;
+  border-radius: 14px;
+  color: #3a3b5a;
+  background: #fff;
+  box-shadow: 0 14px 34px rgba(94, 59, 162, 0.2);
+}
+.calendar-header {
+  display: grid;
+  grid-template-columns: 32px 1fr 32px;
+  align-items: center;
+  margin-bottom: 10px;
+  text-align: center;
+}
+.calendar-header strong {
+  color: #5e3ba2;
+  font: 600 14px/normal "Fredoka:SemiBold";
+}
+.calendar-header button,
+.calendar-grid button {
+  border: 0;
+  border-radius: 8px;
+  color: #5e3ba2;
+  background: transparent;
+}
+.calendar-header button {
+  width: 32px;
+  height: 32px;
+  font-size: 24px;
+  line-height: 1;
+}
+.calendar-header button:hover,
+.calendar-grid button:hover:not(:disabled) {
+  background: #ece7ff;
+}
+.calendar-grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 3px;
+}
+.calendar-weekdays {
+  margin-bottom: 4px;
+}
+.calendar-weekdays span {
+  padding: 4px 0;
+  color: #8a68d4;
+  text-align: center;
+  font: 600 11px/normal "Fredoka:SemiBold";
+}
+.calendar-grid button {
+  aspect-ratio: 1;
+  padding: 0;
+  font: 600 12px/1 "Nunito:SemiBold";
+}
+.calendar-grid button.outside {
+  color: #aaa5c8;
+}
+.calendar-grid button.today {
+  border: 1px solid #8a68d4;
+}
+.calendar-grid button.selected {
+  border-color: #5e3ba2;
+  color: #fff;
+  background: #5e3ba2;
+}
+.calendar-grid button:disabled {
+  color: #d8d2e6;
+  cursor: not-allowed;
+  text-decoration: line-through;
+}
+.time-popover {
+  max-height: 238px;
+  overflow-y: auto;
+  padding: 8px;
+}
+.time-popover button {
+  width: 100%;
+  padding: 9px 10px;
+  border: 0;
+  border-radius: 8px;
+  color: #3a3b5a;
+  background: #fff;
+  text-align: left;
+  font: 600 14px/normal "Nunito:SemiBold";
+}
+.time-popover button:hover {
+  background: #ece7ff;
+}
+.time-popover button.selected {
+  color: #fff;
+  background: #5e3ba2;
+}
+.special > .primary {
+  margin-top: 18px;
+}
+.mascot-message {
+  padding: 18px;
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  color: #5e3ba2;
+  border-radius: 22px;
+}
+.mascot-message img {
+  width: 64px;
+  height: 82px;
+  object-fit: contain;
+  animation: mascotFloat 4.8s ease-in-out infinite reverse;
+}
+.mascot-message strong {
+  font: 800 15px/1.4 "Nunito:ExtraBold";
+}
+.ornament {
+  position: absolute;
+  z-index: 1;
+  color: #7756c5;
+  pointer-events: none;
+}
+.gear {
+  top: 28px;
+  left: 18px;
+  font-size: 31px;
+  animation: gearSpin 10s linear infinite;
+}
+.flag {
+  top: 30px;
+  right: 25px;
+  color: #15143a;
+  font-size: 32px;
+  transform: rotate(90deg);
+}
+.hexagon {
+  top: 122px;
+  right: 20px;
+  width: 40px;
+  height: 46px;
+  background: #f5d23c;
+  clip-path: polygon(25% 6%, 75% 6%, 100% 50%, 75% 94%, 25% 94%, 0 50%);
+}
+.triangle {
+  top: 392px;
+  left: 3px;
+  width: 0;
+  height: 0;
+  border-left: 16px solid transparent;
+  border-right: 16px solid transparent;
+  border-bottom: 28px solid #f5b92f;
+}
+footer {
+  color: #aaa5c8;
+  background: #15143a;
+  text-align: center;
+}
+.footer-wave {
+  height: 90px;
+  margin-top: -1px;
+  background: #ece7ff;
+  overflow: hidden;
+}
+.footer-wave img {
+  display: block;
+  width: 1180px;
+  height: 90px;
+  min-width: 100%;
+  object-fit: fill;
+}
+.footer-content {
+  padding: 20px 32px 16px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+}
+.footer-content strong {
+  color: #d8d2f4;
+  font: 700 18px/normal "Inter:Bold";
+}
+.footer-content span {
+  font: 400 13px/18px "Inter:Regular";
+}
+.footer-content hr {
+  width: 100%;
+  border: 0;
+  border-top: 1px solid rgba(170, 165, 200, 0.35);
+}
+.footer-content small {
+  font: 400 12px/normal "Inter:Regular";
+}
+.checker {
+  height: 24px;
+  background-color: white;
+  background-image:
+    linear-gradient(45deg, #000 25%, transparent 25%),
+    linear-gradient(-45deg, #000 25%, transparent 25%),
+    linear-gradient(45deg, transparent 75%, #000 75%),
+    linear-gradient(-45deg, transparent 75%, #000 75%);
+  background-size: 24px 24px;
+  background-position:
+    0 0,
+    0 12px,
+    12px -12px,
+    -12px 0;
+}
+.toast {
+  position: fixed;
+  z-index: 50;
+  right: 24px;
+  bottom: 28px;
+  max-width: min(420px, calc(100vw - 48px));
+  padding: 14px 18px;
+  border-radius: 14px;
+  color: white;
+  background: #15143a;
+  box-shadow: 0 12px 34px rgba(21, 20, 58, 0.28);
+  font: 600 15px/1.4 "Nunito:SemiBold";
+  animation: toastIn 0.25s ease-out;
+}
+.reveal {
+  animation: reveal 0.55s both;
+}
+.reveal:nth-of-type(2) {
+  animation-delay: 0.08s;
+}
+.reveal:nth-of-type(3) {
+  animation-delay: 0.16s;
+}
+.reveal:nth-of-type(4) {
+  animation-delay: 0.24s;
+}
+
+@keyframes reveal {
+  from {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+@keyframes toastIn {
+  from {
+    opacity: 0;
+    transform: translateY(12px) scale(0.98);
+  }
+}
+@keyframes mascotFloat {
+  0%,
+  100% {
+    transform: translateY(0) rotate(-1deg);
+  }
+  50% {
+    transform: translateY(-8px) rotate(2deg);
+  }
+}
+@keyframes timerPulse {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.82;
+    text-shadow: 0 0 18px rgba(255, 201, 60, 0.14);
+  }
+}
+@keyframes gearSpin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@media (max-width: 760px) {
+  .navbar {
+    gap: 10px;
+    padding: 10px 16px;
+  }
+  .brand {
+    font-size: 23px;
+  }
+  .nav-menu {
+    justify-content: center;
+  }
+  .nav-active {
+    font-size: 13px;
+    padding-inline: 10px;
+  }
+  .operator-label {
+    display: none;
+  }
+  .hero,
+  .main-content {
+    padding-left: 20px;
+    padding-right: 20px;
+  }
+  .hero h1 {
+    font-size: 37px;
+  }
+  .hero p {
+    font-size: 15px;
+  }
+  .hero-mascot {
+    width: 86px;
+    height: 105px;
+  }
+  .run-grid {
+    grid-template-columns: 1fr;
+  }
+  .active-robot h2 {
+    font-size: 34px;
+  }
+  .timer {
+    font-size: 52px;
+  }
+  .queue-row {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 14px;
+  }
+  .queue-meta {
+    width: 100%;
+    justify-content: space-between;
+  }
+  .field-grid {
+    grid-template-columns: 1fr;
+    gap: 0;
+  }
+  .calendar-popover,
+  .time-popover {
+    min-width: 100%;
+  }
+  .content-card,
+  .run-card {
+    padding: 22px;
+    border-radius: 24px;
+  }
+  .ornament {
+    display: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    scroll-behavior: auto !important;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
