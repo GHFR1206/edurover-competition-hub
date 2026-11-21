@@ -72,6 +72,23 @@ textarea:focus-visible {
   background: #ece7ff;
   color: #5e3ba2;
 }
+/* The Blade layout renders nav items as anchors, not buttons. */
+.navlinks a {
+  height: 56px;
+  border: 0;
+  border-radius: 999px;
+  background: transparent;
+  padding: 0 16px;
+  display: inline-flex;
+  align-items: center;
+  color: #3a3b5a;
+  font: 16px "Fredoka";
+  text-decoration: none;
+}
+.navlinks a.active {
+  background: #ece7ff;
+  color: #5e3ba2;
+}
 .navtools {
   display: flex;
   align-items: center;
@@ -1331,7 +1348,7 @@ footer hr {
   }
 }
 
-@media (max-width: 600px) {
+@media (max-width: 1119px) {
   body {
     min-width: 0;
   }
@@ -1547,7 +1564,7 @@ footer hr {
 /* Phone layout. The React original hid `.page` on small screens because its
    content lived inside a popup; the Blade port renders it directly, so this
    block is what actually makes judge screens usable on a phone. */
-@media (max-width: 600px) {
+@media (max-width: 1119px) {
   .page-hero {
     height: auto;
     padding: 20px 16px 8px;
@@ -1692,7 +1709,7 @@ footer hr {
   }
 }
 
-@media (max-width: 600px) {
+@media (max-width: 1119px) {
   .recap > div {
     flex-wrap: wrap;
     gap: 10px;

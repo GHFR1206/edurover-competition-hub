@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\Enums\CategoryStatus;
+use App\Enums\RunStatus;
 use App\Enums\ScoreStatus;
 use App\Events\StandingsUpdated;
 use App\Models\Category;
@@ -47,8 +48,10 @@ class PublicationService
         // Time-mode categories are ranked by the arena stopwatch, so judge
         // scores are not part of the official result at all.
         if ($category->scoring_mode === 'time') {
+            // Only a finished run needs a stopwatch reading. A DQ/DNF/no-show
+            // is settled by its status alone and must not block publication.
             $withoutTime = $runs->filter(
-                fn ($run) => $run->status->isSettled() && $run->official_time_ms === null
+                fn ($run) => $run->status === RunStatus::Finished && $run->official_time_ms === null
             );
 
             if ($withoutTime->isNotEmpty()) {

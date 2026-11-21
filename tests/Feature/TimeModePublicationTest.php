@@ -81,3 +81,22 @@ it('still requires approved judge scores in jury mode', function () {
 
     expect(collect($reasons)->contains(fn ($r) => str_contains($r, 'belum disetujui')))->toBeTrue();
 });
+
+it('does not block publication for a disqualified run without a stopwatch reading', function () {
+    finishedTimedRun($this->category, $this->arena, 42_000);
+
+    $dqTeam = Team::factory()->create(['category_id' => $this->category->id]);
+    Run::factory()->create([
+        'event_id' => $this->category->event_id,
+        'category_id' => $this->category->id,
+        'arena_id' => $this->arena->id,
+        'team_id' => $dqTeam->id,
+        'status' => RunStatus::Dq,
+        'official_time_ms' => null,
+    ]);
+
+    $service = app(PublicationService::class);
+
+    expect($service->blockingReasons($this->category))->toBe([])
+        ->and($service->canPublish($this->category))->toBeTrue();
+});

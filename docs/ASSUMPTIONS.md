@@ -40,6 +40,7 @@ alih-alih ditebak diam-diam.
 | A33 | Tie-break memakai `rulebook.tie_break_order` (default `primary_achievement > penalty > time > extra_run`) | Sebelumnya tersimpan tapi tidak pernah dipakai; seri ditentukan urutan acak DB. Fallback terakhir: nama tim, supaya urutan tidak berubah antar request. |
 | A34 | Mode penilaian **terkunci setelah kategori dipublikasikan** | Mengubah mode setelah publikasi akan menulis ulang podium resmi; perubahan hanya lewat jalur koreksi resmi. |
 | A35 | API arena memakai `auth:sanctum` + penolakan token non-`PersonalAccessToken` | Mencegah sesi browser staf dipakai sebagai "perangkat arena"; endpoint hanya menerima bearer token sungguhan. |
+| A36 | Waktu resmi hanya berlaku untuk run berstatus **`finished`** | Perangkat arena bisa saja menghentikan stopwatch pada run yang kemudian didiskualifikasi. Bacaan waktu pada run `dq`/`dnf`/`no_show` diabaikan: tidak masuk klasemen mode `time`, tidak dipakai tie-break, dan tidak dianggap hasil publik (`hasApprovedScores`). Run non-`finished` tidak memblokir publikasi karena statusnya sudah final tanpa waktu. |
 
 ## Sudah diselesaikan (sebelumnya terbuka)
 

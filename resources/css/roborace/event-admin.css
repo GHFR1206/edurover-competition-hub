@@ -77,6 +77,23 @@
   color: #5e3ba2;
   background: #ece7ff;
 }
+/* The Blade layout renders nav items as anchors, not buttons. */
+.navbar nav a {
+  min-height: 44px;
+  padding: 10px 12px;
+  border-radius: 999px;
+  display: inline-flex;
+  align-items: center;
+  color: #3a3b5a;
+  font: 600 15px "Fredoka";
+  text-decoration: none;
+  transition: 0.2s ease;
+}
+.navbar nav a:hover,
+.navbar nav a.active {
+  color: #5e3ba2;
+  background: #ece7ff;
+}
 .admin-label,
 .live,
 .badge,
@@ -645,6 +662,10 @@ footer small {
   }
   .navbar nav button {
     font-size: 13px;
+  }
+  .navbar nav a {
+    font-size: 13px;
+    white-space: nowrap;
   }
   .admin-label {
     margin-left: auto;

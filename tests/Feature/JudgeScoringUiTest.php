@@ -97,16 +97,17 @@ it('lets the judge submit a penalty that reduces the total', function () {
 it('keeps judge pages visible on phones (no display:none regression)', function () {
     $css = file_get_contents(resource_path('css/roborace/juri.css'));
 
-    // The mobile block must not hide the page container that every judge
+    // The responsive block must not hide the page container that every judge
     // view uses. (The original React design did, which broke scoring on phones.)
-    preg_match('/@media \(max-width: 600px\)\s*\{(.*?)\n\}/s', $css, $match);
+    // The design canvas is 1120px wide, so the block starts just below that.
+    preg_match('/@media \(max-width: 1119px\)\s*\{(.*?)\n\}/s', $css, $match);
 
     expect($match)->not->toBeEmpty();
 
     $mobileBlock = $match[1];
 
     expect($mobileBlock)->not->toContain(".page {\n    display: none;")
-        ->and($css)->toContain('@media (max-width: 600px)')
+        ->and($css)->toContain('@media (max-width: 1119px)')
         ->and($css)->toContain('.score-section')
         ->and($css)->toContain('.penalty-section');
 });

@@ -277,6 +277,45 @@ it('uses a team best time across attempts in time mode', function () {
     expect($row['time_ms'])->toBe(55_000);
 });
 
+it('never ranks a disqualified run by its stopwatch reading in time mode', function () {
+    $this->category->update(['scoring_mode' => 'time']);
+
+    $clean = Team::factory()->create(['category_id' => $this->category->id]);
+    $disqualified = Team::factory()->create(['category_id' => $this->category->id]);
+
+    runWithScores($clean, [], timeMs: 90_000);
+
+    // The device stopped the clock, but the run was disqualified: the fast
+    // reading must be ignored so the DQ team cannot win the category.
+    $dq = runWithScores($disqualified, [], timeMs: 10_000);
+    $dq->update(['status' => RunStatus::Dq]);
+
+    $service = app(StandingsService::class);
+    $standings = $service->forCategory($this->category->fresh());
+
+    expect($standings[0]['team']->id)->toBe($clean->id)
+        ->and($standings[0]['time_ms'])->toBe(90_000)
+        ->and($standings[1]['team']->id)->toBe($disqualified->id)
+        ->and($standings[1]['time_ms'])->toBeNull()
+        ->and($standings[1]['approved'])->toBeFalse();
+});
+
+it('does not treat a disqualified stopwatch reading as a public result', function () {
+    $this->category->update(['scoring_mode' => 'time']);
+
+    $team = Team::factory()->create(['category_id' => $this->category->id]);
+    $run = runWithScores($team, [], timeMs: 10_000);
+    $run->update(['status' => RunStatus::Dq]);
+
+    $service = app(StandingsService::class);
+
+    expect($service->hasApprovedScores($this->category->fresh()))->toBeFalse();
+
+    $run->update(['status' => RunStatus::Finished]);
+
+    expect($service->hasApprovedScores($this->category->fresh()))->toBeTrue();
+});
+
 it('formats stopwatch values for display', function () {
     expect(StandingsService::formatMs(65_432))->toBe('01:05.432')
         ->and(StandingsService::formatMs(1_500))->toBe('00:01.500')

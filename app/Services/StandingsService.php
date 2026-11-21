@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Enums\RunStatus;
 use App\Enums\ScoreStatus;
 use App\Models\Category;
 use App\Models\Run;
@@ -81,9 +82,11 @@ class StandingsService
     public function hasApprovedScores(Category $category): bool
     {
         if (($category->scoring_mode ?: 'jury') === 'time') {
+            // Only a finished run has a valid official time; a DQ/DNF/no-show
+            // may carry a raw stopwatch reading but must never be rankable.
             return Run::where('category_id', $category->id)
                 ->whereNotNull('official_time_ms')
-                ->whereIn('status', ['finished', 'dnf', 'dq', 'no_show'])
+                ->where('status', RunStatus::Finished->value)
                 ->exists();
         }
 
@@ -115,10 +118,11 @@ class StandingsService
             default => (int) ($values->max() ?? 0),
         };
 
-        // Official time is always the fastest settled run, independent of mode:
-        // it feeds the `time` tie-break even in jury mode.
+        // Official time only counts for a run that actually finished: a DQ or
+        // a no-show must never win a time-based category just because the
+        // device happened to stop the clock.
         $times = $teamRuns
-            ->filter(fn (Run $run) => $run->status->isSettled() && $run->official_time_ms !== null)
+            ->filter(fn (Run $run) => $run->status === RunStatus::Finished && $run->official_time_ms !== null)
             ->pluck('official_time_ms');
 
         $timeMs = $times->isEmpty() ? null : (int) $times->min();
@@ -160,7 +164,7 @@ class StandingsService
     private function runValue(Run $run, string $mode, array $aggregation): array
     {
         if ($mode === 'time') {
-            $official = $run->status->isSettled() && $run->official_time_ms !== null;
+            $official = $run->status === RunStatus::Finished && $run->official_time_ms !== null;
 
             return [
                 'official' => $official,
