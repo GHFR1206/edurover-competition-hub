@@ -95,10 +95,12 @@ it('never lets one arena touch another arena run', function () {
     ]);
 
     ($this->api)('post', "/runs/{$otherRun->uuid}/start", ['started_ms' => 0])
-        ->assertNotFound();
+        ->assertNotFound()
+        ->assertJsonPath('message', 'Run tidak ditemukan di arena ini.');
 
     ($this->api)('post', "/runs/{$otherRun->uuid}/finish", ['finished_ms' => 10_000])
-        ->assertNotFound();
+        ->assertNotFound()
+        ->assertJsonPath('message', 'Run tidak ditemukan di arena ini.');
 
     expect($otherRun->fresh()->official_time_ms)->toBeNull();
 });

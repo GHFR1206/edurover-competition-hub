@@ -52,8 +52,11 @@ final class ScoringEngine
 
     private function effectiveQuantity(ScoreLineInput $line): int
     {
-        // Achievement-type lines score once when achieved.
-        if (! $line->isPenalty && $line->achieved && $line->quantity === 0) {
+        // The UI offers both a "reached/occurred" checkbox and a quantity
+        // field. A checked box with a blank quantity means "once" — this
+        // applies to penalties too, otherwise ticking "pelanggaran terjadi"
+        // while leaving the number at 0 would silently deduct nothing.
+        if ($line->achieved && $line->quantity === 0) {
             return 1;
         }
 

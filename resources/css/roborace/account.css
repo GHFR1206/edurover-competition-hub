@@ -70,6 +70,7 @@
 .rr-account-menu button {
   display: block;
   width: 100%;
+  min-height: 44px;
   padding: 10px 12px;
   border: 0;
   border-radius: 10px;
@@ -114,4 +115,38 @@
   gap: 12px;
   margin-left: auto;
   flex: none;
+}
+
+/* Flash messages shared by the role layouts (see x-roborace.flash). */
+.rr-flash {
+  position: relative;
+  z-index: 2;
+  margin: 16px auto;
+  width: min(100% - 32px, 1120px);
+  padding: 16px 20px;
+  border-radius: 16px;
+  font-family: "Nunito", sans-serif;
+  font-weight: 800;
+  font-size: 15px;
+  line-height: 1.45;
+}
+.rr-flash ul {
+  margin: 0;
+  padding-left: 18px;
+  list-style: disc;
+}
+.rr-flash-success {
+  color: #14794f;
+  background: #ddf5ea;
+}
+.rr-flash-error {
+  color: #a22f46;
+  background: #ffe5ea;
+}
+@media (max-width: 720px) {
+  .rr-flash {
+    margin: 12px auto;
+    width: calc(100% - 24px);
+    font-size: 14px;
+  }
 }

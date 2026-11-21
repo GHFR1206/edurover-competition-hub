@@ -1481,6 +1481,9 @@ button.official-team-row {
   }
   .navlinks {
     order: 3;
+    /* `flex: 1` from the desktop rule has a 0 basis, which keeps the links
+       on the brand row and clips them. Force a full-width own row. */
+    flex: 1 1 100%;
     width: 100%;
     overflow-x: auto;
   }

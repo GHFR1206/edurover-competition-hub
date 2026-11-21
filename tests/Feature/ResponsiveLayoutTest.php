@@ -43,3 +43,28 @@ it('styles the event admin nav anchors', function () {
     expect($css)->toContain('.navbar nav a')
         ->and($css)->toContain('.navbar nav a.active');
 });
+
+it('forces the mobile nav onto its own full-width row', function (string $role, string $selector) {
+    $css = roleCss($role);
+
+    // Find the media block that actually contains the nav override and assert
+    // it beats the desktop `flex: 1` (basis 0) rule. Without that the links
+    // stay on the brand row and the last items are clipped.
+    $found = false;
+
+    preg_match_all('/@media \(max-width: \d+px\) \{(.*?)\n\}/s', $css, $matches);
+
+    foreach ($matches[1] as $block) {
+        if (str_contains($block, $selector) && str_contains($block, 'flex: 1 1 100%')) {
+            $found = true;
+            break;
+        }
+    }
+
+    expect($found)->toBeTrue("{$role}.css has no mobile nav row override for {$selector}");
+})->with([
+    ['juri', '.navlinks'],
+    ['chief', '.navlinks'],
+    ['super-admin', '.navlinks'],
+    ['event-admin', '.navbar nav'],
+]);

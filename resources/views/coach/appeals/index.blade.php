@@ -23,14 +23,6 @@
 
 <main class="content-zone">
     <div class="content-width page-stack">
-        @if (session('status'))
-            <div class="notice success">{{ session('status') }}</div>
-        @endif
-        @if ($errors->any())
-            <div class="notice warning">
-                @foreach ($errors->all() as $error) <div>{{ $error }}</div> @endforeach
-            </div>
-        @endif
 
         <div class="notice warning">
             Banding hanya untuk run milik tim sekolahmu. Satu run hanya boleh memiliki satu banding terbuka pada satu waktu.

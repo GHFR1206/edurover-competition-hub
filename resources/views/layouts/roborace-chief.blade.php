@@ -35,7 +35,9 @@
         <div class="nav-right"><span class="role-chip">Chief Judge</span><x-roborace.account-menu /></div>
     </nav>
 
-    @hasSection('hero')
+    {{-- Every chief page defines a hero title; the empty `hero` section that
+         used to guard this block made @hasSection() false everywhere. --}}
+    @if (trim($__env->yieldContent('hero-title')))
         <header class="hero">
             <div class="event-row">
                 <span class="live">● LANGSUNG · {{ now()->translatedFormat('d M Y') }}</span>
@@ -57,6 +59,7 @@
         <div class="hexagon"></div>
         <div class="triangle"></div>
         <div class="flag"></div>
+        <x-roborace.flash />
         @yield('content')
     </section>
 

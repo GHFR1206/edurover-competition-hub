@@ -67,14 +67,6 @@
             @endif
 
             @if ($editable)
-                @if (session('status'))
-                    <div class="notice success">{{ session('status') }}</div>
-                @endif
-                @if ($errors->any())
-                    <div class="notice warning">
-                        @foreach ($errors->all() as $error) <div>{{ $error }}</div> @endforeach
-                    </div>
-                @endif
 
                 <form method="POST" action="{{ route('coach.teams.submit', $team) }}" style="width:100%;margin-top:16px">
                     @csrf

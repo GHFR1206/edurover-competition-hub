@@ -23,12 +23,6 @@
 
 <main class="content-zone">
     <div class="content-width page-stack">
-        @if ($errors->any())
-            <div class="notice warning">
-                @foreach ($errors->all() as $error) <div>{{ $error }}</div> @endforeach
-            </div>
-        @endif
-
         @if ($categories->isEmpty())
             <section class="card reveal">
                 <span class="eyebrow">PENDAFTARAN DITUTUP</span>

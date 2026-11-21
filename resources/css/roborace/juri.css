@@ -1374,6 +1374,9 @@ footer hr {
   }
   .navlinks {
     order: 3;
+    /* The desktop rule sets `flex: 1` (flex-basis 0), which would keep the
+       links on the brand row and clip them. Force a full-width own row. */
+    flex: 1 1 100%;
     width: 100%;
     overflow-x: auto;
     gap: 4px;

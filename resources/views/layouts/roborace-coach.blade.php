@@ -34,6 +34,8 @@
         <div class="nav-right"><span class="coach-chip">Coach</span><x-roborace.account-menu /></div>
     </header>
 
+    <x-roborace.flash />
+
     @yield('content')
 
     <x-roborace.role-footer variant="wave" />

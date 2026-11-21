@@ -10,6 +10,7 @@ use App\Services\ScoringService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
+use Illuminate\Validation\ValidationException;
 use Illuminate\View\View;
 
 /**
@@ -76,6 +77,21 @@ class ScoringController extends Controller
             'evidence_kind' => ['nullable', 'in:photo,video,document,note'],
             'evidence_caption' => ['nullable', 'string', 'max:255'],
         ]);
+
+        // The engine rejects quantities above the configured maximum; catch it
+        // here so a mistyped number returns a field error instead of a 500.
+        $limits = $run->category->challenges()->first()
+            ?->scoreObjects->pluck('max_quantity', 'id') ?? collect();
+
+        foreach ($validated['entries'] ?? [] as $index => $entry) {
+            $max = $limits->get((int) $entry['score_object_id']);
+
+            if ($max !== null && (int) ($entry['quantity'] ?? 0) > $max) {
+                throw ValidationException::withMessages([
+                    "entries.{$index}.quantity" => "Jumlah melebihi batas {$max} untuk parameter ini.",
+                ]);
+            }
+        }
 
         $score = $this->scoring->saveDraft($run, $request->user(), $validated['entries'] ?? []);
 

@@ -105,7 +105,7 @@ class ArenaTimingController extends Controller
     {
         $arena = $this->arena($request);
 
-        abort_unless($run->arena_id === $arena->id, 404);
+        abort_unless($run->arena_id === $arena->id, 404, 'Run tidak ditemukan di arena ini.');
 
         return response()->json(['run' => $this->runPayload($run->load('laps'))]);
     }
@@ -115,8 +115,9 @@ class ArenaTimingController extends Controller
     {
         $arena = $this->arena($request);
 
-        // A device must never learn about runs outside its own arena.
-        abort_unless($run->arena_id === $arena->id, 404);
+        // A device must never learn about runs outside its own arena, but the
+        // 404 still needs a readable message for the device log.
+        abort_unless($run->arena_id === $arena->id, 404, 'Run tidak ditemukan di arena ini.');
 
         try {
             $result = $this->timing->record($run, $arena, $payload, $request->attributes->get('device_id'));

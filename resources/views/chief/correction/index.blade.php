@@ -14,14 +14,6 @@
     Area hasil resmi. Koreksi akan memperbarui skor publik, peringkat, dan rekap. Pastikan bukti sudah diperiksa.
 </div>
 
-@if (session('status'))
-    <div class="badge green">{{ session('status') }}</div>
-@endif
-@if ($errors->any())
-    <div class="warning">
-        @foreach ($errors->all() as $error) <div>{{ $error }}</div> @endforeach
-    </div>
-@endif
 
 <div class="correction-grid">
     <section class="card">

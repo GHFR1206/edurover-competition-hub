@@ -10,14 +10,6 @@
 @section('hero-mascot', 'd8b40.png')
 
 @section('content')
-@if (session('status'))
-    <div class="badge green">{{ session('status') }}</div>
-@endif
-@if ($errors->any())
-    <div class="warning">
-        @foreach ($errors->all() as $error) <div>{{ $error }}</div> @endforeach
-    </div>
-@endif
 
 @forelse ($appeals as $appeal)
     <section class="card">

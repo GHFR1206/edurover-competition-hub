@@ -33,6 +33,25 @@ it('scores achievement lines once when achieved with zero quantity', function ()
     expect($result->total)->toBe(25);
 });
 
+it('counts a ticked penalty once when its quantity is left blank', function () {
+    $result = (new ScoringEngine)->calculate([
+        new ScoreLineInput(scoreObjectId: 1, code: 'A', pointsPerUnit: 100, isPenalty: false, quantity: 1),
+        new ScoreLineInput(scoreObjectId: 2, code: 'P', pointsPerUnit: 15, isPenalty: true, achieved: true),
+    ]);
+
+    expect($result->subtotal)->toBe(100)
+        ->and($result->penaltyTotal)->toBe(15)
+        ->and($result->total)->toBe(85);
+});
+
+it('still deducts nothing for an unticked penalty', function () {
+    $result = (new ScoringEngine)->calculate([
+        new ScoreLineInput(scoreObjectId: 1, code: 'P', pointsPerUnit: 15, isPenalty: true, achieved: false),
+    ]);
+
+    expect($result->penaltyTotal)->toBe(0);
+});
+
 it('rejects quantities above the configured maximum', function () {
     (new ScoringEngine)->calculate([
         new ScoreLineInput(scoreObjectId: 1, code: 'A', pointsPerUnit: 10, isPenalty: false, quantity: 5, maxQuantity: 3),

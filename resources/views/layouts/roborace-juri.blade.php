@@ -35,6 +35,8 @@
         </div>
     </nav>
 
+    <x-roborace.flash />
+
     @yield('content')
 
     <x-roborace.role-footer variant="juri" />

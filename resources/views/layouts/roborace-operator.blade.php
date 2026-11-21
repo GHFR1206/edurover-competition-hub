@@ -24,6 +24,8 @@
         <div class="nav-right"><span class="operator-label">Operator Arena</span><x-roborace.account-menu /></div>
     </nav>
 
+    <x-roborace.flash />
+
     @yield('content')
 
     <x-roborace.role-footer variant="operator" />
