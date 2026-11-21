@@ -21,10 +21,10 @@ class Category extends Model
 
     protected $fillable = [
         'uuid', 'event_id', 'level', 'name', 'persona', 'description',
-        'status', 'min_team_members', 'max_team_members', 'settings',
+        'status', 'scoring_mode', 'min_team_members', 'max_team_members', 'settings',
     ];
 
-    protected $auditAttributes = ['level', 'name', 'status', 'min_team_members', 'max_team_members', 'settings'];
+    protected $auditAttributes = ['level', 'name', 'status', 'scoring_mode', 'min_team_members', 'max_team_members', 'settings'];
 
     protected function casts(): array
     {

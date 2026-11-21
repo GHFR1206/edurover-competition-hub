@@ -17,6 +17,7 @@
         ['id' => 'events', 'label' => 'Event & Ruleset', 'route' => 'eventadmin.events.index'],
         ['id' => 'staff', 'label' => 'Staf & Penugasan', 'route' => 'eventadmin.staff.index'],
         ['id' => 'schedule', 'label' => 'Jadwal & Arena', 'route' => 'eventadmin.schedule.index'],
+        ['id' => 'tokens', 'label' => 'Token Arena', 'route' => 'eventadmin.tokens.index'],
         ['id' => 'reports', 'label' => 'Laporan', 'route' => 'eventadmin.reports.index'],
     ];
     $activeNav = ($page ?? 'events') === 'setup' ? 'events' : ($page ?? 'events');

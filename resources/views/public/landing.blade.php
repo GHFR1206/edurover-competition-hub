@@ -86,7 +86,7 @@
                     <span class="status {{ ($featured?->isPublished() ?? false) ? 'resmi' : 'sementara' }}">
                         {{ ($featured?->isPublished() ?? false) ? '✓ Resmi' : '◷ Sementara' }}
                     </span>
-                    <em>{{ $row['best_total'] }}</em>
+                    <em><x-roborace.result-value :row="$row" :unit="false" /></em>
                 </a>
             @empty
                 <p class="muted" style="color:#c9b8f0">Belum ada skor resmi untuk ditampilkan.</p>
@@ -104,18 +104,18 @@
             <div>
                 <b>2</b>
                 <strong>{{ $featuredStandings[1]['team']->name ?? '—' }}</strong>
-                <small>{{ isset($featuredStandings[1]) ? $featuredStandings[1]['best_total'].' poin' : 'Menunggu' }}</small>
+                <small>@isset($featuredStandings[1])<x-roborace.result-value :row="$featuredStandings[1]" />@else Menunggu @endisset</small>
             </div>
             <a class="podium-first" href="{{ route('public.results') }}" style="text-decoration:none;color:inherit">
                 <span>JUARA 1</span>
                 <b>1</b>
                 <strong>{{ $featuredStandings[0]['team']->name ?? '—' }}</strong>
-                <small>{{ isset($featuredStandings[0]) ? $featuredStandings[0]['best_total'].' poin' : 'Menunggu' }}</small>
+                <small>@isset($featuredStandings[0])<x-roborace.result-value :row="$featuredStandings[0]" />@else Menunggu @endisset</small>
             </a>
             <div>
                 <b>3</b>
                 <strong>{{ $featuredStandings[2]['team']->name ?? 'Belum ditetapkan' }}</strong>
-                <small>{{ isset($featuredStandings[2]) ? $featuredStandings[2]['best_total'].' poin' : '' }}</small>
+                <small>@isset($featuredStandings[2])<x-roborace.result-value :row="$featuredStandings[2]" />@endisset</small>
             </div>
         </div>
         <a class="outline-btn" href="{{ route('public.results') }}">Lihat hasil resmi →</a>

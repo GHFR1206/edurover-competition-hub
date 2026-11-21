@@ -124,12 +124,51 @@ Keluar) di kanan navbar.
 | Peran | Aksi |
 |---|---|
 | Coach | Daftarkan tim + anggota (`/coach/tim/baru`), tambah/hapus anggota, ajukan verifikasi dengan consent, ajukan banding |
-| Event Admin | Buat event & maju tahap, atur status kategori (sampai *semua run selesai*), tugaskan/nonaktifkan operator & juri per arena, jadwalkan/ubah/batalkan sesi run |
+| Event Admin | Buat event & maju tahap, atur status kategori (sampai *semua run selesai*), pilih mode penilaian kategori (juri/waktu), tugaskan/nonaktifkan operator & juri per arena, terbitkan/putar/cabut token perangkat arena, jadwalkan/ubah/batalkan sesi run |
 | Super Admin | Verifikasi registrasi, undang pengguna, ubah peran (termasuk promosi ke Coach + sekolah), aktif/nonaktifkan akun, pengaturan platform |
 | Chief Judge | Tinjau/approve/reject/reopen skor, koreksi resmi skor beku, selesaikan banding, publikasi per kategori, terbitkan sertifikat |
 
 Publishing kategori sengaja hanya bisa dilakukan Chief Judge; Event Admin dibatasi sampai status
 *Semua Run Selesai* agar hasil tidak terbit sebelum disahkan.
+
+## API waktu arena (v1)
+
+Perangkat arena (timer/robot) mengirim **start, lap, dan finish** lewat API ber-token. Token
+dikelola per arena oleh Event Admin di `/event-admin/token-arena`.
+
+| Endpoint | Kegunaan |
+|---|---|
+| `GET /api/v1/arena/current-run` | Run yang sedang/akan berjalan di arena pemilik token |
+| `POST /api/v1/runs/{uuid}/start` | Sinyal start (`started_ms`, default 0) |
+| `POST /api/v1/runs/{uuid}/laps` | Satu atau banyak split (`laps[][lap_no]`, `laps[][lap_ms]`) |
+| `POST /api/v1/runs/{uuid}/finish` | Sinyal finish (`finished_ms` = total waktu tempuh) |
+| `POST /api/v1/runs/{uuid}/timing` | Payload gabungan start + lap + finish |
+| `GET /api/v1/runs/{uuid}/timing` | Baca ulang waktu tersimpan (rekonsiliasi perangkat) |
+
+Aturan yang berlaku:
+
+- **Autentikasi**: `Authorization: Bearer <token>` (Sanctum). Token milik akun layanan arena,
+  hanya berizin `arena:timing`, dan hanya bisa menyentuh run di arena pemiliknya. Rotasi token
+  langsung membatalkan token lama; pencabutan berlaku seketika.
+- **Satuan**: semua waktu **milidetik sejak start run** (monoton), bukan jam dinding. Selisih jam
+  perangkat vs server tidak mempengaruhi hasil.
+- **Idempotent**: bacaan pertama yang disimpan; lap di-upsert berdasarkan `lap_no`, jadi perangkat
+  yang mengulang kiriman setelah putus jaringan tidak merusak hasil. Respons memuat `first_seen`.
+- **Rate limit**: 120 permintaan/menit per token.
+- **Efek**: `official_time_ms`, `lap_count`, `duration_seconds` terisi; run otomatis menjadi
+  `running` saat start dan `finished` saat finish. Status `dq`/`no_show` tidak pernah ditimpa.
+- **Telemetri mentah** tetap di balik `FEATURE_TELEMETRY` (default OFF). Waktu resmi tetap dicatat
+  walau flag telemetri mati.
+
+### Mode penilaian kategori
+
+| Mode | Nilai resmi | Tie-break |
+|---|---|---|
+| `jury` (default) | Skor juri yang `Approved`, agregasi sesuai `aggregation.judges` (average/best/total) lalu `aggregation.attempt` | `tie_break_order` rulebook (default achievement → penalti → waktu → run tambahan) |
+| `time` | `official_time_ms` tercepat dari run yang *settled* | Waktu tercepat |
+
+Mode dipilih Event Admin di `/event-admin/setup` dan **terkunci setelah kategori dipublikasikan**,
+karena mengubahnya akan menulis ulang podium resmi.
 
 ## CI
 

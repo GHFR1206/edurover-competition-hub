@@ -24,13 +24,20 @@ class ResultExportService
         $rows = [];
         foreach ($categories as $category) {
             foreach ($this->standings->forCategory($category) as $row) {
+                // A time-mode category has no meaningful points; export the
+                // official stopwatch value instead so the CSV stays truthful.
+                $official = ($row['mode'] ?? 'jury') === 'time'
+                    ? StandingsService::formatMs($row['time_ms'])
+                    : $row['best_total'];
+
                 $rows[] = [
                     $category->level->publicLabel(),
                     $category->name,
                     $row['rank'],
                     $row['team']->name,
                     $row['team']->school?->name ?? '',
-                    $row['best_total'],
+                    $official,
+                    ($row['mode'] ?? 'jury') === 'time' ? 'Waktu' : 'Poin',
                     $row['runs'],
                 ];
             }
@@ -38,7 +45,7 @@ class ResultExportService
 
         return $this->stream(
             'hasil-resmi-'.$event->slug.'.csv',
-            ['Level', 'Kategori', 'Peringkat', 'Tim', 'Sekolah', 'Skor Terbaik', 'Jumlah Run'],
+            ['Level', 'Kategori', 'Peringkat', 'Tim', 'Sekolah', 'Nilai Resmi', 'Satuan', 'Jumlah Run'],
             $rows,
         );
     }

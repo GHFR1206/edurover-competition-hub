@@ -55,6 +55,12 @@
                     </div>
                     <div class="queue-meta">
                         <span class="status {{ $statusClass[$run->status->value] ?? '' }}">{{ $run->status->label() }}</span>
+                        @if ($run->official_time_ms !== null)
+                            <span class="status status-berjalan" title="Waktu resmi dari perangkat arena">
+                                ⏱ {{ \App\Services\StandingsService::formatMs($run->official_time_ms) }}
+                                @if ($run->lap_count) · {{ $run->lap_count }} lap @endif
+                            </span>
+                        @endif
                     </div>
                     <form method="POST" action="{{ route('operator.runs.status', $run) }}" class="issue-row">
                         @csrf

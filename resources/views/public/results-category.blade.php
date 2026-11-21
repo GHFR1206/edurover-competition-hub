@@ -20,18 +20,18 @@
                 <div class="podium-place second">
                     <b>2</b>
                     <strong>{{ $podium[1]['team']->name ?? '—' }}</strong>
-                    <span>{{ isset($podium[1]) ? $podium[1]['best_total'].' poin' : 'Menunggu' }}</span>
+                    <span>{{ isset($podium[1]) ? '' : 'Menunggu' }}@isset($podium[1])<x-roborace.result-value :row="$podium[1]" />@endisset</span>
                 </div>
                 <div class="podium-place first">
                     <small>🏆 JUARA 1</small>
                     <b>1</b>
                     <strong>{{ $podium[0]['team']->name }}</strong>
-                    <span>{{ $podium[0]['best_total'] }} poin</span>
+                    <span><x-roborace.result-value :row="$podium[0]" /></span>
                 </div>
                 <div class="podium-place third">
                     <b>3</b>
                     <strong>{{ $podium[2]['team']->name ?? '—' }}</strong>
-                    <span>{{ isset($podium[2]) ? $podium[2]['best_total'].' poin' : 'Menunggu hasil valid' }}</span>
+                    <span>{{ isset($podium[2]) ? '' : 'Menunggu hasil valid' }}@isset($podium[2])<x-roborace.result-value :row="$podium[2]" />@endisset</span>
                 </div>
             </div>
         @endif
@@ -44,8 +44,8 @@
             <div class="table-head">
                 <span>Rank</span>
                 <span>Tim · Sekolah</span>
-                <span>Total skor</span>
-                <span>Waktu</span>
+                <span>{{ $isTimeMode ? 'Waktu resmi' : 'Total skor' }}</span>
+                <span>{{ $isTimeMode ? 'Lap' : 'Waktu' }}</span>
                 <span></span>
             </div>
             @forelse ($standings as $row)
@@ -55,8 +55,12 @@
                         <strong>{{ $row['team']->name }}</strong>
                         <small>{{ $row['team']->school?->name }} · {{ $row['team']->short_name ?? '—' }}</small>
                     </div>
-                    <strong>{{ $row['best_total'] }}</strong>
-                    <span>{{ $row['runs'] }} run</span>
+                    <strong><x-roborace.result-value :row="$row" :unit="false" /></strong>
+                    @if ($isTimeMode)
+                        <span>{{ $row['lap_count'] ? $row['lap_count'].' lap' : '—' }}</span>
+                    @else
+                        <span>{{ $row['time_ms'] !== null ? \App\Services\StandingsService::formatMs($row['time_ms']) : $row['runs'].' run' }}</span>
+                    @endif
                     <span></span>
                 </div>
             @empty

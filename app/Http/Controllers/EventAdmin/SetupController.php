@@ -75,4 +75,28 @@ class SetupController extends Controller
 
         return back()->with('status', "Kategori {$category->level->publicLabel()} diubah ke {$status->label()}.");
     }
+
+    /**
+     * Choose how a category is ranked: judge points or arena timing.
+     * Locked once results are published, because changing it would rewrite
+     * an official podium.
+     */
+    public function updateScoringMode(Request $request, Category $category): RedirectResponse
+    {
+        $validated = $request->validate([
+            'scoring_mode' => ['required', 'in:jury,time'],
+        ]);
+
+        if ($category->isPublished()) {
+            return back()->withErrors([
+                'scoring_mode' => 'Mode penilaian tidak dapat diubah setelah hasil dipublikasikan.',
+            ]);
+        }
+
+        $category->update(['scoring_mode' => $validated['scoring_mode']]);
+
+        $label = $validated['scoring_mode'] === 'time' ? 'Waktu arena' : 'Skor juri';
+
+        return back()->with('status', "Mode penilaian {$category->level->publicLabel()} diubah ke {$label}.");
+    }
 }

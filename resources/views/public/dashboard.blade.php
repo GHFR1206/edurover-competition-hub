@@ -124,7 +124,7 @@
                                 <strong>{{ $row['team']->name }}</strong>
                                 <small>{{ $row['team']->school?->name }}</small>
                             </div>
-                            <em>{{ $row['best_total'] }}</em>
+                            <em><x-roborace.result-value :row="$row" :unit="false" /></em>
                         </a>
                     @empty
                         <p class="muted">Belum ada skor untuk ditampilkan.</p>

@@ -2,7 +2,7 @@
 
 @section('title', 'Penilaian Run')
 
-@php($page = 'manual')
+@php $page = 'manual'; @endphp
 
 @section('content')
 <div class="page light">
@@ -43,40 +43,88 @@
                 <span>Arena {{ $run->arena?->name }}</span>
                 <span>Level {{ $run->category?->level->publicLabel() }}</span>
                 <span>Status run {{ $run->status->label() }}</span>
+                @if ($run->official_time_ms !== null)
+                    <span>⏱ Waktu arena {{ \App\Services\StandingsService::formatMs($run->official_time_ms) }}@if ($run->lap_count) · {{ $run->lap_count }} lap @endif</span>
+                @endif
             </div>
 
             <form method="POST" action="{{ route('judge.scores.store', $run) }}" class="parameters" enctype="multipart/form-data">
                 @csrf
-                <h3>Parameter manual</h3>
-                <p>Isi jumlah dan centang objek yang tercapai. Poin mengikuti konfigurasi challenge pada level ini.</p>
-                @forelse ($challenge?->scoreObjects ?? collect() as $i => $object)
-                    @php($line = $lines->get($object->id))
-                    <div class="parameter">
-                        <div>
-                            <b>{{ $object->name }} <small style="color:#8a68d4;font:11px 'JetBrains Mono'">{{ $object->code }}</small></b>
-                            <input type="hidden" name="entries[{{ $i }}][score_object_id]" value="{{ $object->id }}">
-                            <input type="number" min="0"
-                                   @if ($object->max_quantity) max="{{ $object->max_quantity }}" @endif
-                                   name="entries[{{ $i }}][quantity]"
-                                   value="{{ old("entries.$i.quantity", $line?->quantity ?? 0) }}">
-                            <span>Poin/unit {{ $object->points_per_unit }} · batas {{ $object->max_quantity ?? '∞' }}</span>
+                @php
+                    $allObjects = $challenge?->scoreObjects ?? collect();
+                    // filter() keeps the original keys so entry indexes stay
+                    // unique across both sections.
+                    $penaltyObjects = $allObjects->filter(fn ($o) => $o->type->isPenalty());
+                    $manualObjects = $allObjects->filter(fn ($o) => ! $o->type->isPenalty());
+                    $isLocked = $score && $score->status === \App\Enums\ScoreStatus::Approved;
+                @endphp
+
+                <section class="score-section">
+                    <h3>Penilaian manual</h3>
+                    <p>Isi jumlah dan centang objek yang tercapai. Poin mengikuti konfigurasi challenge pada level ini.</p>
+                    @forelse ($manualObjects as $i => $object)
+                        @php($line = $lines->get($object->id))
+                        <div class="parameter">
+                            <div>
+                                <b>{{ $object->name }} <small>{{ $object->code }}</small></b>
+                                <input type="hidden" name="entries[{{ $i }}][score_object_id]" value="{{ $object->id }}">
+                                <input type="number" min="0" inputmode="numeric"
+                                       @if ($object->max_quantity) max="{{ $object->max_quantity }}" @endif
+                                       name="entries[{{ $i }}][quantity]"
+                                       value="{{ old("entries.$i.quantity", $line?->quantity ?? 0) }}"
+                                       @disabled($isLocked)>
+                                <span>Poin/unit {{ $object->points_per_unit }} · batas {{ $object->max_quantity ?? '∞' }}</span>
+                            </div>
+                            <p>{{ $object->type->label() }}@if ($object->requires_evidence) · wajib bukti @endif</p>
+                            <label class="check-row">
+                                <input type="checkbox" name="entries[{{ $i }}][achieved]" value="1"
+                                       @checked(old("entries.$i.achieved", $line?->achieved)) @disabled($isLocked)>
+                                Tercapai
+                            </label>
+                            <label>
+                                Catatan parameter (opsional)
+                                <input type="text" name="entries[{{ $i }}][notes]" maxlength="255"
+                                       value="{{ old("entries.$i.notes", $line?->notes) }}"
+                                       placeholder="Catatan opsional untuk parameter ini." @disabled($isLocked)>
+                            </label>
                         </div>
-                        <p>{{ $object->type->label() }}@if ($object->requires_evidence) · wajib bukti @endif</p>
-                        <label style="flex-direction:row;align-items:center;gap:10px">
-                            <input type="checkbox" name="entries[{{ $i }}][achieved]" value="1"
-                                   @checked(old("entries.$i.achieved", $line?->achieved))>
-                            Tercapai
-                        </label>
-                        <label>
-                            Catatan parameter (opsional)
-                            <input type="text" name="entries[{{ $i }}][notes]" maxlength="255"
-                                   value="{{ old("entries.$i.notes", $line?->notes) }}"
-                                   placeholder="Catatan opsional untuk parameter ini.">
-                        </label>
-                    </div>
-                @empty
-                    <p class="muted">Tantangan belum memiliki objek skor untuk dinilai.</p>
-                @endforelse
+                    @empty
+                        <p class="muted">Tantangan belum memiliki objek skor manual untuk dinilai.</p>
+                    @endforelse
+                </section>
+
+                <section class="score-section penalty-section">
+                    <h3>Penalti &amp; pelanggaran</h3>
+                    <p>Centang pelanggaran yang terjadi. Setiap penalti mengurangi total skor run ini.</p>
+                    @forelse ($penaltyObjects as $i => $object)
+                        @php($line = $lines->get($object->id))
+                        <div class="parameter">
+                            <div>
+                                <b>{{ $object->name }} <small>{{ $object->code }}</small></b>
+                                <input type="hidden" name="entries[{{ $i }}][score_object_id]" value="{{ $object->id }}">
+                                <input type="number" min="0" inputmode="numeric"
+                                       @if ($object->max_quantity) max="{{ $object->max_quantity }}" @endif
+                                       name="entries[{{ $i }}][quantity]"
+                                       value="{{ old("entries.$i.quantity", $line?->quantity ?? 0) }}"
+                                       @disabled($isLocked)>
+                                <span>−{{ $object->points_per_unit }} poin/unit · batas {{ $object->max_quantity ?? '∞' }}</span>
+                            </div>
+                            <label class="check-row">
+                                <input type="checkbox" name="entries[{{ $i }}][achieved]" value="1"
+                                       @checked(old("entries.$i.achieved", $line?->achieved)) @disabled($isLocked)>
+                                Pelanggaran terjadi
+                            </label>
+                            <label>
+                                Catatan pelanggaran (opsional)
+                                <input type="text" name="entries[{{ $i }}][notes]" maxlength="255"
+                                       value="{{ old("entries.$i.notes", $line?->notes) }}"
+                                       placeholder="Mis. menabrak dinding di tikungan 2." @disabled($isLocked)>
+                            </label>
+                        </div>
+                    @empty
+                        <p class="muted">Belum ada jenis penalti yang dikonfigurasi untuk level ini.</p>
+                    @endforelse
+                </section>
 
                 @if ($score && $score->status !== \App\Enums\ScoreStatus::Approved)
                     <p class="muted">Total saat ini: <strong>{{ $score->total }}</strong> (subtotal {{ $score->subtotal }} − penalti {{ $score->penalty_total }})</p>

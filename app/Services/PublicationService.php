@@ -44,6 +44,20 @@ class PublicationService
             $reasons[] = "Masih ada {$unfinished->count()} run yang belum selesai.";
         }
 
+        // Time-mode categories are ranked by the arena stopwatch, so judge
+        // scores are not part of the official result at all.
+        if ($category->scoring_mode === 'time') {
+            $withoutTime = $runs->filter(
+                fn ($run) => $run->status->isSettled() && $run->official_time_ms === null
+            );
+
+            if ($withoutTime->isNotEmpty()) {
+                $reasons[] = "Ada {$withoutTime->count()} run selesai tanpa waktu resmi dari arena.";
+            }
+
+            return $reasons;
+        }
+
         $unapproved = Score::whereIn('run_id', $runs->pluck('id'))
             ->where('status', '!=', ScoreStatus::Approved->value)
             ->count();

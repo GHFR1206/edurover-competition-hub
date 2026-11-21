@@ -18,8 +18,8 @@ class Arena extends Model
     use Auditable, HasFactory, HasUuid, SoftDeletes;
 
     protected $fillable = [
-        'uuid', 'event_id', 'name', 'code', 'location', 'status',
-        'capacity_per_slot', 'slot_minutes', 'is_active', 'settings',
+        'uuid', 'event_id', 'api_user_id', 'token_issued_at', 'name', 'code',
+        'location', 'status', 'capacity_per_slot', 'slot_minutes', 'is_active', 'settings',
     ];
 
     protected $auditAttributes = ['name', 'code', 'location', 'status', 'is_active', 'settings'];
@@ -29,6 +29,7 @@ class Arena extends Model
         return [
             'is_active' => 'boolean',
             'settings' => 'array',
+            'token_issued_at' => 'datetime',
         ];
     }
 
@@ -36,6 +37,12 @@ class Arena extends Model
     public function event(): BelongsTo
     {
         return $this->belongsTo(Event::class);
+    }
+
+    /** @return BelongsTo<User, Arena> */
+    public function apiUser(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'api_user_id');
     }
 
     /** @return HasMany<ArenaAssignment> */

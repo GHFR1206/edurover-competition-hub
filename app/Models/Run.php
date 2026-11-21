@@ -21,6 +21,8 @@ class Run extends Model
         'uuid', 'event_id', 'category_id', 'arena_id', 'team_id', 'heat_slot_id',
         'attempt_no', 'status', 'scheduled_at', 'called_at', 'started_at',
         'finished_at', 'duration_seconds', 'notes', 'outcome_reason', 'operator_id',
+        'started_ms', 'finished_ms', 'official_time_ms', 'lap_count',
+        'timing_recorded_at', 'timing_source',
     ];
 
     protected $auditAttributes = [
@@ -36,6 +38,11 @@ class Run extends Model
             'called_at' => 'datetime',
             'started_at' => 'datetime',
             'finished_at' => 'datetime',
+            'timing_recorded_at' => 'datetime',
+            'started_ms' => 'integer',
+            'finished_ms' => 'integer',
+            'official_time_ms' => 'integer',
+            'lap_count' => 'integer',
         ];
     }
 
@@ -73,6 +80,12 @@ class Run extends Model
     public function scores(): HasMany
     {
         return $this->hasMany(Score::class);
+    }
+
+    /** @return HasMany<RunLap> */
+    public function laps(): HasMany
+    {
+        return $this->hasMany(RunLap::class)->orderBy('lap_no');
     }
 
     /** @return HasMany<EvidenceFile> */

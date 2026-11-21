@@ -33,6 +33,13 @@ alih-alih ditebak diam-diam.
 | A26 | Penjadwalan: sesi bisa **diubah** (arena/waktu) dan **dibatalkan** selama masih `scheduled` dan belum punya skor | Operator butuh antrean yang stabil; slot heat yang kosong ikut dihapus. Slot unik per arena (bukan per kategori). |
 | A27 | Super Admin dapat **mengubah peran** akun (satu peran aktif) dan promosi ke Coach membuat `School` + profil `Coach` bila belum ada | Tanpa ini, koreksi peran hanya bisa lewat DB. Akun sendiri tidak bisa diubah/dinonaktifkan. |
 | A28 | Event Admin hanya dapat mengubah status kategori sampai **Semua Run Selesai**; `Published` khusus Chief Judge | Menjaga pemisahan tugas: hasil resmi hanya terbit setelah pengesahan skor. |
+| A29 | API waktu arena memakai **Sanctum bearer token per arena** (bukan API key global/HMAC) | Token bisa dicabut/rotasi per arena, punya ability `arena:timing`, dan terikat ke `arenas.api_user_id` sehingga satu perangkat tidak bisa menyentuh arena lain. |
+| A30 | Waktu dikirim sebagai **milidetik sejak start** (monoton), bukan timestamp jam dinding | Menghindari hasil rusak akibat jam perangkat tidak sinkron dengan server. Bacaan pertama menang; lap di-upsert per `lap_no` (idempotent). |
+| A31 | Kategori punya **mode penilaian** `jury`/`time` (`categories.scoring_mode`) | User memutuskan waktu arena bisa jadi pemecah seri *dan* nilai akhir pada sebagian lomba. Mode `time` memakai `official_time_ms` tercepat; mode `jury` tetap memakai skor juri. |
+| A32 | Agregasi juri mengikuti rulebook (`aggregation.judges`: average/best/total, `aggregation.attempt`: best/total/average) | Sebelumnya `StandingsService` mengambil `max()` dari semua skor approved — kalau 3 juri menilai run yang sama, nilai tertinggi yang dipakai. Itu melanggar rulebook. |
+| A33 | Tie-break memakai `rulebook.tie_break_order` (default `primary_achievement > penalty > time > extra_run`) | Sebelumnya tersimpan tapi tidak pernah dipakai; seri ditentukan urutan acak DB. Fallback terakhir: nama tim, supaya urutan tidak berubah antar request. |
+| A34 | Mode penilaian **terkunci setelah kategori dipublikasikan** | Mengubah mode setelah publikasi akan menulis ulang podium resmi; perubahan hanya lewat jalur koreksi resmi. |
+| A35 | API arena memakai `auth:sanctum` + penolakan token non-`PersonalAccessToken` | Mencegah sesi browser staf dipakai sebagai "perangkat arena"; endpoint hanya menerima bearer token sungguhan. |
 
 ## Sudah diselesaikan (sebelumnya terbuka)
 

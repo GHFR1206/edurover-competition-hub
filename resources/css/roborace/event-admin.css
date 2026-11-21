@@ -786,3 +786,44 @@ footer small {
   color: #6e7090;
   font: 600 12px "Nunito", sans-serif;
 }
+
+/* Arena device tokens: the plain token is shown once, so it must be easy to
+   select and copy on both desktop and phone. */
+.token-once {
+  border: 3px solid #f5d23c;
+}
+.token-value {
+  margin: 0;
+  padding: 16px 18px;
+  overflow-x: auto;
+  border-radius: 16px;
+  background: #121326;
+  color: #f5d23c;
+  font: 700 13px/1.6 "JetBrains Mono", ui-monospace, monospace;
+  white-space: pre;
+  -webkit-overflow-scrolling: touch;
+}
+.token-value code {
+  font: inherit;
+  color: inherit;
+}
+.token-once .token-value code {
+  word-break: break-all;
+  white-space: pre-wrap;
+}
+.token-value + .actions {
+  align-items: center;
+}
+@media (max-width: 760px) {
+  .token-value {
+    font-size: 12px;
+    padding: 14px;
+  }
+  .row-actions form {
+    flex: 1 1 auto;
+  }
+  .row-actions .button,
+  .row-actions .chip {
+    width: 100%;
+  }
+}

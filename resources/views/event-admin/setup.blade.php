@@ -40,6 +40,10 @@
                     <span>{{ $category->status->label() }}</span>
                     <span>Status</span>
                 </div>
+                <div class="rule-status">
+                    <span>{{ $category->scoring_mode === 'time' ? 'Waktu arena' : 'Skor juri' }}</span>
+                    <span>Mode nilai</span>
+                </div>
                 <div class="rule-actions">
                     @if ($category->isPublished())
                         <span class="badge badge-✓-resmi">Dipublikasikan</span>
@@ -51,6 +55,14 @@
                                 @foreach ($editableStatuses as $status)
                                     <option value="{{ $status->value }}" @selected($category->status === $status)>{{ $status->label() }}</option>
                                 @endforeach
+                            </select>
+                        </form>
+                        <form method="POST" action="{{ route('eventadmin.setup.scoring', $category) }}">
+                            @csrf
+                            @method('PATCH')
+                            <select name="scoring_mode" onchange="this.form.submit()" aria-label="Mode penilaian {{ $category->level->publicLabel() }}">
+                                <option value="jury" @selected($category->scoring_mode !== 'time')>Mode: Skor juri</option>
+                                <option value="time" @selected($category->scoring_mode === 'time')>Mode: Waktu arena</option>
                             </select>
                         </form>
                     @endif

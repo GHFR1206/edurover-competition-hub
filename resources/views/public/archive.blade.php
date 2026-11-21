@@ -34,7 +34,7 @@
                                 <strong>🏅 {{ $champion['category']->level->publicLabel() }} · {{ $top['team']->name }}</strong>
                                 <small>Juara 1 · {{ $top['team']->school?->name }}</small>
                             </div>
-                            <b>{{ $top['best_total'] }}</b>
+                            <b><x-roborace.result-value :row="$top" :unit="false" /></b>
                             <span class="status resmi">✓ Resmi</span>
                         </div>
                     @endif

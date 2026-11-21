@@ -82,7 +82,7 @@
                                 <strong>{{ $standing['team']->name }}</strong>
                                 <span>{{ $standing['team']->school?->name }} · {{ $standing['runs'] }} run</span>
                             </div>
-                            <div class="score">{{ $standing['best_total'] }}</div>
+                            <div class="score"><x-roborace.result-value :row="$standing" :unit="false" /></div>
                         </div>
                     @endforeach
                 </div>

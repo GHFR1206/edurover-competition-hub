@@ -1343,13 +1343,46 @@ footer hr {
   .page {
     min-width: 0;
   }
+  /* Phones get a compact, scrollable nav instead of hiding it: judges need
+     to move between tasks, manual scoring and the leaderboard. */
   .navbar {
+    height: auto;
+    min-height: 56px;
+    padding: 6px 12px;
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+  .brand {
+    font-size: 22px;
+  }
+  .navlinks {
+    order: 3;
+    width: 100%;
+    overflow-x: auto;
+    gap: 4px;
+    padding-bottom: 2px;
+    -webkit-overflow-scrolling: touch;
+  }
+  .navlinks a {
+    height: 44px;
+    display: inline-flex;
+    align-items: center;
+    padding: 0 14px;
+    font-size: 14px;
+    white-space: nowrap;
+  }
+  .navtools {
+    margin-left: auto;
+    gap: 8px;
+  }
+  .connection {
     display: none;
   }
+  /* The ported Blade views render content directly inside `.page`; the
+     original React design only showed it inside `.popup-layer`. Keep the
+     page visible on phones (see the responsive block at the end of this
+     file for the layout). */
   .offline-banner {
-    display: none;
-  }
-  .page {
     display: none;
   }
   .popup-layer {
@@ -1452,4 +1485,233 @@ footer hr {
   color: #5e3ba2;
   font: 15px "Fredoka";
   text-decoration: underline;
+}
+
+/* Manual scoring form: split into "penilaian manual" and "penalti" so a judge
+   can never confuse a penalty with an achievement. */
+.score-section {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  padding: 20px;
+  border-radius: 22px;
+  background: #faf7ff;
+  border: 2px solid #ece7ff;
+}
+.score-section h3 {
+  margin: 0;
+  color: #5e3ba2;
+  font: 22px/1.2 "Lilita One";
+}
+.score-section > p {
+  margin: 0;
+  color: #6e7090;
+  font-size: 15px;
+}
+.penalty-section {
+  background: #fff8f0;
+  border-color: #ffd9b0;
+}
+.penalty-section h3 {
+  color: #a24d0b;
+}
+.parameter > div b small {
+  color: #8a68d4;
+  font: 11px "JetBrains Mono";
+}
+.parameter .check-row {
+  flex-direction: row;
+  align-items: center;
+  gap: 10px;
+  min-height: 44px;
+}
+.parameter .check-row input[type="checkbox"] {
+  width: 22px;
+  height: 22px;
+  accent-color: #5e3ba2;
+}
+.parameter input[type="text"] {
+  width: 100%;
+  min-height: 44px;
+  padding: 10px 14px;
+  border: 2px solid #c9b8f0;
+  border-radius: 12px;
+  color: #121326;
+  background: #fff;
+}
+.parameter input:disabled,
+.parameter input:disabled + span {
+  opacity: 0.6;
+}
+
+/* Phone layout. The React original hid `.page` on small screens because its
+   content lived inside a popup; the Blade port renders it directly, so this
+   block is what actually makes judge screens usable on a phone. */
+@media (max-width: 600px) {
+  .page-hero {
+    height: auto;
+    padding: 20px 16px 8px;
+    gap: 12px;
+    align-items: flex-start;
+  }
+  .event-row {
+    margin-bottom: 14px;
+    flex-wrap: wrap;
+  }
+  .page-hero h1,
+  .leader-hero h1 {
+    font-size: 28px;
+    line-height: 1.15;
+  }
+  .page-hero p,
+  .leader-hero p {
+    font-size: 15px;
+  }
+  .hero-mascot {
+    width: 64px;
+    height: 86px;
+    margin-right: 0;
+    flex: none;
+  }
+  .page-content,
+  .manual-space {
+    padding: 12px 14px 48px;
+    max-width: 100%;
+    gap: 16px;
+  }
+  .filters,
+  .team-filters,
+  .level-filters,
+  .meta-chips {
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  .chip {
+    min-height: 48px;
+    padding: 12px 18px;
+    font-size: 15px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .card {
+    padding: 18px;
+    border-radius: 20px;
+  }
+  .card h2,
+  .recap h2 {
+    font-size: 22px;
+  }
+  /* Task list: one column, full-width action button. */
+  .checkpoint {
+    grid-template-columns: 1fr;
+    padding: 16px;
+  }
+  .checkpoint h3 {
+    font-size: 20px;
+  }
+  .checkpoint em {
+    justify-self: start;
+  }
+  .checkpoint .chip {
+    width: 100%;
+  }
+  .team-head {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+  }
+  .score-section {
+    padding: 14px;
+    border-radius: 18px;
+  }
+  .score-section h3 {
+    font-size: 19px;
+  }
+  /* Each parameter becomes a block: name, big number input, checkbox, note. */
+  .parameter > div {
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+  .parameter > div b {
+    flex-basis: 100%;
+  }
+  .parameter input[type="number"] {
+    width: 84px;
+    height: 48px;
+    font-size: 17px;
+  }
+  .parameter > div span {
+    flex-basis: 100%;
+    font-size: 13px;
+  }
+  .parameter input[type="text"],
+  .parameter .check-row {
+    min-height: 48px;
+    font-size: 16px; /* prevents iOS zoom-on-focus */
+  }
+  .parameter .check-row input[type="checkbox"] {
+    width: 26px;
+    height: 26px;
+  }
+  .form-actions {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 8px;
+  }
+  .form-actions button,
+  .form-actions .chip {
+    width: 100%;
+    min-height: 50px;
+    font-size: 16px;
+  }
+  .form-actions span {
+    text-align: center;
+  }
+  .evidence-block .meta-chips {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  .evidence-block input[type="file"],
+  .evidence-block input[type="text"],
+  .evidence-block select {
+    min-height: 48px;
+    font-size: 16px;
+  }
+  .mascot-message {
+    padding: 12px 4px;
+  }
+  .mascot-message img {
+    width: 48px;
+    height: 64px;
+  }
+  footer {
+    height: auto;
+    margin-top: 48px;
+    padding: 32px 18px 32px;
+  }
+}
+
+@media (max-width: 600px) {
+  .recap > div {
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+  .recap > div span {
+    flex-basis: 100%;
+  }
+  .recap > div strong {
+    font-size: 24px;
+  }
+  .guide > div {
+    align-items: flex-start;
+  }
+  .guide b {
+    font-size: 16px;
+  }
+  .vote-record .chip,
+  .card > .chip {
+    width: 100%;
+    justify-content: center;
+  }
 }

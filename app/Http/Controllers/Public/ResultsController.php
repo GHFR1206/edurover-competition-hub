@@ -51,6 +51,7 @@ class ResultsController extends Controller
             'podium' => $podium,
             'published' => $published,
             'publishedCategories' => $publishedCategories,
+            'isTimeMode' => ($category?->scoring_mode ?? 'jury') === 'time',
             'liveEvent' => $event?->id,
             'liveCategory' => $category?->id,
             'page' => 'hasil',
@@ -69,6 +70,7 @@ class ResultsController extends Controller
             'category' => $category,
             'standings' => $standings,
             'podium' => $standings->take(3)->values(),
+            'isTimeMode' => ($category->scoring_mode ?? 'jury') === 'time',
             'runs' => Run::with(['team.school', 'arena'])
                 ->where('category_id', $category->id)
                 ->orderBy('scheduled_at')

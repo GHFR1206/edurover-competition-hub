@@ -42,8 +42,8 @@
                     {{ $published ? '✓ Resmi' : '◷ Sementara' }}
                 </span>
                 <strong>
-                    {{ $row['best_total'] }}
-                    <small>POIN</small>
+                    <x-roborace.result-value :row="$row" :unit="false" />
+                    <small>{{ ($row['mode'] ?? 'jury') === 'time' ? 'WAKTU' : 'POIN' }}</small>
                 </strong>
             </a>
         @empty
