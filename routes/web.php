@@ -4,6 +4,7 @@ use App\Http\Controllers\CertificateController;
 use App\Http\Controllers\EvidenceController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\Public\ArchiveController;
+use App\Http\Controllers\Public\DashboardController as PublicDashboardController;
 use App\Http\Controllers\Public\EventController;
 use App\Http\Controllers\Public\LandingController;
 use App\Http\Controllers\Public\LeaderboardController;
@@ -77,6 +78,11 @@ Route::middleware(['auth', 'active'])->group(function () {
     Route::middleware('role:super_admin')
         ->prefix('super-admin')->name('superadmin.')
         ->group(base_path('routes/role/super-admin.php'));
+
+    // Publik (signed-in spectator)
+    Route::middleware('role:public')
+        ->get('/publik/dasbor', PublicDashboardController::class)
+        ->name('public.dashboard');
 });
 
 require __DIR__.'/auth.php';

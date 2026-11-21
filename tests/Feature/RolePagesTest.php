@@ -29,6 +29,7 @@ it('renders every role dashboard and page', function () {
             '/super-admin/dashboard', '/super-admin/verifikasi', '/super-admin/pengguna',
             '/super-admin/audit', '/super-admin/pengaturan',
         ],
+        'publik@nanorobotic.test' => ['/publik/dasbor'],
     ];
 
     foreach ($pages as $email => $urls) {
@@ -48,6 +49,7 @@ it('redirects every role from the shared dashboard', function () {
         'chief@nanorobotic.test' => '/chief/dashboard',
         'eventadmin@nanorobotic.test' => '/event-admin/dashboard',
         'admin@nanorobotic.test' => '/super-admin/dashboard',
+        'publik@nanorobotic.test' => '/publik/dasbor',
     ];
 
     foreach ($targets as $email => $target) {

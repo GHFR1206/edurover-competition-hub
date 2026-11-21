@@ -3,17 +3,15 @@
 namespace App\Http\Controllers;
 
 use App\Enums\Role as RoleEnum;
-use App\Models\Event;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Illuminate\View\View;
 
 /**
  * Single entry point after login. Each role is redirected to its own dashboard.
  */
 class RoleDashboardController extends Controller
 {
-    public function __invoke(Request $request): View|RedirectResponse
+    public function __invoke(Request $request): RedirectResponse
     {
         $user = $request->user();
 
@@ -24,9 +22,9 @@ class RoleDashboardController extends Controller
             $user->isRole(RoleEnum::ChiefJudge) => redirect()->route('chief.dashboard'),
             $user->isRole(RoleEnum::EventAdmin) => redirect()->route('eventadmin.dashboard'),
             $user->isRole(RoleEnum::SuperAdmin) => redirect()->route('superadmin.dashboard'),
-            default => view('dashboard', [
-                'event' => Event::with('categories')->latest('starts_at')->first(),
-            ]),
+            // Spectators — and any account without a competition role — land on
+            // the public dashboard instead of a placeholder page.
+            default => redirect()->route('public.dashboard'),
         };
     }
 }

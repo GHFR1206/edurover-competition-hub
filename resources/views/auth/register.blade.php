@@ -28,7 +28,8 @@
 
     <label class="field">
         <span>Sekolah / Institusi</span>
-        <input name="school" type="text" value="{{ old('school') }}" placeholder="SMP Garuda A">
+        <input name="school" type="text" value="{{ old('school') }}" placeholder="SMP Garuda A"
+               required @if ($errors->has('school')) aria-invalid="true" @endif>
         @error('school') <small class="field-error">{{ $message }}</small> @enderror
     </label>
 

@@ -24,6 +24,8 @@ alih-alih ditebak diam-diam.
 | A17 | Banding: coach mengajukan per run, Chief menyelesaikan (accept/reject/review) dengan catatan wajib | Sesuai tabel `appeals`; satu run = satu banding terbuka pada satu waktu. |
 | A18 | Realtime memakai strategi **reload on event** (bukan patch DOM in-place) di kanal publik (`event.*`, `category.*`) & privat (`arena.*`) | Server-rendered standings tetap sumber kebenaran tunggal; menghindari drift. Kanal privat arena dibatasi staf yang ditugaskan. |
 | A19 | Klien realtime hanya memuat websocket bila halaman menyertakan meta live (`live-event`/`live-category`/`live-arena`) | Halaman statis tidak membuka koneksi; hemat resource. |
+| A20 | Registrasi mandiri (`/register`) membuat akun berperan **Coach** sekaligus `School` + `Coach` profile; sekolah yang sudah ada (nama sama) dipakai ulang | Tanpa tautan sekolah, dashboard coach kosong. Pendaftaran tim/peserta tetap dilakukan panitia/coach setelah verifikasi. |
+| A21 | Peran **Publik** punya dashboard sendiri (`/publik/dasbor`) di layout RoboRace, bukan halaman Breeze lama | Menyatukan desain 8 aplikasi front-end; halaman ini jadi tujuan default akun tanpa peran kompetisi. |
 
 ## Sudah diselesaikan (sebelumnya terbuka)
 

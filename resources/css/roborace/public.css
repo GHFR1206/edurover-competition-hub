@@ -1071,6 +1071,9 @@ footer i {
   .account-actions .outline-btn {
     display: none;
   }
+  .account-actions .account-dashboard {
+    display: inline-flex;
+  }
   .site-header nav {
     gap: 0;
   }
@@ -1373,4 +1376,175 @@ button.purple-btn, a.purple-btn { display: inline-flex; align-items: center; jus
   text-decoration: underline;
   cursor: pointer;
   padding: 0;
+}
+
+/* ============================================================
+   Public role dashboard (signed-in spectator home base).
+   ============================================================ */
+.account-logout {
+  margin: 0;
+  display: inline-flex;
+}
+.account-logout .gold-btn {
+  cursor: pointer;
+}
+.dash-hero {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  padding: 40px max(6vw, 70px) 56px;
+  position: relative;
+}
+.dash-copy {
+  flex: 1;
+  z-index: 1;
+}
+.dash-copy h1 {
+  font-size: 46px;
+  line-height: 1.1;
+  color: var(--purple);
+  margin: 12px 0;
+}
+.dash-copy p {
+  max-width: 560px;
+  color: #3a3b5a;
+  line-height: 1.55;
+}
+.dash-copy .hero-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: 20px;
+}
+.dash-mascot {
+  width: 200px;
+  height: 180px;
+  object-fit: contain;
+  margin-right: 5%;
+}
+.dash-main {
+  padding-top: 0;
+}
+.dash-main .stats-grid {
+  margin-top: -30px;
+  position: relative;
+  z-index: 3;
+}
+.quick-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+  margin-top: 26px;
+}
+.quick-card {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 20px;
+}
+.quick-card .quick-icon {
+  font: 24px "Lilita One";
+  color: #e0a100;
+}
+.quick-card strong {
+  font: 600 18px "Fredoka";
+  color: var(--purple);
+}
+.quick-card small {
+  color: var(--muted);
+  font: 600 13px "Nunito";
+}
+.dash-columns {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+  margin-top: 26px;
+}
+.dash-columns .outline-btn,
+.dash-columns .purple-btn {
+  margin-top: 16px;
+}
+.dash-standings {
+  display: flex;
+  flex-direction: column;
+}
+.dash-rank {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 10px 0;
+  border-bottom: 1px dashed #c9b8f0;
+}
+.dash-rank:last-child {
+  border-bottom: 0;
+}
+.dash-rank > b {
+  display: grid;
+  place-items: center;
+  width: 30px;
+  height: 30px;
+  flex: 0 0 30px;
+  border-radius: 9px;
+  background: var(--lavender);
+  color: var(--purple);
+  font: 600 14px "Fredoka";
+}
+.dash-rank div {
+  flex: 1;
+  min-width: 0;
+}
+.dash-rank strong,
+.dash-rank small {
+  display: block;
+}
+.dash-rank strong {
+  font: 600 15px "Fredoka";
+  color: var(--ink);
+}
+.dash-rank small {
+  color: var(--muted);
+  font: 600 12px "Nunito";
+}
+.dash-rank em {
+  font: 24px "Lilita One";
+  font-style: normal;
+  color: var(--purple);
+}
+.dash-categories {
+  margin-top: 26px;
+}
+.dash-categories .level-line:last-child {
+  border-bottom: 0;
+}
+.dash-categories .level-line .outline-btn {
+  margin: 0;
+}
+@media (max-width: 900px) {
+  .dash-hero {
+    padding: 30px 5% 48px;
+  }
+  .dash-copy h1 {
+    font-size: 36px;
+  }
+  .dash-mascot {
+    width: 130px;
+    height: 120px;
+    margin: 0;
+  }
+  .quick-grid,
+  .dash-columns {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+@media (max-width: 640px) {
+  .dash-mascot {
+    display: none;
+  }
+  .quick-grid,
+  .dash-columns {
+    grid-template-columns: 1fr;
+  }
+  .account-actions .account-profile {
+    display: none;
+  }
 }

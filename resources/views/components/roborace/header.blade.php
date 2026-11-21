@@ -25,7 +25,12 @@
     </nav>
     <div class="account-actions">
         @auth
-            <a href="{{ route('dashboard') }}" class="outline-btn">Dashboard</a>
+            <a href="{{ route('dashboard') }}" class="outline-btn account-dashboard">Dasbor</a>
+            <a href="{{ route('profile.edit') }}" class="outline-btn account-profile">Profil</a>
+            <form method="POST" action="{{ route('logout') }}" class="account-logout">
+                @csrf
+                <button type="submit" class="gold-btn">Keluar</button>
+            </form>
         @else
             <a href="{{ route('login') }}" class="outline-btn">Masuk</a>
             <a href="{{ route('register') }}" class="gold-btn">Daftar sekolah</a>

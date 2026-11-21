@@ -55,6 +55,9 @@ Akses:
 | Coach / Sekolah | coach@nanorobotic.test |
 | Publik | publik@nanorobotic.test |
 
+> Pendaftaran mandiri lewat `/register` membuat akun **Coach** beserta profil sekolahnya, lalu
+> diarahkan ke dasbor coach. Akun **Publik** (penonton) mendapat dasbor sendiri di `/publik/dasbor`.
+
 ## Perintah harian
 
 Semua perintah PHP dijalankan di dalam kontainer:
@@ -97,6 +100,20 @@ user tiap peran + 3 juri tambahan. **Score object yang diseed adalah CONTOH, buk
 | 5 | Scoring engine, judge entry, evidence upload, approve/reopen, audit | ✅ selesai |
 | 6 | Realtime privat, visibilitas guest, Publish, leaderboard, export | ✅ selesai |
 | 7 | Hardening: security, visibilitas, offline/retry, load test, UAT | ⏳ sebagian (UAT/load test manual) |
+
+### Halaman per peran
+
+| Peran | Dasbor | Area |
+|---|---|---|
+| Super Admin | `/super-admin/dashboard` | `/super-admin/*`, panel `/admin` |
+| Event Admin | `/event-admin/dashboard` | `/event-admin/*` |
+| Operator Arena | `/operator/dashboard` | `/operator/*` |
+| Juri | `/juri/dashboard` | `/juri/*` |
+| Chief Judge | `/chief/dashboard` | `/chief/*` |
+| Coach / Sekolah | `/coach/dashboard` | `/coach/*` |
+| Publik | `/publik/dasbor` | halaman publik (`/event`, `/jadwal`, `/leaderboard`, `/hasil`, `/arsip`) |
+
+`/dashboard` adalah pintu masuk tunggal setelah login dan mengarahkan tiap peran ke dasbornya.
 
 ## CI
 
