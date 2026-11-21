@@ -56,7 +56,9 @@ Akses:
 | Publik | publik@nanorobotic.test |
 
 > Pendaftaran mandiri lewat `/register` membuat akun **Coach** beserta profil sekolahnya, lalu
-> diarahkan ke dasbor coach. Akun **Publik** (penonton) mendapat dasbor sendiri di `/publik/dasbor`.
+> diarahkan ke dasbor coach. Coach dapat membuat tim + anggota sendiri di `/coach/tim/baru`,
+> mengajukan verifikasi, dan memantau statusnya. Akun **Publik** (penonton) mendapat dasbor sendiri
+> di `/publik/dasbor`.
 
 ## Perintah harian
 
@@ -114,6 +116,20 @@ user tiap peran + 3 juri tambahan. **Score object yang diseed adalah CONTOH, buk
 | Publik | `/publik/dasbor` | halaman publik (`/event`, `/jadwal`, `/leaderboard`, `/hasil`, `/arsip`) |
 
 `/dashboard` adalah pintu masuk tunggal setelah login dan mengarahkan tiap peran ke dasbornya.
+Semua layout peran punya menu akun bersama (Dasbor / Panel panitia untuk staf / Profil & keamanan /
+Keluar) di kanan navbar.
+
+### Operasional yang bisa dilakukan langsung dari aplikasi
+
+| Peran | Aksi |
+|---|---|
+| Coach | Daftarkan tim + anggota (`/coach/tim/baru`), tambah/hapus anggota, ajukan verifikasi dengan consent, ajukan banding |
+| Event Admin | Buat event & maju tahap, atur status kategori (sampai *semua run selesai*), tugaskan/nonaktifkan operator & juri per arena, jadwalkan/ubah/batalkan sesi run |
+| Super Admin | Verifikasi registrasi, undang pengguna, ubah peran (termasuk promosi ke Coach + sekolah), aktif/nonaktifkan akun, pengaturan platform |
+| Chief Judge | Tinjau/approve/reject/reopen skor, koreksi resmi skor beku, selesaikan banding, publikasi per kategori, terbitkan sertifikat |
+
+Publishing kategori sengaja hanya bisa dilakukan Chief Judge; Event Admin dibatasi sampai status
+*Semua Run Selesai* agar hasil tidak terbit sebelum disahkan.
 
 ## CI
 

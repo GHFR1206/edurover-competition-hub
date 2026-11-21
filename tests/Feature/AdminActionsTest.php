@@ -6,6 +6,7 @@ use App\Enums\RegistrationStatus;
 use App\Enums\RunStatus;
 use App\Models\Category;
 use App\Models\Event;
+use App\Models\HeatSlot;
 use App\Models\Registration;
 use App\Models\Run;
 use App\Models\Setting;
@@ -228,4 +229,116 @@ it('validates the scoring method', function () {
         'scoring_method' => 'Nuklir',
         'robot_service_name' => 'API robot',
     ])->assertSessionHasErrors('scoring_method');
+});
+
+it('reschedules a not-yet-started session', function () {
+    $admin = ($this->eventAdmin)();
+    $event = Event::with(['categories', 'arenas'])->latest('starts_at')->firstOrFail();
+    $arena = $event->arenas->firstOrFail();
+    $otherArena = $event->arenas->where('id', '!=', $arena->id)->first();
+    $team = $event->categories->first()->teams()->firstOrFail();
+
+    $when = now()->addWeek()->setTime(11, 0);
+    $this->actingAs($admin)->post('/event-admin/jadwal', [
+        'team_id' => $team->id,
+        'arena_id' => $arena->id,
+        'scheduled_at' => $when->toDateTimeString(),
+    ]);
+
+    $run = Run::where('team_id', $team->id)->where('scheduled_at', $when)->firstOrFail();
+
+    $newTime = $when->copy()->addHours(2);
+    $targetArena = $otherArena ?? $arena;
+
+    $this->actingAs($admin)->patch("/event-admin/jadwal/{$run->uuid}", [
+        'arena_id' => $targetArena->id,
+        'scheduled_at' => $newTime->toDateTimeString(),
+        'duration' => 20,
+    ])->assertRedirect('/event-admin/jadwal');
+
+    expect($run->fresh()->scheduled_at->equalTo($newTime))->toBeTrue()
+        ->and($run->fresh()->arena_id)->toBe($targetArena->id);
+});
+
+it('refuses to reschedule a session that already started', function () {
+    $admin = ($this->eventAdmin)();
+    $run = Run::firstOrFail();
+    $run->update(['status' => RunStatus::Running]);
+
+    $this->actingAs($admin)->patch("/event-admin/jadwal/{$run->uuid}", [
+        'arena_id' => $run->arena_id,
+        'scheduled_at' => now()->addDay()->toDateTimeString(),
+    ])->assertSessionHasErrors('scheduled_at');
+});
+
+it('cancels a scheduled session and prunes its empty heat slot', function () {
+    $admin = ($this->eventAdmin)();
+    $event = Event::with(['categories', 'arenas'])->latest('starts_at')->firstOrFail();
+    $arena = $event->arenas->firstOrFail();
+    $team = $event->categories->first()->teams()->firstOrFail();
+
+    $when = now()->addWeek()->setTime(14, 0);
+    $this->actingAs($admin)->post('/event-admin/jadwal', [
+        'team_id' => $team->id,
+        'arena_id' => $arena->id,
+        'scheduled_at' => $when->toDateTimeString(),
+    ]);
+
+    $run = Run::where('team_id', $team->id)->where('scheduled_at', $when)->firstOrFail();
+    $slotId = $run->heat_slot_id;
+
+    $this->actingAs($admin)->delete("/event-admin/jadwal/{$run->uuid}")
+        ->assertRedirect('/event-admin/jadwal');
+
+    expect(Run::find($run->id))->toBeNull()
+        ->and(HeatSlot::find($slotId))->toBeNull();
+});
+
+it('changes a user role and creates a coach profile when promoted', function () {
+    $admin = ($this->superAdmin)();
+    $user = User::where('email', 'publik@nanorobotic.test')->firstOrFail();
+
+    $this->actingAs($admin)->patch("/super-admin/pengguna/{$user->id}/peran", [
+        'role' => 'coach',
+        'school' => 'SMP Peran Baru',
+    ])->assertRedirect('/super-admin/pengguna');
+
+    $user->refresh();
+
+    expect($user->hasRole('coach'))->toBeTrue()
+        ->and($user->hasRole('public'))->toBeFalse()
+        ->and($user->coachProfile?->school?->name)->toBe('SMP Peran Baru');
+});
+
+it('requires a school when promoting a user to coach', function () {
+    $admin = ($this->superAdmin)();
+    $user = User::where('email', 'publik@nanorobotic.test')->firstOrFail();
+
+    $this->actingAs($admin)->patch("/super-admin/pengguna/{$user->id}/peran", [
+        'role' => 'coach',
+    ])->assertSessionHasErrors('school');
+
+    expect($user->fresh()->hasRole('coach'))->toBeFalse();
+});
+
+it('lets an event admin move a category through its pre-publication lifecycle', function () {
+    $admin = ($this->eventAdmin)();
+    $category = Category::firstOrFail();
+
+    $this->actingAs($admin)->patch("/event-admin/setup/kategori/{$category->uuid}", [
+        'status' => CategoryStatus::Running->value,
+    ])->assertRedirect();
+
+    expect($category->fresh()->status)->toBe(CategoryStatus::Running);
+});
+
+it('refuses publishing a category from the event admin setup page', function () {
+    $admin = ($this->eventAdmin)();
+    $category = Category::firstOrFail();
+
+    $this->actingAs($admin)->patch("/event-admin/setup/kategori/{$category->uuid}", [
+        'status' => CategoryStatus::Published->value,
+    ])->assertForbidden();
+
+    expect($category->fresh()->status)->not->toBe(CategoryStatus::Published);
 });

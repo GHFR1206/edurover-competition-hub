@@ -42,20 +42,122 @@
         </div>
 
         <section class="card reveal" style="animation-delay:140ms">
+            <span class="eyebrow">PENDAFTARAN</span>
+            <h2>Status pendaftaran</h2>
+            @if ($registration)
+                <div class="data-list">
+                    <div class="data-row">
+                        <div>
+                            <strong>{{ $registration->status->label() }}</strong>
+                            <span>
+                                Diajukan {{ $registration->submitted_at?->translatedFormat('d M Y, H:i') ?? '—' }}
+                                · Diverifikasi {{ $registration->verified_at?->translatedFormat('d M Y') ?? '—' }}
+                            </span>
+                            @if ($registration->rejection_reason)
+                                <span>Catatan panitia: {{ $registration->rejection_reason }}</span>
+                            @endif
+                        </div>
+                        <span class="status-badge {{ $registration->status->value === 'verified' ? 'success' : 'warning' }}">
+                            {{ $registration->status->label() }}
+                        </span>
+                    </div>
+                </div>
+            @else
+                <p>Belum ada data pendaftaran untuk tim ini.</p>
+            @endif
+
+            @if ($editable)
+                @if (session('status'))
+                    <div class="notice success">{{ session('status') }}</div>
+                @endif
+                @if ($errors->any())
+                    <div class="notice warning">
+                        @foreach ($errors->all() as $error) <div>{{ $error }}</div> @endforeach
+                    </div>
+                @endif
+
+                <form method="POST" action="{{ route('coach.teams.submit', $team) }}" style="width:100%;margin-top:16px">
+                    @csrf
+                    <div class="consent-list">
+                        <label>
+                            <input type="checkbox" name="consent_parent" value="1" required
+                                   @checked(old('consent_parent') || $registration->consent_parent)>
+                            <span>Orang tua/wali setiap anggota telah memberi persetujuan tertulis untuk mengikuti kompetisi.</span>
+                        </label>
+                        <label>
+                            <input type="checkbox" name="consent_media" value="1" required
+                                   @checked(old('consent_media') || $registration->consent_media)>
+                            <span>Kami mengizinkan dokumentasi foto/video tim dipublikasikan untuk keperluan kompetisi.</span>
+                        </label>
+                    </div>
+                    <div class="actions">
+                        <button class="button primary" type="submit">Ajukan verifikasi</button>
+                    </div>
+                </form>
+            @endif
+        </section>
+
+        <section class="card reveal" style="animation-delay:170ms">
             <h2>Anggota tim</h2>
             <div class="data-list">
                 @forelse ($team->participants as $participant)
                     <div class="data-row">
                         <div>
                             <strong>{{ $participant->name }}</strong>
-                            <span>{{ $participant->role === 'leader' ? 'Ketua tim' : 'Anggota' }}</span>
+                            <span>{{ $participant->role === 'leader' ? 'Ketua tim' : ($participant->role === 'reserve' ? 'Cadangan' : 'Anggota') }}
+                                @if ($participant->grade) · Kelas {{ $participant->grade }} @endif
+                            </span>
                         </div>
-                        <span class="status-badge success">Lengkap</span>
+                        @if ($editable)
+                            <form method="POST"
+                                  action="{{ route('coach.teams.participants.destroy', [$team, $participant]) }}"
+                                  onsubmit="return confirm('Hapus anggota ini?')">
+                                @csrf
+                                @method('DELETE')
+                                <button class="button secondary" type="submit">Hapus</button>
+                            </form>
+                        @else
+                            <span class="status-badge success">Tercatat</span>
+                        @endif
                     </div>
                 @empty
                     <p>Belum ada anggota tercatat.</p>
                 @endforelse
             </div>
+
+            @if ($editable)
+                <form method="POST" action="{{ route('coach.teams.participants.store', $team) }}"
+                      style="width:100%;margin-top:16px">
+                    @csrf
+                    <h3>Tambah anggota</h3>
+                    <div class="form-grid">
+                        <label class="field">
+                            <span>Nama lengkap *</span>
+                            <input type="text" name="name" value="{{ old('name') }}" required maxlength="255">
+                        </label>
+                        <label class="field">
+                            <span>NISN (10 digit)</span>
+                            <input type="text" name="nisn" value="{{ old('nisn') }}" inputmode="numeric"
+                                   pattern="[0-9]{10}" maxlength="10">
+                        </label>
+                        <label class="field">
+                            <span>Kelas</span>
+                            <input type="text" name="grade" value="{{ old('grade') }}" maxlength="20">
+                        </label>
+                        <label class="field">
+                            <span>Peran</span>
+                            <select name="role">
+                                <option value="member">Anggota</option>
+                                <option value="leader">Ketua</option>
+                                <option value="reserve">Cadangan</option>
+                            </select>
+                        </label>
+                    </div>
+                    <div class="actions">
+                        <button class="button secondary" type="submit">Tambah anggota</button>
+                    </div>
+                </form>
+            @endif
             <p class="caption">NISN hanya terlihat oleh panitia, tidak untuk publik.</p>
         </section>
 

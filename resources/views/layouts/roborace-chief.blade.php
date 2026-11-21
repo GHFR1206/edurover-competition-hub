@@ -9,7 +9,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Lilita+One&family=Nunito:wght@400;600;700;800&family=JetBrains+Mono:wght@700;800&family=Inter:wght@400;700&display=swap">
-    @vite(['resources/css/roborace/chief.css'])
+    @vite(['resources/css/roborace/chief.css', 'resources/css/roborace/account.css'])
 </head>
 <body>
 @php
@@ -32,7 +32,7 @@
                 <a class="{{ $activeNav === $item['id'] ? 'active' : '' }}" href="{{ route($item['route']) }}" style="display:inline-flex;align-items:center;text-decoration:none;">{{ $item['label'] }}</a>
             @endforeach
         </div>
-        <span class="role-chip">Chief Judge</span>
+        <div class="nav-right"><span class="role-chip">Chief Judge</span><x-roborace.account-menu /></div>
     </nav>
 
     @hasSection('hero')

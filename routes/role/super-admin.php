@@ -15,6 +15,7 @@ Route::patch('/verifikasi/{registration:uuid}/tolak', [VerificationController::c
 Route::patch('/verifikasi/{registration:uuid}/revisi', [VerificationController::class, 'requestRevision'])->name('verification.revision');
 Route::get('/pengguna', [UserController::class, 'index'])->name('users.index');
 Route::post('/pengguna', [UserController::class, 'store'])->name('users.store');
+Route::patch('/pengguna/{user}/peran', [UserController::class, 'updateRole'])->name('users.role');
 Route::patch('/pengguna/{user}/toggle', [UserController::class, 'toggleActive'])->name('users.toggle');
 Route::get('/audit', AuditController::class)->name('audit.index');
 Route::get('/pengaturan', [SettingController::class, 'index'])->name('settings.index');

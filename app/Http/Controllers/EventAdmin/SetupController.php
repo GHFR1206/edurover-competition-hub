@@ -2,19 +2,32 @@
 
 namespace App\Http\Controllers\EventAdmin;
 
+use App\Enums\CategoryStatus;
 use App\Http\Controllers\Controller;
 use App\Models\Category;
 use App\Models\Event;
 use App\Models\Rulebook;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
 use Illuminate\View\View;
 
 /**
  * Event Admin setup wizard: categories, rulesets and challenges.
- * Read-only overview here; edits happen in the Filament panel.
+ * Ruleset/challenge content is edited in the Filament panel, but the category
+ * lifecycle up to "all runs finished" is driven from this page. Publishing is
+ * reserved for the Chief Judge (PublicationService).
  */
 class SetupController extends Controller
 {
+    /** Statuses the event admin may set directly. */
+    private const EDITABLE_STATUSES = [
+        CategoryStatus::Registration,
+        CategoryStatus::Scheduled,
+        CategoryStatus::Running,
+        CategoryStatus::AllRunsFinished,
+    ];
+
     public function index(Request $request): View
     {
         $event = Event::with([
@@ -36,7 +49,30 @@ class SetupController extends Controller
             'event' => $event,
             'categories' => $categories,
             'checks' => $checks,
+            'editableStatuses' => self::EDITABLE_STATUSES,
             'page' => 'setup',
         ]);
+    }
+
+    /** Advance a category through the pre-publication lifecycle. */
+    public function updateCategory(Request $request, Category $category): RedirectResponse
+    {
+        $validated = $request->validate([
+            'status' => ['required', Rule::enum(CategoryStatus::class)],
+        ]);
+
+        $status = CategoryStatus::from($validated['status']);
+
+        abort_unless(in_array($status, self::EDITABLE_STATUSES, true), 403, 'Publikasi kategori dilakukan oleh Chief Judge.');
+
+        if ($category->isPublished()) {
+            return back()->withErrors([
+                'status' => 'Kategori yang sudah dipublikasikan tidak dapat diubah lagi.',
+            ]);
+        }
+
+        $category->update(['status' => $status]);
+
+        return back()->with('status', "Kategori {$category->level->publicLabel()} diubah ke {$status->label()}.");
     }
 }

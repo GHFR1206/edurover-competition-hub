@@ -9,6 +9,15 @@
 @section('content')
 @php($allComplete = collect($checks)->every(fn ($c) => $c[1]))
 
+@if (session('status'))
+    <div class="notice">{{ session('status') }}</div>
+@endif
+@if ($errors->any())
+    <div class="notice error">
+        @foreach ($errors->all() as $error) <div>{{ $error }}</div> @endforeach
+    </div>
+@endif
+
 <div class="chips setup-tabs">
     <a class="chip active" href="#kategori">1 · Kategori</a>
     <a class="chip" href="#ruleset">2 · Ruleset</a>
@@ -18,11 +27,38 @@
 <section class="card" id="kategori">
     <span class="eyebrow">JENJANG PESERTA</span>
     <h2>1 · Kategori</h2>
-    <p class="muted">Aktifkan level yang dipertandingkan dan lengkapi setiap ruleset. Perubahan kategori dilakukan di panel admin.</p>
-    <div class="chips">
-        @foreach ($categories as $category)
-            <span class="chip active">✓ {{ $category->level->publicLabel() }}</span>
-        @endforeach
+    <p class="muted">Aktifkan level yang dipertandingkan dan lengkapi setiap ruleset. Publikasi hasil tetap dilakukan Chief Judge.</p>
+    <div class="rules">
+        @forelse ($categories as $category)
+            <div class="rule">
+                <span class="rule-level">▣ {{ $category->level->publicLabel() }}</span>
+                <div>
+                    <strong>{{ $category->teams()->count() }}</strong>
+                    <span>Tim</span>
+                </div>
+                <div class="rule-status">
+                    <span>{{ $category->status->label() }}</span>
+                    <span>Status</span>
+                </div>
+                <div class="rule-actions">
+                    @if ($category->isPublished())
+                        <span class="badge badge-✓-resmi">Dipublikasikan</span>
+                    @else
+                        <form method="POST" action="{{ route('eventadmin.setup.category', $category) }}">
+                            @csrf
+                            @method('PATCH')
+                            <select name="status" onchange="this.form.submit()" aria-label="Status kategori {{ $category->level->publicLabel() }}">
+                                @foreach ($editableStatuses as $status)
+                                    <option value="{{ $status->value }}" @selected($category->status === $status)>{{ $status->label() }}</option>
+                                @endforeach
+                            </select>
+                        </form>
+                    @endif
+                </div>
+            </div>
+        @empty
+            <p class="muted">Belum ada kategori. Tambahkan kategori di panel admin.</p>
+        @endforelse
     </div>
     <span class="mini-success">{{ $categories->count() }} kategori aktif</span>
 </section>

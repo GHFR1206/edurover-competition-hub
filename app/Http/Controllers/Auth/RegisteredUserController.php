@@ -6,6 +6,7 @@ use App\Enums\Role as RoleEnum;
 use App\Http\Controllers\Controller;
 use App\Models\Coach;
 use App\Models\School;
+use App\Models\Setting;
 use App\Models\User;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Http\RedirectResponse;
@@ -53,6 +54,15 @@ class RegisteredUserController extends Controller
                 'password' => Hash::make($request->password),
                 'is_active' => true,
             ]);
+
+            // New self-registered accounts must confirm their email address.
+            // In local/dev the mailer is `log`, so the link is written to
+            // storage/logs/laravel.log instead of being delivered.
+            if (Setting::flag('require_email_verification', true)) {
+                $user->forceFill(['email_verified_at' => null])->save();
+            } else {
+                $user->forceFill(['email_verified_at' => now()])->save();
+            }
 
             $user->syncRoles([Role::findOrCreate(RoleEnum::Coach->value, 'web')->name]);
 

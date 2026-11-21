@@ -9,7 +9,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Lilita+One&family=Nunito:wght@400;600;700;800&family=JetBrains+Mono:wght@700;800&family=Inter:wght@400;700&display=swap">
-    @vite(['resources/css/roborace/juri.css'])
+    @vite(['resources/css/roborace/juri.css', 'resources/css/roborace/account.css'])
 </head>
 <body>
 @php
@@ -31,7 +31,7 @@
         </div>
         <div class="navtools">
             <span class="connection">● Online</span>
-            <span class="account"><i>{{ strtoupper(mb_substr($user->name, 0, 1)) }}</i><span>{{ $user->name }}</span></span>
+            <x-roborace.account-menu />
         </div>
     </nav>
 

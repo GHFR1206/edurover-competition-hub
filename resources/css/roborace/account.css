@@ -1,0 +1,117 @@
+/*
+ * Shared account menu for the role layouts (coach, juri, operator, chief,
+ * event admin, super admin). Kept in its own stylesheet so it can be loaded
+ * alongside any role design without class collisions.
+ */
+.rr-account {
+  position: relative;
+  flex: none;
+  font-family: "Fredoka", sans-serif;
+  font-weight: 600;
+}
+.rr-account > summary {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 40px;
+  padding: 6px 14px 6px 6px;
+  border-radius: 999px;
+  border: 2px solid rgba(94, 59, 162, 0.25);
+  background: #fff;
+  color: #5e3ba2;
+  font-size: 14px;
+  cursor: pointer;
+  list-style: none;
+  white-space: nowrap;
+}
+.rr-account > summary::-webkit-details-marker {
+  display: none;
+}
+.rr-account > summary::after {
+  content: "▾";
+  font-size: 11px;
+  color: #8a68d4;
+}
+.rr-account[open] > summary {
+  border-color: #5e3ba2;
+}
+.rr-account-avatar {
+  display: grid;
+  place-items: center;
+  width: 28px;
+  height: 28px;
+  flex: none;
+  border-radius: 50%;
+  background: linear-gradient(145deg, #7748c8, #5e3ba2);
+  color: #fff;
+  font-size: 13px;
+}
+.rr-account-name {
+  max-width: 160px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.rr-account-menu {
+  position: absolute;
+  right: 0;
+  top: calc(100% + 8px);
+  z-index: 60;
+  min-width: 208px;
+  padding: 8px;
+  border-radius: 16px;
+  background: #fff;
+  border: 1px solid #e6ddff;
+  box-shadow: 0 16px 34px rgba(94, 59, 162, 0.18);
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.rr-account-menu a,
+.rr-account-menu button {
+  display: block;
+  width: 100%;
+  padding: 10px 12px;
+  border: 0;
+  border-radius: 10px;
+  background: none;
+  color: #3a3b5a;
+  font: 600 14px "Fredoka", sans-serif;
+  text-align: left;
+  text-decoration: none;
+  cursor: pointer;
+}
+.rr-account-menu a:hover,
+.rr-account-menu button:hover {
+  background: #f2ecff;
+  color: #5e3ba2;
+}
+.rr-account-menu form {
+  margin: 0;
+  padding-top: 4px;
+  border-top: 1px dashed #e6ddff;
+}
+.rr-account-menu form button {
+  color: #b3261e;
+}
+.rr-account-menu form button:hover {
+  background: #fdecea;
+  color: #b3261e;
+}
+@media (max-width: 720px) {
+  .rr-account-name {
+    display: none;
+  }
+  .rr-account > summary {
+    padding: 5px;
+    gap: 4px;
+  }
+}
+
+/* Wrapper used by the role navbars to keep the role chip + account menu aligned. */
+.nav-right {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-left: auto;
+  flex: none;
+}

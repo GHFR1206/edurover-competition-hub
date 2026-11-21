@@ -58,6 +58,12 @@ class Team extends Model
         return $this->hasMany(Certificate::class);
     }
 
+    /** @return HasMany<Registration> */
+    public function registrations(): HasMany
+    {
+        return $this->hasMany(Registration::class);
+    }
+
     /** Public label never exposes personal data of children. */
     public function publicLabel(): string
     {

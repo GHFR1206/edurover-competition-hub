@@ -66,6 +66,7 @@
             </div>
             <div class="actions">
                 <a class="button primary" href="{{ route('coach.results.index') }}">Lihat hasil</a>
+                <a class="button secondary" href="{{ route('coach.teams.create') }}">+ Daftarkan tim</a>
             </div>
         </section>
 

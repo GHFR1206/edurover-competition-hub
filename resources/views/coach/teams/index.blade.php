@@ -37,8 +37,16 @@
                         <a class="button secondary" href="{{ route('coach.teams.show', $team) }}">Detail</a>
                     </div>
                 @empty
-                    <p>Belum ada tim.</p>
+                    <p>Belum ada tim. Daftarkan tim pertama sekolah Anda untuk mulai bertanding.</p>
                 @endforelse
+            </div>
+
+            <div class="actions">
+                @if ($canRegister)
+                    <a class="button primary" href="{{ route('coach.teams.create') }}">+ Daftarkan tim</a>
+                @else
+                    <span class="caption">Pendaftaran tim dibuka saat panitia menyiapkan kategori lomba.</span>
+                @endif
             </div>
         </section>
     </div>

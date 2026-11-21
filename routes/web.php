@@ -36,7 +36,7 @@ Route::get('/sertifikat/verifikasi/{token}', [CertificateController::class, 'ver
 |--------------------------------------------------------------------------
 */
 
-Route::middleware(['auth', 'active'])->group(function () {
+Route::middleware(['auth', 'active', 'verified.setting'])->group(function () {
     Route::get('/dashboard', RoleDashboardController::class)->name('dashboard');
 
     // Private evidence download (authorised users only).

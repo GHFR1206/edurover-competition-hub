@@ -141,6 +141,11 @@ class DemoSeeder extends Seeder
                 ['email' => $email],
                 ['name' => RoleEnum::from($role)->label(), 'password' => $password, 'is_active' => true],
             );
+            // Demo accounts are pre-verified so they stay usable when the
+            // "require email verification" setting is enabled.
+            if (! $user->email_verified_at) {
+                $user->forceFill(['email_verified_at' => now()])->save();
+            }
             $user->syncRoles([$role]);
             $users[$role] = $user;
         }
@@ -151,6 +156,9 @@ class DemoSeeder extends Seeder
                 ['email' => "juri{$i}@nanorobotic.test"],
                 ['name' => "Juri {$i}", 'password' => 'password', 'is_active' => true],
             );
+            if (! $judge->email_verified_at) {
+                $judge->forceFill(['email_verified_at' => now()])->save();
+            }
             $judge->syncRoles([RoleEnum::Judge->value]);
         }
 

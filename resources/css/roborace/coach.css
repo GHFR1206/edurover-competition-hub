@@ -726,3 +726,80 @@ footer small {
     transition-duration: 0.01ms !important;
   }
 }
+
+/* ============================================================
+   Team registration form (coach creates team + participants).
+   ============================================================ */
+.field textarea {
+  width: 100%;
+  min-height: 110px;
+  padding: 12px;
+  border: 2px solid #c9b8f0;
+  border-radius: 12px;
+  color: #121326;
+  background: #fff;
+  font-family: "Nunito", sans-serif;
+  font-weight: 600;
+  font-size: 15px;
+  line-height: 1.5;
+  resize: vertical;
+}
+.field input:focus,
+.field select:focus,
+.field textarea:focus {
+  outline: none;
+  border-color: #5e3ba2;
+  box-shadow: 0 0 0 3px rgba(94, 59, 162, 0.14);
+}
+.member-block {
+  width: 100%;
+  padding: 18px 0;
+  border-top: 1px dashed #c9b8f0;
+}
+.member-block:first-of-type {
+  border-top: 0;
+}
+.member-block h3 {
+  margin: 0 0 12px;
+  color: #5e3ba2;
+  font-family: "Fredoka", sans-serif;
+  font-weight: 600;
+  font-size: 16px;
+}
+.member-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+.consent-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  width: 100%;
+  margin: 14px 0;
+}
+.consent-list label {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 12px 14px;
+  border-radius: 14px;
+  background: #f7f4ff;
+  color: #3a3b5a;
+  font: 600 14px "Nunito", sans-serif;
+  line-height: 1.5;
+  cursor: pointer;
+}
+.consent-list input[type="checkbox"] {
+  width: 18px;
+  height: 18px;
+  margin-top: 2px;
+  accent-color: #5e3ba2;
+  flex: none;
+}
+@media (max-width: 720px) {
+  .form-grid {
+    grid-template-columns: 1fr;
+  }
+}

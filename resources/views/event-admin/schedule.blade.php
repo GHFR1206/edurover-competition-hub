@@ -6,6 +6,15 @@
 @section('hero-subtitle', 'Susun sesi tanpa bentrok dan jaga ritme setiap arena.')
 
 @section('content')
+@if (session('status'))
+    <div class="notice">{{ session('status') }}</div>
+@endif
+@if ($errors->any())
+    <div class="notice error">
+        @foreach ($errors->all() as $error) <div>{{ $error }}</div> @endforeach
+    </div>
+@endif
+
 <section class="card">
     <h2>Tambah sesi</h2>
     <form method="POST" action="{{ route('eventadmin.schedule.store') }}">
@@ -60,7 +69,40 @@
                 </div>
                 <div class="row-actions">
                     <span class="badge badge-{{ str_replace('_', '-', $run->status->value) }}">{{ $run->status->label() }}</span>
+                    @if ($run->status === \App\Enums\RunStatus::Scheduled)
+                        <form method="POST" action="{{ route('eventadmin.schedule.destroy', $run) }}"
+                              onsubmit="return confirm('Batalkan sesi ini?')">
+                            @csrf
+                            @method('DELETE')
+                            <button class="chip" type="submit">Batalkan</button>
+                        </form>
+                    @endif
                 </div>
+                @if ($run->status === \App\Enums\RunStatus::Scheduled)
+                    <details class="rr-inline-form rr-inline-panel">
+                        <summary class="chip">Ubah jadwal</summary>
+                        <form method="POST" action="{{ route('eventadmin.schedule.update', $run) }}">
+                            @csrf
+                            @method('PATCH')
+                            <label class="field"><span>Arena</span>
+                                <select name="arena_id" required>
+                                    @foreach ($arenas as $arena)
+                                        <option value="{{ $arena->id }}" @selected($run->arena_id === $arena->id)>{{ $arena->name }}</option>
+                                    @endforeach
+                                </select>
+                            </label>
+                            <label class="field"><span>Waktu mulai</span>
+                                <input type="datetime-local" name="scheduled_at" required
+                                       value="{{ $run->scheduled_at?->format('Y-m-d\TH:i') }}">
+                            </label>
+                            <label class="field"><span>Durasi (menit)</span>
+                                <input type="number" name="duration" min="1" max="120"
+                                       value="{{ $run->heatSlot ? max(1, (int) $run->heatSlot->starts_at->diffInMinutes($run->heatSlot->ends_at)) : 15 }}">
+                            </label>
+                            <button class="button yellow" type="submit">Simpan jadwal</button>
+                        </form>
+                    </details>
+                @endif
             </div>
         @empty
             <p class="muted">Belum ada sesi terjadwal untuk event ini.</p>

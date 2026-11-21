@@ -30,4 +30,18 @@ class Setting extends Model
     {
         static::updateOrCreate(['key' => $key], ['value' => ['data' => $value]]);
     }
+
+    /**
+     * Read a boolean flag. A key that was never saved counts as "not
+     * configured" and falls back to $default, so features that depend on a
+     * setting stay off until an admin turns them on explicitly.
+     */
+    public static function flag(string $key, bool $default = false): bool
+    {
+        if (! static::query()->where('key', $key)->exists()) {
+            return $default;
+        }
+
+        return (bool) static::get($key, $default);
+    }
 }

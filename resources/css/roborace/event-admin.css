@@ -698,3 +698,91 @@ footer small {
     transition-duration: 0.01ms !important;
   }
 }
+
+/* Staff assignment page glue */
+.mascot-note {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 18px 22px;
+  border-radius: 18px;
+  background: #fff9d8;
+  color: #7a5a00;
+  font: 800 15px/1.5 "Nunito", sans-serif;
+}
+.mascot-note img {
+  width: 56px;
+  height: 56px;
+  object-fit: contain;
+  flex: none;
+}
+.form-grid.three {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+@media (max-width: 860px) {
+  .form-grid.three {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Inline "Ubah jadwal" panel on the schedule page. Uses <details> so the
+   edit form works without extra JavaScript. */
+.rows .row {
+  flex-wrap: wrap;
+}
+.rr-inline-form > summary {
+  list-style: none;
+  cursor: pointer;
+}
+.rr-inline-form > summary::-webkit-details-marker {
+  display: none;
+}
+.rr-inline-panel {
+  flex-basis: 100%;
+  width: 100%;
+}
+.rr-inline-form > form {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr)) auto;
+  align-items: end;
+  gap: 14px;
+  width: 100%;
+  margin-top: 14px;
+  padding: 16px;
+  border-radius: 16px;
+  background: #f7f4ff;
+}
+.rr-inline-form > form .field span {
+  font-size: 13px;
+}
+.rr-inline-form > form .button {
+  min-height: 48px;
+}
+@media (max-width: 900px) {
+  .rr-inline-form > form {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Category status control inside the setup wizard. */
+.rule-actions {
+  margin-left: auto;
+  align-self: center;
+  min-width: 200px;
+}
+.rule-actions form {
+  margin: 0;
+}
+.rule-actions select {
+  min-height: 44px;
+  border-radius: 12px;
+}
+.rule-status {
+  font-family: "Fredoka", sans-serif;
+  font-weight: 600;
+  color: #5e3ba2;
+}
+.rule-status span:last-child {
+  color: #6e7090;
+  font: 600 12px "Nunito", sans-serif;
+}

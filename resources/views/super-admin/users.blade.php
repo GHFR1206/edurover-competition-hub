@@ -5,6 +5,15 @@
 
 @section('content')
 <div class="content decorated">
+    @if (session('status'))
+        <div class="notice">{{ session('status') }}</div>
+    @endif
+    @if ($errors->any())
+        <div class="notice error">
+            @foreach ($errors->all() as $error) <div>{{ $error }}</div> @endforeach
+        </div>
+    @endif
+
     <section class="card">
         <h2>Undang Pengguna</h2>
         <form method="POST" action="{{ route('superadmin.users.store') }}">
@@ -60,6 +69,24 @@
                 </div>
                 <div class="button-row">
                     @unless ($user->id === auth()->id())
+                        <details class="role-editor">
+                            <summary class="button">Ubah peran</summary>
+                            <form method="POST" action="{{ route('superadmin.users.role', $user) }}">
+                                @csrf
+                                @method('PATCH')
+                                <label>Peran baru
+                                    <select name="role" required>
+                                        @foreach ($roles as $role)
+                                            <option value="{{ $role }}" @selected($user->hasRole($role))>{{ ucwords(str_replace('_', ' ', $role)) }}</option>
+                                        @endforeach
+                                    </select>
+                                </label>
+                                <label>Nama sekolah <small>(wajib bila memilih Coach)</small>
+                                    <input type="text" name="school" value="{{ $user->coachProfile?->school?->name }}" placeholder="SMP Negeri 1">
+                                </label>
+                                <button class="button primary" type="submit">Simpan peran</button>
+                            </form>
+                        </details>
                         <form method="POST" action="{{ route('superadmin.users.toggle', $user) }}">
                             @csrf
                             @method('PATCH')

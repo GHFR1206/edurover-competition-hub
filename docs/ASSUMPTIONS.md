@@ -26,6 +26,13 @@ alih-alih ditebak diam-diam.
 | A19 | Klien realtime hanya memuat websocket bila halaman menyertakan meta live (`live-event`/`live-category`/`live-arena`) | Halaman statis tidak membuka koneksi; hemat resource. |
 | A20 | Registrasi mandiri (`/register`) membuat akun berperan **Coach** sekaligus `School` + `Coach` profile; sekolah yang sudah ada (nama sama) dipakai ulang | Tanpa tautan sekolah, dashboard coach kosong. Pendaftaran tim/peserta tetap dilakukan panitia/coach setelah verifikasi. |
 | A21 | Peran **Publik** punya dashboard sendiri (`/publik/dasbor`) di layout RoboRace, bukan halaman Breeze lama | Menyatukan desain 8 aplikasi front-end; halaman ini jadi tujuan default akun tanpa peran kompetisi. |
+| A22 | **Menu akun** bersama (`<details>` tanpa JS) dimuat di 6 layout peran lewat entry Vite terpisah `account.css` | Satu komponen untuk Dasbor/Panel panitia/Profil/Keluar; stylesheet terpisah agar tidak bentrok dengan CSS tiap role. |
+| A23 | Coach mendaftarkan tim + peserta sendiri (satu transaksi: `Team` + `Participant` + `Registration` draft) | Inti Fase 3; ukuran tim divalidasi terhadap `min/max_team_members`, NISN dicek lewat blind index, tim hanya bisa diedit selama `Draft`/`Rejected`. |
+| A24 | Event Admin menugaskan operator/juri lewat `/event-admin/staff` (bukan hanya Filament) | Penugasan menentukan arena yang bisa dikontrol/dinilai; role penugasan `operator` dipetakan ke peran platform `arena_operator`. |
+| A25 | Pengaturan `require_email_verification` benar-benar ditegakkan middleware `verified.setting` | Sebelumnya hanya tersimpan. Baris setting yang belum ada dianggap "belum dikonfigurasi" (permissive) agar instalasi baru tetap bisa dipakai; akun demo di-seed terverifikasi. |
+| A26 | Penjadwalan: sesi bisa **diubah** (arena/waktu) dan **dibatalkan** selama masih `scheduled` dan belum punya skor | Operator butuh antrean yang stabil; slot heat yang kosong ikut dihapus. Slot unik per arena (bukan per kategori). |
+| A27 | Super Admin dapat **mengubah peran** akun (satu peran aktif) dan promosi ke Coach membuat `School` + profil `Coach` bila belum ada | Tanpa ini, koreksi peran hanya bisa lewat DB. Akun sendiri tidak bisa diubah/dinonaktifkan. |
+| A28 | Event Admin hanya dapat mengubah status kategori sampai **Semua Run Selesai**; `Published` khusus Chief Judge | Menjaga pemisahan tugas: hasil resmi hanya terbit setelah pengesahan skor. |
 
 ## Sudah diselesaikan (sebelumnya terbuka)
 
