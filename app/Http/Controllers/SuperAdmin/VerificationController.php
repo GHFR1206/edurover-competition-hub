@@ -37,6 +37,7 @@ class VerificationController extends Controller
                 'under_review' => Registration::where('status', RegistrationStatus::UnderReview->value)->count(),
                 'verified' => Registration::where('status', RegistrationStatus::Verified->value)->count(),
                 'rejected' => Registration::where('status', RegistrationStatus::Rejected->value)->count(),
+                'revision' => Registration::where('status', RegistrationStatus::Revision->value)->count(),
             ],
             'page' => 'verifikasi',
         ]);
@@ -83,11 +84,22 @@ class VerificationController extends Controller
     {
         $validated = $request->validate(['reason' => ['required', 'string', 'max:255']]);
 
-        // Revision keeps the entry in under_review with a recorded note.
-        $registration->update([
-            'status' => RegistrationStatus::UnderReview,
-            'rejection_reason' => $validated['reason'],
-        ]);
+        // Go through the service so the transition is validated and team.status
+        // stays in sync. Writing the status directly here used to bypass the
+        // state machine entirely (e.g. pulling a verified entry back).
+        try {
+            $blockers = $this->registrations->requestRevision(
+                $registration,
+                $request->user(),
+                $validated['reason'],
+            );
+        } catch (RuntimeException $e) {
+            return back()->withErrors(['reason' => $e->getMessage()]);
+        }
+
+        if ($blockers !== []) {
+            return back()->withErrors(['revision' => $blockers]);
+        }
 
         return redirect()->route('superadmin.verification.index')
             ->with('status', 'Permintaan revisi dikirim ke coach.');

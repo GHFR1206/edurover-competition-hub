@@ -46,28 +46,37 @@
         @endif
 
         @if ($registration->rejection_reason)
-            <div class="notice">Catatan terakhir: {{ $registration->rejection_reason }}</div>
+            <div class="notice">
+                {{ $registration->status === \App\Enums\RegistrationStatus::Revision ? 'Catatan revisi' : 'Catatan terakhir' }}: {{ $registration->rejection_reason }}
+            </div>
         @endif
 
-        <div class="button-row">
-            <form method="POST" action="{{ route('superadmin.verification.approve', $registration) }}">
+        @if ($registration->status->isAwaitingDecision())
+            <div class="button-row">
+                <form method="POST" action="{{ route('superadmin.verification.approve', $registration) }}">
+                    @csrf
+                    @method('PATCH')
+                    <button class="button primary" type="submit" @disabled($blockers !== [])>Setujui</button>
+                </form>
+            </div>
+
+            <form method="POST" action="{{ route('superadmin.verification.reject', $registration) }}">
                 @csrf
                 @method('PATCH')
-                <button class="button primary" type="submit" @disabled($blockers !== [])>Setujui</button>
+                <label>Catatan penolakan / revisi *</label>
+                <textarea name="reason" placeholder="Surat pendamping belum ditandatangani kepala sekolah. Mohon unggah kembali dokumen yang lengkap.">{{ old('reason') }}</textarea>
+                <small>* Wajib diisi untuk tolak / revisi</small>
+                <div class="button-row">
+                    <button class="button danger" type="submit" formaction="{{ route('superadmin.verification.reject', $registration) }}">Tolak</button>
+                    <button class="button yellow" type="submit" formaction="{{ route('superadmin.verification.revision', $registration) }}">Minta revisi</button>
+                </div>
             </form>
-        </div>
-
-        <form method="POST" action="{{ route('superadmin.verification.reject', $registration) }}">
-            @csrf
-            @method('PATCH')
-            <label>Catatan penolakan / revisi *</label>
-            <textarea name="reason" placeholder="Surat pendamping belum ditandatangani kepala sekolah. Mohon unggah kembali dokumen yang lengkap.">{{ old('reason') }}</textarea>
-            <small>* Wajib diisi untuk tolak / revisi</small>
-            <div class="button-row">
-                <button class="button danger" type="submit" formaction="{{ route('superadmin.verification.reject', $registration) }}">Tolak</button>
-                <button class="button yellow" type="submit" formaction="{{ route('superadmin.verification.revision', $registration) }}">Minta revisi</button>
+        @else
+            <div class="notice">
+                Pengajuan ini berstatus <strong>{{ $registration->status->label() }}</strong> sehingga tidak ada keputusan
+                yang bisa diambil lagi. Coach perlu mengajukan ulang agar masuk antrean.
             </div>
-        </form>
+        @endif
     </section>
 
     <section class="card">

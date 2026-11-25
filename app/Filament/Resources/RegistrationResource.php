@@ -122,6 +122,7 @@ class RegistrationResource extends Resource
                         RegistrationStatus::UnderReview => 'warning',
                         RegistrationStatus::Verified => 'success',
                         RegistrationStatus::Rejected => 'danger',
+                        RegistrationStatus::Revision => 'warning',
                         RegistrationStatus::Withdrawn => 'gray',
                     })
                     ->formatStateUsing(fn (RegistrationStatus $state): string => $state->label()),
@@ -160,11 +161,7 @@ class RegistrationResource extends Resource
                     ->label('Verifikasi')
                     ->icon('heroicon-o-check-badge')
                     ->color('success')
-                    ->visible(fn (Registration $record): bool => in_array(
-                        $record->status,
-                        [RegistrationStatus::Submitted, RegistrationStatus::UnderReview],
-                        true,
-                    ))
+                    ->visible(fn (Registration $record): bool => $record->status->isAwaitingDecision())
                     ->requiresConfirmation()
                     ->action(function (Registration $record) {
                         $blockers = app(RegistrationService::class)->verify($record, auth()->user());
@@ -185,11 +182,7 @@ class RegistrationResource extends Resource
                     ->label('Tolak')
                     ->icon('heroicon-o-x-mark')
                     ->color('danger')
-                    ->visible(fn (Registration $record): bool => in_array(
-                        $record->status,
-                        [RegistrationStatus::Submitted, RegistrationStatus::UnderReview],
-                        true,
-                    ))
+                    ->visible(fn (Registration $record): bool => $record->status->isAwaitingDecision())
                     ->form([
                         Forms\Components\Textarea::make('reason')
                             ->label('Alasan Penolakan')
@@ -199,6 +192,33 @@ class RegistrationResource extends Resource
                     ->action(function (Registration $record, array $data) {
                         app(RegistrationService::class)->reject($record, auth()->user(), $data['reason']);
                         Notification::make()->title('Pendaftaran ditolak.')->danger()->send();
+                    }),
+                Tables\Actions\Action::make('revision')
+                    ->label('Minta Revisi')
+                    ->icon('heroicon-o-arrow-uturn-left')
+                    ->color('warning')
+                    ->visible(fn (Registration $record): bool => $record->status->isAwaitingDecision())
+                    ->form([
+                        Forms\Components\Textarea::make('reason')
+                            ->label('Catatan Revisi')
+                            ->required()
+                            ->rows(3),
+                    ])
+                    ->action(function (Registration $record, array $data) {
+                        $blockers = app(RegistrationService::class)
+                            ->requestRevision($record, auth()->user(), $data['reason']);
+
+                        if ($blockers !== []) {
+                            Notification::make()
+                                ->title('Tidak dapat meminta revisi')
+                                ->body(implode(' ', $blockers))
+                                ->danger()
+                                ->send();
+
+                            return;
+                        }
+
+                        Notification::make()->title('Permintaan revisi dikirim ke coach.')->warning()->send();
                     }),
                 Tables\Actions\EditAction::make()->label('Detail'),
             ])

@@ -182,7 +182,7 @@ class TeamController extends Controller
 
         abort_unless($registration, 404, 'Data pendaftaran tidak ditemukan.');
 
-        if (! in_array($registration->status, [RegistrationStatus::Draft, RegistrationStatus::Rejected], true)) {
+        if (! $registration->status->isEditableByCoach()) {
             return back()->withErrors(['submit' => 'Pendaftaran ini sudah diajukan atau sudah diverifikasi.']);
         }
 
@@ -220,8 +220,7 @@ class TeamController extends Controller
         return view('coach.teams.show', [
             'team' => $team,
             'registration' => $registration,
-            'editable' => $registration
-                && in_array($registration->status, [RegistrationStatus::Draft, RegistrationStatus::Rejected], true),
+            'editable' => $registration && $registration->status->isEditableByCoach(),
             'page' => 'team',
         ]);
     }
@@ -273,7 +272,7 @@ class TeamController extends Controller
         $status = $team->registrations()->latest()->value('status');
 
         abort_unless(
-            in_array($status, [RegistrationStatus::Draft->value, RegistrationStatus::Rejected->value], true),
+            $status !== null && RegistrationStatus::from($status)->isEditableByCoach(),
             403,
             'Tim yang sudah diajukan tidak dapat diubah.',
         );

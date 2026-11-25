@@ -9,6 +9,7 @@
         <a class="button {{ ! $activeStatus ? 'primary' : '' }}" href="{{ route('superadmin.verification.index') }}">Semua · {{ $counts['all'] }}</a>
         <a class="button {{ $activeStatus === 'submitted' ? 'primary' : '' }}" href="{{ route('superadmin.verification.index', ['status' => 'submitted']) }}">Menunggu · {{ $counts['submitted'] }}</a>
         <a class="button {{ $activeStatus === 'under_review' ? 'primary' : '' }}" href="{{ route('superadmin.verification.index', ['status' => 'under_review']) }}">Ditinjau · {{ $counts['under_review'] }}</a>
+        <a class="button {{ $activeStatus === 'revision' ? 'primary' : '' }}" href="{{ route('superadmin.verification.index', ['status' => 'revision']) }}">Perlu Revisi · {{ $counts['revision'] }}</a>
         <a class="button {{ $activeStatus === 'verified' ? 'primary' : '' }}" href="{{ route('superadmin.verification.index', ['status' => 'verified']) }}">Terverifikasi · {{ $counts['verified'] }}</a>
         <a class="button {{ $activeStatus === 'rejected' ? 'primary' : '' }}" href="{{ route('superadmin.verification.index', ['status' => 'rejected']) }}">Ditolak · {{ $counts['rejected'] }}</a>
     </div>
@@ -28,7 +29,7 @@
                         </span>
                     </div>
                     <div class="row-actions">
-                        <span class="status {{ $registration->status->value === 'verified' ? 'green' : ($registration->status->value === 'rejected' ? 'red' : 'yellow') }}">
+                        <span class="status {{ $registration->status->value === 'verified' ? 'green' : (in_array($registration->status->value, ['rejected', 'revision'], true) ? 'red' : 'yellow') }}">
                             {{ $registration->status->label() }}
                         </span>
                         <a class="button" href="{{ route('superadmin.verification.show', $registration) }}">Periksa</a>

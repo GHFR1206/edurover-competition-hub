@@ -51,10 +51,13 @@
                             <strong>{{ $registration->status->label() }}</strong>
                             <span>
                                 Diajukan {{ $registration->submitted_at?->translatedFormat('d M Y, H:i') ?? '—' }}
-                                · Diverifikasi {{ $registration->verified_at?->translatedFormat('d M Y') ?? '—' }}
+                                · Disahkan {{ $registration->verified_at?->translatedFormat('d M Y') ?? '—' }}
                             </span>
                             @if ($registration->rejection_reason)
-                                <span>Catatan panitia: {{ $registration->rejection_reason }}</span>
+                                <span>
+                                    {{ $registration->status === \App\Enums\RegistrationStatus::Revision ? 'Perbaiki dulu' : 'Catatan panitia' }}:
+                                    {{ $registration->rejection_reason }}
+                                </span>
                             @endif
                         </div>
                         <span class="status-badge {{ $registration->status->value === 'verified' ? 'success' : 'warning' }}">
@@ -70,6 +73,11 @@
 
                 <form method="POST" action="{{ route('coach.teams.submit', $team) }}" style="width:100%;margin-top:16px">
                     @csrf
+                    @if ($registration?->status === \App\Enums\RegistrationStatus::Revision)
+                        <div class="notice warning">
+                            Panitia meminta perbaikan. Ubah data tim bila perlu, lalu ajukan ulang.
+                        </div>
+                    @endif
                     <div class="consent-list">
                         <label>
                             <input type="checkbox" name="consent_parent" value="1" required
@@ -83,7 +91,9 @@
                         </label>
                     </div>
                     <div class="actions">
-                        <button class="button primary" type="submit">Ajukan verifikasi</button>
+                        <button class="button primary" type="submit">
+                            {{ $registration?->status === \App\Enums\RegistrationStatus::Revision ? 'Ajukan ulang' : 'Ajukan verifikasi' }}
+                        </button>
                     </div>
                 </form>
             @endif

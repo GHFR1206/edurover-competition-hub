@@ -11,8 +11,12 @@ use RuntimeException;
 /**
  * Registration (team entry) lifecycle. Event Admin / Super Admin verify.
  *
- * submitted -> under_review -> verified
- *                           -> rejected (reason required)
+ * draft -> submitted -> under_review -> verified
+ *                                   -> rejected   (final)
+ *                                   -> revision   (coach must fix & resubmit)
+ * rejected|revision -> submitted
+ * verified -> withdrawn
+ *
  * Teams are mirrored with the same status so downstream (heat scheduling)
  * can filter on team.status without joining registrations.
  */
@@ -23,9 +27,18 @@ class RegistrationService
     {
         return match ($registration->status) {
             RegistrationStatus::Draft => [RegistrationStatus::Submitted],
-            RegistrationStatus::Submitted => [RegistrationStatus::UnderReview, RegistrationStatus::Verified, RegistrationStatus::Rejected],
-            RegistrationStatus::UnderReview => [RegistrationStatus::Verified, RegistrationStatus::Rejected],
-            RegistrationStatus::Rejected => [RegistrationStatus::Submitted],
+            RegistrationStatus::Submitted => [
+                RegistrationStatus::UnderReview,
+                RegistrationStatus::Verified,
+                RegistrationStatus::Rejected,
+                RegistrationStatus::Revision,
+            ],
+            RegistrationStatus::UnderReview => [
+                RegistrationStatus::Verified,
+                RegistrationStatus::Rejected,
+                RegistrationStatus::Revision,
+            ],
+            RegistrationStatus::Revision, RegistrationStatus::Rejected => [RegistrationStatus::Submitted],
             RegistrationStatus::Verified => [RegistrationStatus::Withdrawn],
             RegistrationStatus::Withdrawn => [],
         };
@@ -100,6 +113,30 @@ class RegistrationService
             'verified_by' => $verifier->id,
             'rejection_reason' => $reason,
         ]);
+    }
+
+    /**
+     * Send an entry back to the coach for corrections. Unlike reject(), this
+     * keeps the door open: the coach can edit the team and resubmit.
+     *
+     * @return array<int, string> blockers; empty on success
+     */
+    public function requestRevision(Registration $registration, User $reviewer, string $reason): array
+    {
+        if (trim($reason) === '') {
+            throw new RuntimeException('Catatan revisi wajib diisi.');
+        }
+
+        if (! $this->canTransition($registration, RegistrationStatus::Revision)) {
+            return ["Status {$registration->status->label()} tidak dapat diminta revisi."];
+        }
+
+        $this->transition($registration, RegistrationStatus::Revision, [
+            'verified_by' => $reviewer->id,
+            'rejection_reason' => $reason,
+        ]);
+
+        return [];
     }
 
     public function withdraw(Registration $registration): void
